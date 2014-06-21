@@ -1,0 +1,18 @@
+@()
+          @if(flash.containsKey("error")) {
+          	<p class="bg-danger">
+          		@flash.get("error")
+          	</p>
+          }
+          
+          @if(flash.containsKey("success")) {
+          	<p class="bg-success">
+          		@flash.get("success")
+          	</p>
+          }
+          
+          @if(flash.containsKey("warning")) {
+          	<p class="bg-warning">
+          		@flash.get("warning")
+          	</p>
+          }
