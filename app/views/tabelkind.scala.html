@@ -1,0 +1,38 @@
+@(kinderen: List[Kind])
+
+@main("Kinderen") {
+  <h2 class="sub-header">Lijst van alle kinderen</h2>
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Naam</th>
+          <th>Geboortedatum</th>
+          <th>Straat, nummer</th>
+          <th>Gemeente</th>
+        </tr>
+      </thead>
+      <tbody>
+      
+      @for(kind <- kinderen) {
+        <tr>
+          <td>
+          	<a href="@routes.Kinderen.edit(kind.id)"><span class="glyphicon glyphicon-pencil"></span></a>
+			<a href="@routes.Kinderen.details(kind.id)"><span class="glyphicon glyphicon-search"></span></a>
+		  </td>
+          <td>@kind.voornaam @kind.achternaam</td>
+          <td>
+          	@if(kind.geboortedatum != null) {
+          		@kind.geboortedatum.format("dd-MM-yyyy")
+          	}
+          	</td>
+          <td>@kind.straatEnNummer</td>
+          <td>@kind.gemeente</td>
+        </tr>
+      }
+      </tbody>
+    </table>
+  </div>
+
+}
