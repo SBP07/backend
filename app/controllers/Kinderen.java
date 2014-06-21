@@ -13,7 +13,23 @@ public class Kinderen extends Controller {
 	 * Bind form from request and add the new Kind to the database
 	 */
 	public static Result save() {
-		return TODO;
+		Form<Kind> boundForm = kindForm.bindFromRequest();
+
+		if (boundForm.hasErrors()) {
+			flash("error", "Niet juist ingevuld. Probeer opnieuw.");
+			return badRequest(nieuwkind.render(boundForm));
+		}
+
+		Kind kind = boundForm.get();
+		if (kind.id != null) {
+			kind.update();
+			flash("success", String.format("Kind %s is geüpdated.", kind));
+		} else {
+			kind.save();
+			flash("success", String.format("Kind %s is toegevoegd.", kind));
+		}
+
+		return redirect(routes.Application.index());
 	}
 	
 	/**
