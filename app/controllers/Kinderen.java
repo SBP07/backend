@@ -1,5 +1,7 @@
 package controllers;
 
+import java.util.List;
+
 import models.*;
 import play.*;
 import play.data.Form;
@@ -62,7 +64,8 @@ public class Kinderen extends Controller {
 	 * Show a table with all the Kind'eren
 	 */
 	public static Result list() {
-		return TODO;
+		List<Kind> kinderen = Kind.findAll();
+		return ok(tabelkind.render(kinderen));
 	}
 	
 	
