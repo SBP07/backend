@@ -28,7 +28,10 @@ public class Kinderen extends Controller {
 	 * @param	id	The id of the Kind
 	 */
 	public static Result edit(Long id) {
-		return TODO;
+		Kind kind = Kind.findById(id);
+		if (kind == null)
+			return notFound("Not Found");
+		return ok(nieuwkind.render(kindForm.fill(kind)));
 	}
 	
 	/**
