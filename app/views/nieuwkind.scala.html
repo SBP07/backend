@@ -1,0 +1,25 @@
+@(kindForm: Form[Kind])
+@import helper._
+
+@implicitField = @{ FieldConstructor(bootstrap3FieldConstructorTemplate.f) }
+
+@main("Nieuw kind") {
+	@helper.form(action = routes.Kinderen.save(), 'class -> "form-horizontal") {
+		<fieldset>
+			<legend>Kind (@kindForm("voornaam").valueOr("nieuw") @kindForm("achternaam").valueOr(""))</legend>
+			<input type="hidden" value="@kindForm("id").value" class="form-control" id="id" name="id">
+			@helper.inputText(kindForm("voornaam"), 'class -> "form-control")
+			@helper.inputText(kindForm("achternaam"), 'class -> "form-control")
+			@helper.inputText(kindForm("gsmnummer"), 'class -> "form-control")
+			@helper.inputText(kindForm("thuistelefoon"), 'class -> "form-control")
+			@helper.inputText(kindForm("geboortedatum"), 'class -> "form-control")
+			@helper.inputText(kindForm("straatEnNummer"), 'class -> "form-control")
+			@helper.inputText(kindForm("gemeente"), 'class -> "form-control")
+			@helper.inputText(kindForm("medischeFicheGecontroleerd"), 'class -> "form-control")
+			
+			Checkbox medische fiche in orde
+			
+			<button type="submit" class="btn btn-primary">Toevoegen</button>
+		</fieldset>
+	}
+}
