@@ -6,7 +6,7 @@ This is the system that will power Speelplein De Speelberg. Since it's created f
 
 ### Minimum
 
-- [ ] Een gebruiker moet nieuwe kinderen kunnen toevoegen
+- [x] Een gebruiker moet nieuwe kinderen kunnen toevoegen
 - [ ] Een gebruiker moet kunnen opgeven dat kinderen blijven (voormiddag, middag, namiddag)
 - [ ] Een gebruiker moet nieuwe animatoren kunnen toevoegen
 - [ ] Een gebruiker moet kunnen opgeven welke animatoren er waren op een dag
