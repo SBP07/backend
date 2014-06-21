@@ -7,6 +7,7 @@ import play.mvc.*;
 import views.html.*;
 
 public class Kinderen extends Controller {
+	private static final Form<Kind> kindForm = Form.form(Kind.class);
 	
 	/**
 	 * Bind form from request and add the new Kind to the database
@@ -19,7 +20,7 @@ public class Kinderen extends Controller {
 	 * Show form to create a new Kind
 	 */
 	public static Result nieuw() {
-		return TODO;
+		return ok(nieuwkind.render(kindForm));
 	}
 	
 	/**
