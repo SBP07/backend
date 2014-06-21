@@ -31,7 +31,7 @@ public class Kinderen extends Controller {
 			flash("success", String.format("Kind %s is toegevoegd.", kind));
 		}
 
-		return redirect(routes.Application.index());
+		return redirect(routes.Kinderen.details(kind.id));
 	}
 	
 	/**
