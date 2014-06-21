@@ -59,9 +59,9 @@ public class Kinderen extends Controller {
 	}
 	
 	/**
-	 * Show a tabel with all the Kind'eren
+	 * Show a table with all the Kind'eren
 	 */
-	public static Result table() {
+	public static Result list() {
 		return TODO;
 	}
 	
