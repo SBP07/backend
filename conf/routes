@@ -8,7 +8,7 @@ GET     /                           controllers.Application.index()
 # Kinderen
 GET		/kind/nieuw					controllers.Kinderen.nieuw()
 POST	/kind/save					controllers.Kinderen.save()
-POST	/kind/lijst					controllers.Kinderen.list()
+GET		/kind/lijst					controllers.Kinderen.list()
 GET		/kind/edit/:id				controllers.Kinderen.edit(id: Long)
 GET		/kind/details/:id			controllers.Kinderen.details(id: Long)
 
