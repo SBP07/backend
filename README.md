@@ -34,4 +34,9 @@ This is the system that will power Speelplein De Speelberg. Since it's created f
 
 - [ ] Een gebruiker moet kinderen kunnen inschrijven met QR-codes
 
+## Development notes
+
+- `~run` to watch source files and recompile on changes
+- Default address and port during development are http://localhost:9000
+- Use `eclipse with-source=true` to also download sources. This can take a while. Then `compile`. Re-importing in Eclipse shouldn't be necessary.
 
