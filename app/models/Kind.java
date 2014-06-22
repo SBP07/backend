@@ -36,6 +36,9 @@ public class Kind extends Model{
 	@Formats.DateTime(pattern="dd/MM/yyyy")
 	public Date medischeFicheGecontroleerd;
 	
+	@OneToOne
+	public Aanwezigheden aanwezigheden = new Aanwezigheden();
+	
 	public static List<Kind> findAll() {
 		return find.all();
 	}
