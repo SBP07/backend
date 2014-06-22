@@ -1,4 +1,9 @@
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,6 +61,48 @@ public class ApplicationTest {
 		});
 
     }
+    
+    @Test
+    public void aanwezighedenKind() {
+    	running(fakeApplication(), new Runnable() {
+			public void run() {
+		    	Kind kind = new Kind();
+		    	kind.voornaam = "Milan";
+		    	kind.achternaam = "Balcaen";
+
+		    	kind.aanwezigheden.kind = kind;
+		    	
+		    	Date date1 = new Date();
+		    	Date date2 = new Date();
+		    	Date date3 = new Date();
+		    	
+		    	date1.setTime(941500800L);
+		    	date2.setTime(1067731200L);
+		    	date3.setTime(1069286400L);
+		    	
+		    	assertThat(kind.aanwezigheden.namiddagen).isNotNull();
+		    	
+			    kind.aanwezigheden.namiddagen.add(date1);
+			    kind.aanwezigheden.namiddagen.add(date2);
+			    kind.aanwezigheden.namiddagen.add(date3);
+		    	
+		    	kind.aanwezigheden.save();
+		    	kind.save();
+		    	
+		    	Long id = kind.id;
+		    	
+		    	Kind found = Kind.findById(id);
+		    	assertThat(found).isNotNull();
+		    	assertThat(found.aanwezigheden).isNotNull();
+		    	assertThat(found.aanwezigheden.namiddagen).isNotNull();
+		    	assertThat(kind.aanwezigheden.namiddagen.get(0)).isNotNull();
+		    	assertThat(found.aanwezigheden.namiddagen).contains(kind.aanwezigheden.namiddagen.get(0));
+		    	assertThat(kind.achternaam).isEqualTo(found.achternaam);
+			}
+    		
+    	});
+    }
+    
 
 
 }
