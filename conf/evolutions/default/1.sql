@@ -3,9 +3,10 @@
 
 # --- !Ups
 
-create table aanwezigheden (
+create table dag (
   id                        bigint not null,
-  constraint pk_aanwezigheden primary key (id))
+  dag                       timestamp,
+  constraint pk_dag primary key (id))
 ;
 
 create table kind (
@@ -19,30 +20,39 @@ create table kind (
   geboortedatum             timestamp,
   medische_fiche_in_orde    boolean,
   medische_fiche_gecontroleerd timestamp,
-  aanwezigheden_id          bigint,
   constraint pk_kind primary key (id))
 ;
 
-create sequence aanwezigheden_seq;
+
+create table kind_dag (
+  kind_id                        bigint not null,
+  dag_id                         bigint not null,
+  constraint pk_kind_dag primary key (kind_id, dag_id))
+;
+create sequence dag_seq;
 
 create sequence kind_seq;
 
-alter table kind add constraint fk_kind_aanwezigheden_1 foreign key (aanwezigheden_id) references aanwezigheden (id) on delete restrict on update restrict;
-create index ix_kind_aanwezigheden_1 on kind (aanwezigheden_id);
 
 
+
+alter table kind_dag add constraint fk_kind_dag_kind_01 foreign key (kind_id) references kind (id) on delete restrict on update restrict;
+
+alter table kind_dag add constraint fk_kind_dag_dag_02 foreign key (dag_id) references dag (id) on delete restrict on update restrict;
 
 # --- !Downs
 
 SET REFERENTIAL_INTEGRITY FALSE;
 
-drop table if exists aanwezigheden;
+drop table if exists dag;
 
 drop table if exists kind;
 
+drop table if exists kind_dag;
+
 SET REFERENTIAL_INTEGRITY TRUE;
 
-drop sequence if exists aanwezigheden_seq;
+drop sequence if exists dag_seq;
 
 drop sequence if exists kind_seq;
 
