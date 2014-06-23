@@ -85,19 +85,25 @@ public class ApplicationTest {
 		    	dag1.dag = date1;
 		    	dag2.dag = date1;
 		    	dag3.dag = date1;
-		    	
+
 		    	kind.voormiddagen.add(dag1);
 		    	dag1.voormiddagAanwezigheden.add(kind);
+		    
+		    	kind.voormiddagen.add(dag2);
+		    	dag2.voormiddagAanwezigheden.add(kind);
+
+		    	kind.voormiddagen.add(dag3);
+		    	dag3.voormiddagAanwezigheden.add(kind);
 		    	
 		    	assertThat(kind).isNotNull();
 		    	assertThat(kind.voormiddagen).isNotNull();
 		    	assertThat(kind.voormiddagen.get(0)).isNotNull();
 
 		    	dag1.save();
-		    	//kind.voormiddagen.get(0).save();
+		    	dag2.save();
+		    	dag3.save();
 		    	kind.save();
 		    	kind.saveManyToManyAssociations("voormiddagen");
-		    	//kind.save();
 		    	
 		    	Long id = kind.id;
 		    	
@@ -108,6 +114,8 @@ public class ApplicationTest {
 		    	assertThat(kind.voormiddagen.get(0)).isNotNull();
 		    	assertThat(found.voormiddagen).contains(kind.voormiddagen.get(0));
 		    	assertThat(kind.achternaam).isEqualTo(found.achternaam);
+
+		    	assertThat(kind.voormiddagen.get(0)).isEqualTo(dag1);
 			}
     		
     	});
