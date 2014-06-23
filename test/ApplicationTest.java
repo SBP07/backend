@@ -69,8 +69,6 @@ public class ApplicationTest {
 		    	Kind kind = new Kind();
 		    	kind.voornaam = "Milan";
 		    	kind.achternaam = "Balcaen";
-
-		    	kind.aanwezigheden.kind = kind;
 		    	
 		    	Date date1 = new Date();
 		    	Date date2 = new Date();
@@ -79,24 +77,36 @@ public class ApplicationTest {
 		    	date1.setTime(941500800L);
 		    	date2.setTime(1067731200L);
 		    	date3.setTime(1069286400L);
+
+		    	Dag dag1 = new Dag();
+		    	Dag dag2 = new Dag();
+		    	Dag dag3 = new Dag();
+
+		    	dag1.dag = date1;
+		    	dag2.dag = date1;
+		    	dag3.dag = date1;
 		    	
-		    	assertThat(kind.aanwezigheden.namiddagen).isNotNull();
+		    	kind.voormiddagen.add(dag1);
+		    	dag1.voormiddagAanwezigheden.add(kind);
 		    	
-			    kind.aanwezigheden.namiddagen.add(date1);
-			    kind.aanwezigheden.namiddagen.add(date2);
-			    kind.aanwezigheden.namiddagen.add(date3);
-		    	
-		    	kind.aanwezigheden.save();
+		    	assertThat(kind).isNotNull();
+		    	assertThat(kind.voormiddagen).isNotNull();
+		    	assertThat(kind.voormiddagen.get(0)).isNotNull();
+
+		    	dag1.save();
+		    	//kind.voormiddagen.get(0).save();
 		    	kind.save();
+		    	kind.saveManyToManyAssociations("voormiddagen");
+		    	//kind.save();
 		    	
 		    	Long id = kind.id;
 		    	
 		    	Kind found = Kind.findById(id);
 		    	assertThat(found).isNotNull();
-		    	assertThat(found.aanwezigheden).isNotNull();
-		    	assertThat(found.aanwezigheden.namiddagen).isNotNull();
-		    	assertThat(kind.aanwezigheden.namiddagen.get(0)).isNotNull();
-		    	assertThat(found.aanwezigheden.namiddagen).contains(kind.aanwezigheden.namiddagen.get(0));
+		    	assertThat(found).isNotNull();
+		    	assertThat(found.voormiddagen).isNotNull();
+		    	assertThat(kind.voormiddagen.get(0)).isNotNull();
+		    	assertThat(found.voormiddagen).contains(kind.voormiddagen.get(0));
 		    	assertThat(kind.achternaam).isEqualTo(found.achternaam);
 			}
     		
