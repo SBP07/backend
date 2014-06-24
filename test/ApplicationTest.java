@@ -118,6 +118,8 @@ public class ApplicationTest {
 		    	assertThat(kind.voormiddagen.get(0)).isEqualTo(dag1);
 		    	assertThat(kind.voormiddagen.get(1)).isEqualTo(dag2);
 		    	assertThat(kind.voormiddagen.get(2)).isEqualTo(dag3);
+
+		    	assertThat(kind.voormiddagen.size()).isEqualTo(3);
 			}
     		
     	});
