@@ -116,6 +116,8 @@ public class ApplicationTest {
 		    	assertThat(kind.achternaam).isEqualTo(found.achternaam);
 
 		    	assertThat(kind.voormiddagen.get(0)).isEqualTo(dag1);
+		    	assertThat(kind.voormiddagen.get(1)).isEqualTo(dag2);
+		    	assertThat(kind.voormiddagen.get(2)).isEqualTo(dag3);
 			}
     		
     	});
