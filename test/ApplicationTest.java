@@ -162,15 +162,15 @@ public class ApplicationTest {
 		    	assertThat(kind.voormiddagen).isNotNull();
 		    	assertThat(kind.voormiddagen.get(0)).isNotNull();
 
-		    	dag1.save();
+		    	/*dag1.save();
 		    	dag2.save();
-		    	dag3.save();
+		    	dag3.save();*/
 		    	kind.save();
+		    	//kind.saveManyToManyAssociations("voormiddagen");
 		    	
 		    	Long id = kind.id;
 		    	
 		    	Kind found = Kind.findById(id);
-		    	assertThat(found).isNotNull();
 		    	assertThat(found).isNotNull();
 		    	assertThat(found.voormiddagen).isNotNull();
 		    	assertThat(kind.voormiddagen.get(0)).isNotNull();
