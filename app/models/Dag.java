@@ -2,6 +2,7 @@ package models;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.*;
 
@@ -10,11 +11,12 @@ import models.*;
 
 @Entity
 public class Dag extends Model {
+	
 	@Id
 	public Long id;
 	
 	public Date dag;
 	
-	@ManyToMany(mappedBy="voormiddagen", cascade=CascadeType.ALL)
-	public ArrayList<Kind> voormiddagAanwezigheden = new ArrayList<Kind>();
+	@ManyToMany(cascade = CascadeType.ALL)
+	public List<Kind> voormiddagAanwezigheden = new ArrayList<Kind>();
 }
