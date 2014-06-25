@@ -17,7 +17,9 @@
 			@helper.inputText(kindForm("gemeente"), '_label -> "Gemeente", 'class -> "form-control")
 			@helper.inputText(kindForm("medischeFicheGecontroleerd"), '_label -> "Medische fiche laatst gecontroleerd op", 'class -> "form-control")
 			
-			Checkbox medische fiche in orde
+			@helper.input(kindForm("medischeFicheInOrde"), '_label -> "Medische fiche in orde") { (id, name, value, args) =>
+    			<input type="checkbox" name="@name" id="@id" @toHtmlArgs(args)>
+			}
 			
 			<button type="submit" class="btn btn-primary">Toevoegen</button>
 		</fieldset>
