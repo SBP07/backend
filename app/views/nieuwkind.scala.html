@@ -8,14 +8,14 @@
 		<fieldset>
 			<legend>Kind (@kindForm("voornaam").valueOr("nieuw") @kindForm("achternaam").valueOr(""))</legend>
 			<input type="hidden" value="@kindForm("id").value" class="form-control" id="id" name="id">
-			@helper.inputText(kindForm("voornaam"), 'class -> "form-control")
-			@helper.inputText(kindForm("achternaam"), 'class -> "form-control")
-			@helper.inputText(kindForm("gsmnummer"), 'class -> "form-control")
-			@helper.inputText(kindForm("thuistelefoon"), 'class -> "form-control")
-			@helper.inputText(kindForm("geboortedatum"), 'class -> "form-control")
-			@helper.inputText(kindForm("straatEnNummer"), 'class -> "form-control")
-			@helper.inputText(kindForm("gemeente"), 'class -> "form-control")
-			@helper.inputText(kindForm("medischeFicheGecontroleerd"), 'class -> "form-control")
+			@helper.inputText(kindForm("voornaam"), '_label -> "Voornaam", 'class -> "form-control")
+			@helper.inputText(kindForm("achternaam"), '_label -> "Achternaam", 'class -> "form-control")
+			@helper.inputText(kindForm("gsmnummer"), '_label -> "GSM-nummer", 'class -> "form-control")
+			@helper.inputText(kindForm("thuistelefoon"), '_label -> "Thuistelefoon", 'class -> "form-control")
+			@helper.inputText(kindForm("geboortedatum"), '_label -> "Geboortedatum", 'class -> "form-control")
+			@helper.inputText(kindForm("straatEnNummer"), '_label -> "Straat en nummer", 'class -> "form-control")
+			@helper.inputText(kindForm("gemeente"), '_label -> "Gemeente", 'class -> "form-control")
+			@helper.inputText(kindForm("medischeFicheGecontroleerd"), '_label -> "Medische fiche laatst gecontroleerd op", 'class -> "form-control")
 			
 			Checkbox medische fiche in orde
 			
