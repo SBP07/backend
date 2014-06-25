@@ -36,11 +36,13 @@ public class Kind extends Model{
 	@Formats.DateTime(pattern="dd/MM/yyyy")
 	public Date medischeFicheGecontroleerd;
 	
-	@ManyToMany
+	@ManyToMany(cascade=CascadeType.ALL)
 	public List<Dag> voormiddagen = new ArrayList<Dag>();
-	@ManyToMany
+	
+	@ManyToMany(cascade=CascadeType.ALL)
 	public List<Dag> middagen = new ArrayList<Dag>();
-	@ManyToMany
+	
+	@ManyToMany(cascade=CascadeType.ALL)
 	public List<Dag> namiddagen = new ArrayList<Dag>();
 	
 	public static List<Kind> findAll() {
