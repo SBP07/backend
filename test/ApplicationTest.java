@@ -83,8 +83,8 @@ public class ApplicationTest {
 		    	Dag dag3 = new Dag();
 
 		    	dag1.dag = date1;
-		    	dag2.dag = date1;
-		    	dag3.dag = date1;
+		    	dag2.dag = date2;
+		    	dag3.dag = date3;
 
 		    	kind.voormiddagen.add(dag1);
 		    	dag1.voormiddagAanwezigheden.add(kind);
@@ -146,8 +146,8 @@ public class ApplicationTest {
 		    	Dag dag3 = new Dag();
 
 		    	dag1.dag = date1;
-		    	dag2.dag = date1;
-		    	dag3.dag = date1;
+		    	dag2.dag = date2;
+		    	dag3.dag = date3;
 
 		    	kind.voormiddagen.add(dag1);
 		    	dag1.voormiddagAanwezigheden.add(kind);
