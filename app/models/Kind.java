@@ -57,4 +57,10 @@ public class Kind extends Model{
 	public String toString() {
 		return voornaam + " " + achternaam;
 	}
+	
+	@Override
+	public void save(){
+		super.save();
+		super.saveManyToManyAssociations("voormiddagen");
+	}
 }
