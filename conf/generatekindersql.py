@@ -33,8 +33,21 @@ with open('kinderen.csv', newline='') as f:
 
         kind = ("INSERT INTO Kind (id, voornaam, achternaam, straat_en_nummer, gemeente, geboortedatum) VALUES ({}, '{}', '{}', '{}', '{}', {});").format(row[0], row[3].capitalize(), row[2].capitalize(), row[4].capitalize(), row[6], row[7]);
         kinderen.append(kind)
-
+        
+        for i in range(0, 5):
+            dag = row[8+i]
+            datum = datetime.date(2014, 4, 7+i)
+            datum = "'" + datum.strftime('%Y-%m-%d %H:%M:%S') + "'"
+            if (dag == '1'):
+                insert = ("INSERT INTO DAG_KIND(DAG_DAG, KIND_ID) VALUES ({}, {});").format(datum, row[0])
+                aanwezigheden.append(insert)
 
 for kind in kinderen:
     print(kind)
+
+print('\n\n', '* - ' * 40, '\n\n')
+
+for aanw in aanwezigheden:
+    print(aanw)
+
 
