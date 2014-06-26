@@ -63,6 +63,21 @@ public class ApplicationTest {
     }
     
     @Test
+    public void dagToString() throws ParseException {
+    	Dag dag1 = new Dag();
+    	dag1.dag = new SimpleDateFormat("dd/MM/yyyy").parse("02/11/1999");
+    	assertThat(dag1.toString()).isEqualTo("02/11/1999");
+    	
+    	Dag dag2 = new Dag();
+    	dag2.dag = new SimpleDateFormat("dd/MM/yyyy").parse("27/12/2009");
+    	assertThat(dag2.toString()).isEqualTo("27/12/2009");
+    	
+    	Dag dag3 = new Dag();
+    	dag3.dag = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2002");
+    	assertThat(dag3.toString()).isEqualTo("01/01/2002");
+    }
+    
+    @Test
     public void aanwezighedenKind() {
     	running(fakeApplication(), new Runnable() {
 			public void run() {
