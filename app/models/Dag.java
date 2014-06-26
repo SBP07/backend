@@ -1,5 +1,6 @@
 package models;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,4 +18,10 @@ public class Dag extends Model {
 	
 	@ManyToMany(cascade = CascadeType.ALL)
 	public List<Kind> voormiddagAanwezigheden = new ArrayList<Kind>();
+	
+	@Override
+	public String toString(){
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+		return formatter.format(dag);
+	}
 }
