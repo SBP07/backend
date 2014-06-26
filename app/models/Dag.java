@@ -13,8 +13,6 @@ import models.*;
 public class Dag extends Model {
 	
 	@Id
-	public Long id;
-	
 	public Date dag;
 	
 	@ManyToMany(cascade = CascadeType.ALL)
