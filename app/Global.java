@@ -71,7 +71,7 @@ public class Global extends GlobalSettings {
 				// ignore the next property
 				csvReader.addIgnore();
 				csvReader.addProperty("gemeente", new CapitalizeStringParser());
-				csvReader.addDateTime("geboortedatum", "dd/MM/yyyy");
+				csvReader.addDateTime("geboortedatum", "MM/dd/yyyy");
 				csvReader.addIgnore();
 				csvReader.addIgnore();
 				csvReader.addIgnore();
