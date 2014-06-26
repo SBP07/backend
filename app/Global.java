@@ -3,6 +3,8 @@ import play.libs.*;
 
 import java.io.File;
 import java.io.FileReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import models.*;
@@ -22,8 +24,27 @@ public class Global extends GlobalSettings {
 			if (Ebean.find(Kind.class).findRowCount() == 0) {
 				// insert some Kind'eren
 				insertKinderen();
-
 			}
+			
+			if(Ebean.find(Dag.class).findRowCount() == 0) {
+				// insert some Dag'en
+				insertDagen();
+			}
+		}
+
+		private static void insertDagen() {
+			// Monday, April 07, 2014;Tuesday, April 08, 2014;Wednesday, April 09, 2014;Thursday, April 10, 2014;Friday, April 11, 2014
+			for(int i = 0; i < 5; i++) {
+				Dag dag = new Dag();
+				int dagDeel = i + 7;
+				try {
+					dag.dag = new SimpleDateFormat("dd/MM/yyyy").parse(dagDeel + "/04/2014");
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				dag.save();
+			}
+			
 		}
 
 		private static void insertKinderen() {
