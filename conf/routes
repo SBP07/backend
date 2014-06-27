@@ -11,6 +11,7 @@ POST	/kind/save					controllers.Kinderen.save()
 GET		/kind/lijst					controllers.Kinderen.list()
 GET		/kind/edit/:id				controllers.Kinderen.edit(id: Long)
 GET		/kind/details/:id			controllers.Kinderen.details(id: Long)
+GET		/kind/inschrijven/:id		controllers.Kinderen.inschrijfForm(id: Long)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
