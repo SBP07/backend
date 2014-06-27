@@ -36,7 +36,7 @@ public class Kind extends Model{
 	@Formats.DateTime(pattern="dd/MM/yyyy")
 	public Date medischeFicheGecontroleerd;
 	
-	@ManyToMany(mappedBy="voormiddagAanwezigheden", cascade = CascadeType.ALL)
+	@ManyToMany(cascade = CascadeType.ALL)
 	public List<Dag> voormiddagen = new ArrayList<Dag>();
 	
 	@ManyToMany(cascade=CascadeType.ALL)

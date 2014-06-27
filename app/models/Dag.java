@@ -16,7 +16,7 @@ public class Dag extends Model {
 	@Id
 	public Date dag;
 	
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(mappedBy = "voormiddagen", cascade = CascadeType.ALL)
 	public List<Kind> voormiddagAanwezigheden = new ArrayList<Kind>();
 	
 	@Override
