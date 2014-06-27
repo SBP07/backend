@@ -70,5 +70,14 @@ public class Kinderen extends Controller {
 		return ok(tabelkind.render(kinderen));
 	}
 	
+	/**
+	 * Show a form to record attendances
+	 */
+	public static Result inschrijfForm(Long id) {
+		Kind kind = Kind.findById(id);
+		if (kind == null)
+			return notFound("Not Found");
+		return ok(inschrijven.render(Dag.findAll(), kindForm.fill(kind)));
+	}
 	
 }
