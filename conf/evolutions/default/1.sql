@@ -1,6 +1,3 @@
-# --- Created by Ebean DDL
-# To stop Ebean DDL generation, remove this comment and start using Evolutions
-
 # --- !Ups
 
 create table dag (
@@ -28,9 +25,9 @@ create table kind_dag (
   dag_dag                        timestamp not null,
   constraint pk_kind_dag primary key (kind_id, dag_dag))
 ;
-create sequence dag_seq;
+create sequence dag_seq start with 300;
 
-create sequence kind_seq;
+create sequence kind_seq start with 300;
 
 
 
