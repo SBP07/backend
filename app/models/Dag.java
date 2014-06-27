@@ -12,7 +12,8 @@ import models.*;
 
 @Entity
 public class Dag extends Model {
-	
+	public static Finder<Long, Dag> find = new Finder<>(Long.class, Dag.class);
+
 	@Id
 	public Date dag;
 	
@@ -23,5 +24,9 @@ public class Dag extends Model {
 	public String toString(){
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 		return formatter.format(dag);
+	}
+	
+	public static List<Dag> findAll() {
+		return find.all();
 	}
 }
