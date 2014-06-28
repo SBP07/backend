@@ -1,0 +1,37 @@
+@(dagen: List[Dag], kindForm: Form[Kind], kind: Kind)
+@import helper._
+
+@implicitField = @{ FieldConstructor(bootstrap3CheckboxConstructorTemplate.f) }
+
+@main("Inschrijven") {
+	<h1>Aanwezigheden voor @kindForm("voornaam").value() @kindForm("achternaam").value()</h1>
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Dag</th>
+				<th>Dagdelen</th>
+			</tr>
+		</thead>
+		<tbody>
+		@for(dag <- dagen) {
+			<tr>
+				<td>@dag</td>
+				<td>
+					@if(kind.voormiddagen.contains(dag)) {
+						@helper.input(kindForm("voormiddagen"), '_label -> "VM") { (id, name, value, args) =>
+							<input type="checkbox" name="voormiddagen[@dag.dag].dag" value="@dag.dag" id="@id" @toHtmlArgs(args) checked>
+						}
+					} else {
+						@helper.input(kindForm("voormiddagen"), '_label -> "VM") { (id, name, value, args) =>
+							<input type="checkbox" name="voormiddagen[@dag.dag].dag" value="@dag.dag" id="@id" @toHtmlArgs(args)>
+						}
+					}
+					
+					
+					
+				</td>
+			</tr>
+		}
+		</tbody>
+	</table>
+}
