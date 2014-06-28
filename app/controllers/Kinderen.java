@@ -77,7 +77,7 @@ public class Kinderen extends Controller {
 		Kind kind = Kind.findById(id);
 		if (kind == null)
 			return notFound("Not Found");
-		return ok(inschrijven.render(Dag.findAll(), kindForm.fill(kind)));
+		return ok(inschrijven.render(Dag.findAll(), kindForm.fill(kind), kind));
 	}
 	
 }
