@@ -24,6 +24,8 @@ public class Dag extends Model {
 	
 	@Override
 	public String toString(){
+		if(dag == null)
+			return null;
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 		return formatter.format(dag);
 	}
