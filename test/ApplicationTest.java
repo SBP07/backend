@@ -60,6 +60,41 @@ public class ApplicationTest {
 			}
 		});
 
+    }    
+    @Test
+    public void findByDate() {
+    	running(fakeApplication(), new Runnable() {
+			public void run() {
+		    	try {
+		    		
+					Date date1 = new SimpleDateFormat("dd/MM/yyyy").parse("02/11/1999");
+			    	Date date2 = new SimpleDateFormat("dd/MM/yyyy").parse("27/12/2009");
+			    	Date date3 = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2002");
+			    	
+			    	Dag dag1 = new Dag();
+			    	Dag dag2 = new Dag();
+			    	Dag dag3 = new Dag();
+
+			    	dag1.dag = date1;
+			    	dag2.dag = date2;
+			    	dag3.dag = date3;
+			    	
+			    	dag1.save();
+			    	dag2.save();
+			    	dag3.save();
+			    	
+			    	assertThat(Dag.findByDate(date1)).isEqualTo(dag1);
+			    	assertThat(Dag.findByDate(date2)).isEqualTo(dag2);
+			    	assertThat(Dag.findByDate(date3)).isEqualTo(dag3);
+			    	
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+		    	
+		    	
+			}
+		});
+
     }
     
     @Test
