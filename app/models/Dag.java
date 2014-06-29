@@ -31,4 +31,8 @@ public class Dag extends Model {
 	public static List<Dag> findAll() {
 		return find.all();
 	}
+	
+	public static Dag findByDate(Date date) {
+		return find.where().eq("dag", date).findUnique();
+	}
 }
