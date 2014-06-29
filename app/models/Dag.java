@@ -37,4 +37,8 @@ public class Dag extends Model {
 	public static Dag findByDate(Date date) {
 		return find.where().eq("dag", date).findUnique();
 	}
+	
+	public static Dag findById(Long id){
+		return find.byId(id);
+	}
 }
