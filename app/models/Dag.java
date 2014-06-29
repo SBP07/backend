@@ -15,6 +15,8 @@ public class Dag extends Model {
 	public static Finder<Long, Dag> find = new Finder<>(Long.class, Dag.class);
 
 	@Id
+	public Long id;
+	
 	public Date dag;
 	
 	@ManyToMany(mappedBy = "voormiddagen", cascade = CascadeType.ALL)

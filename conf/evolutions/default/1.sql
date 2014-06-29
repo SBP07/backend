@@ -1,8 +1,9 @@
 # --- !Ups
 
 create table dag (
-  dag                       timestamp not null,
-  constraint pk_dag primary key (dag))
+  id                        bigint not null,
+  dag                       timestamp,
+  constraint pk_dag primary key (id))
 ;
 
 create table kind (
@@ -22,8 +23,8 @@ create table kind (
 
 create table kind_dag (
   kind_id                        bigint not null,
-  dag_dag                        timestamp not null,
-  constraint pk_kind_dag primary key (kind_id, dag_dag))
+  dag_id                         bigint not null,
+  constraint pk_kind_dag primary key (kind_id, dag_id))
 ;
 create sequence dag_seq start with 300;
 
@@ -34,7 +35,7 @@ create sequence kind_seq start with 300;
 
 alter table kind_dag add constraint fk_kind_dag_kind_01 foreign key (kind_id) references kind (id) on delete restrict on update restrict;
 
-alter table kind_dag add constraint fk_kind_dag_dag_02 foreign key (dag_dag) references dag (dag) on delete restrict on update restrict;
+alter table kind_dag add constraint fk_kind_dag_dag_02 foreign key (dag_id) references dag (id) on delete restrict on update restrict;
 
 # --- !Downs
 
