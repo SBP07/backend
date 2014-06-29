@@ -1,5 +1,6 @@
 package controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import models.*;
@@ -78,6 +79,48 @@ public class Kinderen extends Controller {
 		if (kind == null)
 			return notFound("Not Found");
 		return ok(inschrijven.render(Dag.findAll(), kindForm.fill(kind), kind));
+	}
+	
+	/**
+	 * Register attendances for a Kind
+	 */
+	public static Result registreerAanwezigheden() {
+		
+		Form<Kind> boundForm = kindForm.bindFromRequest();
+
+		if (boundForm.hasErrors()) {
+			flash("error", "Niet juist ingevuld. Probeer opnieuw.");
+				
+			Kind kind = Kind.findById(Long.parseLong(boundForm.field("id").value()));
+			if(kind == null)
+				return redirect(routes.Kinderen.list());
+			return badRequest(inschrijven.render(Dag.findAll(), boundForm, kind));
+		}
+
+		Kind boundKind = boundForm.get(); // this is the bound form
+		Kind kind = Kind.findById(boundKind.id); // this is the Kind we want to edit, we check them out of the database and now we're going to set their attendances
+		
+		if(kind == null)
+			return notFound("Not Found");
+		
+		kind.voormiddagen = new ArrayList<>();
+		
+		// This feels really hackish
+		// TODO Get binding to work with Lists and checkboxes
+		for(String key : boundForm.data().keySet()) {
+			if(key.startsWith("voormiddagen")){
+				String got = boundForm.data().get(key);
+				Long dagid = Long.parseLong(got);
+				Dag dag = Dag.findById(dagid);
+				if(dag ==  null)
+					continue;
+				kind.voormiddagen.add(dag);
+			}
+		}
+		
+		kind.update();
+		flash("success", String.format("Aanwezigheden van %s zijn geüpdated.", kind));
+		return redirect(routes.Kinderen.details(kind.id));
 	}
 	
 }
