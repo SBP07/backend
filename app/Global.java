@@ -3,6 +3,7 @@ import play.libs.*;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -13,23 +14,55 @@ import com.avaje.ebean.*;
 import com.avaje.ebean.text.StringParser;
 import com.avaje.ebean.text.csv.CsvReader;
 
+import au.com.bytecode.opencsv.CSVReader;
+
 public class Global extends GlobalSettings {
 	public void onStart(Application app) {
-
+		System.out.println("[Global.onStart] Starting application...");
 		InitialData.insert(app);
 	}
 
 	static class InitialData {
 		public static void insert(Application app) {
-			if (Ebean.find(Kind.class).findRowCount() == 0) {
-				// insert some Kind'eren
-				insertKinderen();
-			}
 			
 			if(Ebean.find(Dag.class).findRowCount() == 0) {
 				// insert some Dag'en
 				insertDagen();
 			}
+			if (Ebean.find(Kind.class).findRowCount() == 0) {
+				// insert some Kind'eren
+				insertKinderen();
+				insertAanwezigheden();
+			}
+		}
+
+		private static void insertAanwezigheden() {
+			try {
+			    CSVReader reader = new CSVReader(new FileReader("conf/aanwezigheden.csv"));
+			    String [] line;
+			    while ((line = reader.readNext()) != null) {
+			    	Long id = Long.parseLong(line[0]);
+			    	
+			    	Kind kind = Kind.findById(id);
+			    	if(kind == null)
+			    		continue;
+			    	
+			    	for(int i = 1; i < 6; i++)
+			    	{
+			    		if(line[i].equals("1")){
+							int dagDeel = i + 6;
+			    			Dag dag = Dag.findByDate(new SimpleDateFormat("dd/MM/yyyy").parse(dagDeel + "/04/2014"));
+			    			dag.voormiddagAanwezigheden.add(kind);
+			    			kind.voormiddagen.add(dag);
+			    			kind.save();
+			    		}
+			    	}
+			    }
+			} catch (IOException | ParseException e) {
+				e.printStackTrace();
+			}
+
+			
 		}
 
 		private static void insertDagen() {
