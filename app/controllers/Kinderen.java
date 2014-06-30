@@ -114,7 +114,7 @@ public class Kinderen extends Controller {
 				Dag dag = Dag.findById(dagid);
 				if(dag ==  null)
 					continue;
-				kind.voormiddagen.add(dag);
+				kind.registerVMAttendance(dag);
 			}
 		}
 		

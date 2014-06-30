@@ -136,14 +136,9 @@ public class ApplicationTest {
 		    	dag2.dag = date2;
 		    	dag3.dag = date3;
 
-		    	kind.voormiddagen.add(dag1);
-		    	dag1.voormiddagAanwezigheden.add(kind);
-		    
-		    	kind.voormiddagen.add(dag2);
-		    	dag2.voormiddagAanwezigheden.add(kind);
-
-		    	kind.voormiddagen.add(dag3);
-		    	dag3.voormiddagAanwezigheden.add(kind);
+		    	kind.registerVMAttendance(dag1);
+		    	kind.registerVMAttendance(dag2);
+		    	kind.registerVMAttendance(dag3);
 		    	
 		    	assertThat(kind).isNotNull();
 		    	assertThat(kind.voormiddagen).isNotNull();
@@ -196,14 +191,9 @@ public class ApplicationTest {
 		    	dag2.dag = date2;
 		    	dag3.dag = date3;
 
-		    	kind.voormiddagen.add(dag1);
-		    	dag1.voormiddagAanwezigheden.add(kind);
-		    
-		    	kind.voormiddagen.add(dag2);
-		    	dag2.voormiddagAanwezigheden.add(kind);
-
-		    	kind.voormiddagen.add(dag3);
-		    	dag3.voormiddagAanwezigheden.add(kind);
+		    	kind.registerVMAttendance(dag1);
+		    	kind.registerVMAttendance(dag2);
+		    	kind.registerVMAttendance(dag3);
 		    	
 		    	assertThat(kind).isNotNull();
 		    	assertThat(kind.voormiddagen).isNotNull();

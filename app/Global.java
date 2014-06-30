@@ -52,8 +52,7 @@ public class Global extends GlobalSettings {
 			    		if(line[i].equals("1")){
 							int dagDeel = i + 6;
 			    			Dag dag = Dag.findByDate(new SimpleDateFormat("dd/MM/yyyy").parse(dagDeel + "/04/2014"));
-			    			dag.voormiddagAanwezigheden.add(kind);
-			    			kind.voormiddagen.add(dag);
+			    			kind.registerVMAttendance(dag);
 			    			kind.save();
 			    		}
 			    	}
