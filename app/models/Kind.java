@@ -63,4 +63,13 @@ public class Kind extends Model{
 		super.save();
 		super.saveManyToManyAssociations("voormiddagen");
 	}
+	
+	/**
+	 * Register an attendance for a Kind in the morning
+	 * @param dag The day to register attendance for
+	 */
+	public void registerVMAttendance(Dag dag) {
+		this.voormiddagen.add(dag);
+		dag.voormiddagAanwezigheden.add(this);
+	}
 }
