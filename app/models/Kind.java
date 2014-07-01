@@ -72,4 +72,26 @@ public class Kind extends Model{
 		this.voormiddagen.add(dag);
 		dag.voormiddagAanwezigheden.add(this);
 	}
+	
+	/**
+	 * Register an attendance for a Kind in the morning
+	 * @param dag The day to register attendance for
+	 */
+	public void unregisterVMAttendance(Dag dag) {
+		Iterator<Dag> it1 = this.voormiddagen.iterator();
+		while(it1.hasNext()){
+			Dag vmDag = it1.next();
+			if(vmDag.equals(dag)) {
+				it1.remove();
+			}
+		}
+		
+		Iterator<Kind> it2 = dag.voormiddagAanwezigheden.iterator();
+		while(it2.hasNext()){
+			Kind kind = it2.next();
+			if(kind.equals(this)) {
+				it2.remove();
+			}
+		}
+	}
 }
