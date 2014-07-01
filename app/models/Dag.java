@@ -41,4 +41,13 @@ public class Dag extends Model {
 	public static Dag findById(Long id){
 		return find.byId(id);
 	}
+	
+	public boolean equals(Object obj){
+		if(obj instanceof Dag) {
+			Dag other = (Dag)obj;
+			return this.dag.equals(other.dag);
+		} else {
+			return false;
+		}
+	}
 }
