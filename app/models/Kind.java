@@ -68,6 +68,11 @@ public class Kind extends Model{
 	public boolean equals(Object obj) {
 		if(obj instanceof Kind) {
 			Kind other = (Kind)obj;
+			if(this.id == null || other.id == null)
+				// even if this.id == other.id == null, the two Kind objects are possibly not equal
+				// we'll let Object.equals(...) handle it, that will return true if they point to the same space in memory
+				return super.equals(other);
+
 			return this.id.equals(other.id);
 		} else {
 			return false;
