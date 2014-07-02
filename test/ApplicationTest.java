@@ -123,9 +123,19 @@ public class ApplicationTest {
     	Dag dag3 = new Dag();
     	dag3.dag = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2002");
 
+    	Dag dag4 = new Dag();
+    	Date date = new Date();
+    	date.setTime(1067731200L);
+    	dag4.dag = date;
+    	
+    	Dag dag5 = new Dag(); // dag5.dag == null
+
     	assertThat(dag1).isEqualTo(dag1);
     	assertThat(dag2).isEqualTo(dag2);
     	assertThat(dag3).isEqualTo(dag3);
+    	assertThat(date).isEqualTo(date);
+    	assertThat(dag4).isEqualTo(dag4);
+    	assertThat(dag5).isEqualTo(dag5);
     	
 
     	assertThat(dag1).isEqualTo(dag2);
@@ -133,6 +143,59 @@ public class ApplicationTest {
     	
     	assertThat(dag1).isNotEqualTo(dag3);
     	assertThat(dag3).isNotEqualTo(dag1);
+    }
+    
+    @Test
+    public void unregisterAanwezigheden() {
+    	running(fakeApplication(), new Runnable() {
+			public void run() {
+		    	Kind kind = new Kind();
+		    	kind.voornaam = "Milan";
+		    	kind.achternaam = "Balcaen";
+		    	
+		    	Date date1 = new Date();
+		    	Date date2 = new Date();
+		    	Date date3 = new Date();
+		    	
+		    	date1.setTime(941500800L);
+		    	date2.setTime(1067731200L);
+		    	date3.setTime(1069286400L);
+
+		    	Dag dag1 = new Dag();
+		    	Dag dag2 = new Dag();
+		    	Dag dag3 = new Dag();
+
+		    	dag1.dag = date1;
+		    	dag2.dag = date2;
+		    	dag3.dag = date3;
+
+		    	kind.registerVMAttendance(dag1);
+		    	kind.registerVMAttendance(dag2);
+		    	kind.registerVMAttendance(dag3);
+		    	
+		    	assertThat(kind.voormiddagen.size()).isEqualTo(3);
+		    	
+		    	kind.save();
+		    	
+		    	kind.unregisterVMAttendance(dag1);
+		    	kind.saveManyToManyAssociations("voormiddagen");
+		    	kind.update();
+		    	assertThat(kind.voormiddagen.size()).isEqualTo(2);
+		    	kind.registerVMAttendance(dag1);
+		    	kind.saveManyToManyAssociations("voormiddagen");
+		    	kind.update();
+		    	assertThat(kind.voormiddagen.size()).isEqualTo(3);
+		    	
+		    	kind.unregisterVMAttendance(dag2);
+		    	kind.saveManyToManyAssociations("voormiddagen");
+		    	kind.update();
+
+		    	assertThat(kind.voormiddagen.size()).isEqualTo(2);
+		    	assertThat(kind.voormiddagen).contains(dag1);
+		    	assertThat(kind.voormiddagen).contains(dag2);
+		    	
+			}
+		});
     }
     
     @Test
