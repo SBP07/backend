@@ -315,8 +315,10 @@ public class ApplicationTest {
 				
 				Kind kind2 = new Kind();
 				kind2.voornaam = "Testnaam"; // even though they have the same name, they shouldn't be equal
-				
+
 				assertThat(kind1).isNotEqualTo(kind2);
+				assertThat(kind1).isEqualTo(kind1);
+				assertThat(kind2).isEqualTo(kind2);
 				
 				kind1.save();
 				kind2.save();
@@ -326,7 +328,8 @@ public class ApplicationTest {
 				assertThat(kind2).isEqualTo(kind2);
 				
 				Kind found = Kind.findById(kind1.id);
-				assertThat(found).isEqualTo(kind2);
+				assertThat(found).isNotNull();
+				assertThat(found).isEqualTo(kind1);
 			}
     	});
     }
