@@ -64,6 +64,16 @@ public class Kind extends Model{
 		super.saveManyToManyAssociations("voormiddagen");
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof Kind) {
+			Kind other = (Kind)obj;
+			return this.id.equals(other.id);
+		} else {
+			return false;
+		}
+	}
+	
 	/**
 	 * Register an attendance for a Kind in the morning
 	 * @param dag The day to register attendance for
