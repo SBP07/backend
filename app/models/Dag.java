@@ -2,11 +2,14 @@ package models;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.persistence.*;
 
+import play.Logger;
 import play.db.ebean.Model;
 import models.*;
 
@@ -43,9 +46,31 @@ public class Dag extends Model {
 	}
 	
 	public boolean equals(Object obj){
+		if(obj == null)
+			return false;
+		
 		if(obj instanceof Dag) {
-			Dag other = (Dag)obj;
-			return this.dag.equals(other.dag);
+			if(this.dag == null && ((Dag)obj).dag == null)
+				return true;
+			
+			Calendar otherCal = new GregorianCalendar();
+			Calendar thisCal = new GregorianCalendar();
+			otherCal.setTime( ((Dag)obj).dag );
+			thisCal.setTime(this.dag);
+			
+			thisCal.set(Calendar.HOUR_OF_DAY, 0);
+			thisCal.set(Calendar.MINUTE, 0);
+			thisCal.set(Calendar.SECOND, 0);
+			thisCal.set(Calendar.MILLISECOND, 0);
+			long thisTime = thisCal.getTimeInMillis();
+			
+			otherCal.set(Calendar.HOUR_OF_DAY, 0);
+			otherCal.set(Calendar.MINUTE, 0);
+			otherCal.set(Calendar.SECOND, 0);
+			otherCal.set(Calendar.MILLISECOND, 0);
+			long otherTime = otherCal.getTimeInMillis();
+
+			return otherTime == thisTime;
 		} else {
 			return false;
 		}
