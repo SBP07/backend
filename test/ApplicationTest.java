@@ -305,5 +305,30 @@ public class ApplicationTest {
     		
     	});
     }
+    
+    @Test
+    public void kindEquals() {
+    	running(fakeApplication(), new Runnable() {
+			public void run() {
+				Kind kind1 = new Kind();
+				kind1.voornaam = "Testnaam";
+				
+				Kind kind2 = new Kind();
+				kind2.voornaam = "Testnaam"; // even though they have the same name, they shouldn't be equal
+				
+				assertThat(kind1).isNotEqualTo(kind2);
+				
+				kind1.save();
+				kind2.save();
+				
+				assertThat(kind1).isNotEqualTo(kind2);
+				assertThat(kind1).isEqualTo(kind1);
+				assertThat(kind2).isEqualTo(kind2);
+				
+				Kind found = Kind.findById(kind1.id);
+				assertThat(found).isEqualTo(kind2);
+			}
+    	});
+    }
 
 }
