@@ -103,16 +103,15 @@ public class Kinderen extends Controller {
 		if(kind == null)
 			return notFound("Not Found");
 		
-		kind.voormiddagen = new ArrayList<>();
-		
-		// This feels really hackish
-		// TODO Get binding to work with Lists and checkboxes
-		for(String key : boundForm.data().keySet()) {
-			if(key.startsWith("voormiddagen")){
-				String got = boundForm.data().get(key);
-				Long dagid = Long.parseLong(got);
-				Dag dag = Dag.findById(dagid);
-				if(dag ==  null)
+		for (int i = 0; i < boundKind.voormiddagen.size(); i++) {
+			if(boundKind.voormiddagen.get(i).id == null) {
+				boundKind.voormiddagen.remove(i);
+			}else {
+				Long id = boundKind.voormiddagen.get(i).id;
+				Dag dag = Dag.findById(id);
+				boundKind.unregisterVMAttendance(boundKind.voormiddagen.get(i));
+				boundKind.voormiddagen.remove(i);
+				if(dag == null)
 					continue;
 				kind.registerVMAttendance(dag);
 			}
