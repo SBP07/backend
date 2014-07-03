@@ -159,7 +159,7 @@ public class ApplicationTest {
 		    	
 		    	date1.setTime(941500800L);
 		    	date2.setTime(1067731200L);
-		    	date3.setTime(1069286400L);
+		    	date3.setTime(1199286400L);
 
 		    	Dag dag1 = new Dag();
 		    	Dag dag2 = new Dag();
@@ -187,12 +187,12 @@ public class ApplicationTest {
 		    	assertThat(kind.voormiddagen.size()).isEqualTo(3);
 		    	
 		    	kind.unregisterVMAttendance(dag2);
-		    	kind.saveManyToManyAssociations("voormiddagen");
 		    	kind.update();
+		    	kind.saveManyToManyAssociations("voormiddagen");
 
 		    	assertThat(kind.voormiddagen.size()).isEqualTo(2);
 		    	assertThat(kind.voormiddagen).contains(dag1);
-		    	assertThat(kind.voormiddagen).contains(dag2);
+		    	assertThat(kind.voormiddagen).contains(dag3);
 		    	
 			}
 		});
@@ -267,7 +267,7 @@ public class ApplicationTest {
 		    	
 		    	date1.setTime(941500800L);
 		    	date2.setTime(1067731200L);
-		    	date3.setTime(1069286400L);
+		    	date3.setTime(1119286400L);
 
 		    	Dag dag1 = new Dag();
 		    	Dag dag2 = new Dag();
