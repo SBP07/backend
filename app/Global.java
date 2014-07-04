@@ -18,7 +18,7 @@ import au.com.bytecode.opencsv.CSVReader;
 
 public class Global extends GlobalSettings {
 	public void onStart(Application app) {
-		System.out.println("[Global.onStart] Starting application...");
+		Logger.debug("[Global.onStart] Starting application...");
 		InitialData.insert(app);
 	}
 
