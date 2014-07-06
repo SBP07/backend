@@ -4,6 +4,7 @@ import java.util.*;
 
 import javax.persistence.*;
 
+import play.Logger;
 import play.db.ebean.*;
 import play.data.format.*;
 import play.data.validation.*;
@@ -84,8 +85,11 @@ public class Kind extends Model{
 	 * @param dag The day to register attendance for
 	 */
 	public void registerVMAttendance(Dag dag) {
-		this.voormiddagen.add(dag);
-		dag.voormiddagAanwezigheden.add(this);
+		if(!this.voormiddagen.contains(dag))
+			this.voormiddagen.add(dag);
+		
+		if(!dag.voormiddagAanwezigheden.contains(this))
+			dag.voormiddagAanwezigheden.add(this);
 	}
 	
 	/**
