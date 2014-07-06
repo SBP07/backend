@@ -85,6 +85,54 @@ public class KindApplicationTest {
 			}
 		});
     }
+    @Test
+    public void unregisterAllAanwezigheden() {
+    	running(fakeApplication(), new Runnable() {
+			public void run() {
+		    	Kind kind1 = new Kind();
+		    	kind1.voornaam = "Milan";
+		    	kind1.achternaam = "Balcaen";
+		    	
+		    	Kind kind2 = new Kind();
+		    	kind2.voornaam = "Eenander";
+		    	kind2.achternaam = "Kind";
+		    	
+		    	Date date1 = new Date();
+		    	Date date2 = new Date();
+		    	Date date3 = new Date();
+		    	
+		    	date1.setTime(941500800L);
+		    	date2.setTime(1067731200L);
+		    	date3.setTime(1199286400L);
+
+		    	Dag dag1 = new Dag();
+		    	Dag dag2 = new Dag();
+		    	Dag dag3 = new Dag();
+
+		    	dag1.dag = date1;
+		    	dag2.dag = date2;
+		    	dag3.dag = date3;
+
+		    	kind1.registerVMAttendance(dag1);
+		    	kind1.registerVMAttendance(dag2);
+		    	kind1.registerVMAttendance(dag3);
+
+		    	kind2.registerVMAttendance(dag1);
+		    	kind2.registerVMAttendance(dag3);
+		    	
+		    	assertThat(kind1.voormiddagen.size()).isEqualTo(3);
+		    	
+		    	kind1.save();
+		    	
+		    	kind1.unregisterAllVMAttendances();
+		    	
+		    	assertThat(kind1.voormiddagen).isEmpty();
+		    	assertThat(dag1.voormiddagAanwezigheden).containsOnly(kind2);
+		    	assertThat(dag2.voormiddagAanwezigheden).isEmpty();
+		    	
+			}
+		});
+    }
     
 
     @Test
@@ -101,7 +149,7 @@ public class KindApplicationTest {
 		    	
 		    	date1.setTime(941500800L);
 		    	date2.setTime(1067731200L);
-		    	date3.setTime(1069286400L);
+		    	date3.setTime(1404604800L);
 
 		    	Dag dag1 = new Dag();
 		    	Dag dag2 = new Dag();
@@ -156,7 +204,7 @@ public class KindApplicationTest {
 		    	
 		    	date1.setTime(941500800L);
 		    	date2.setTime(1067731200L);
-		    	date3.setTime(1119286400L);
+		    	date3.setTime(1404604800L);
 
 		    	Dag dag1 = new Dag();
 		    	Dag dag2 = new Dag();
