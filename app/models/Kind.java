@@ -113,4 +113,26 @@ public class Kind extends Model{
 			}
 		}
 	}
+	
+	/**
+	 * Remove all morning attendances
+	 * This will also remove them from each Dag.voormiddagen
+	 */
+	public void unregisterAllVMAttendances(){
+		// iterate through all voormiddagen
+		Iterator<Dag> it1 = this.voormiddagen.iterator();
+		while(it1.hasNext()){
+			Dag vmDag = it1.next();
+			
+			// iterate through all attendances on this day and remove this Kind
+			Iterator<Kind> it2 = vmDag.voormiddagAanwezigheden.iterator();
+			while(it2.hasNext()){
+				Kind kind = it2.next();
+				if(kind.equals(this)) {
+					it2.remove();
+				}
+			}
+			it1.remove();
+		}
+	}
 }
