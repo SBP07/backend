@@ -1,7 +1,10 @@
 package controllers;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+
+import com.avaje.ebean.Ebean;
 
 import models.*;
 import play.*;
@@ -102,15 +105,16 @@ public class Kinderen extends Controller {
 		
 		if(kind == null)
 			return notFound("Not Found");
+
+		kind.unregisterAllVMAttendances(); // unregister all attendances, we'll add the new ones from the bound form now
 		
-		for (int i = 0; i < boundKind.voormiddagen.size(); i++) {
-			if(boundKind.voormiddagen.get(i).id == null) {
-				boundKind.voormiddagen.remove(i);
-			}else {
-				Long id = boundKind.voormiddagen.get(i).id;
-				Dag dag = Dag.findById(id);
-				boundKind.unregisterVMAttendance(boundKind.voormiddagen.get(i));
-				boundKind.voormiddagen.remove(i);
+		List<Dag> lijst = boundKind.voormiddagen;
+		Iterator<Dag> it = lijst.iterator();
+		
+		while(it.hasNext()){
+			Dag boundDag = it.next();
+			if(boundDag.id != null) {
+				Dag dag = Dag.findById(boundDag.id);
 				if(dag == null)
 					continue;
 				kind.registerVMAttendance(dag);
