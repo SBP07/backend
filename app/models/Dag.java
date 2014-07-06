@@ -53,7 +53,7 @@ public class Dag extends Model {
 			if(this.dag == null && ((Dag)obj).dag == null)
 				return true;
 			
-			if(((Dag)obj).dag == null)
+			if(((Dag)obj).dag == null || this.dag == null)
 				return false;
 			
 			Calendar otherCal = new GregorianCalendar();
