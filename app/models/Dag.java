@@ -59,7 +59,7 @@ public class Dag extends Model {
 		
 		if(obj instanceof Dag) {
 			if(this.dag == null && ((Dag)obj).dag == null)
-				return true;
+				return super.equals(((Dag)obj));
 			
 			if(((Dag)obj).dag == null || this.dag == null)
 				return false;
