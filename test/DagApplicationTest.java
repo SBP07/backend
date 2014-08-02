@@ -79,8 +79,10 @@ public class DagApplicationTest {
     	Date date = new Date();
     	date.setTime(1067731200L);
     	dag4.dag = date;
-    	
+
     	Dag dag5 = new Dag(); // dag5.dag == null
+    	Dag dag6 = new Dag(); // dag6.dag == null
+    	
     	assertThat(dag5.dag).isNull();
 
     	assertThat(dag1).isEqualTo(dag1);
@@ -99,6 +101,9 @@ public class DagApplicationTest {
     	
     	assertThat(dag5).isNotEqualTo(dag2);
     	assertThat(dag2).isNotEqualTo(dag5);
+    	
+    	assertThat(dag6).isNotEqualTo(dag5);
+    	assertThat(dag5).isNotEqualTo(dag6);
     }
     
     
