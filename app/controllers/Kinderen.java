@@ -28,6 +28,10 @@ public class Kinderen extends Controller {
 
 		Kind kind = boundForm.get();
 		if (kind.id != null) {
+			Kind toGetAttendances = Kind.findById(kind.id);
+			if(toGetAttendances != null) {
+				kind.voormiddagen = new ArrayList<>(toGetAttendances.voormiddagen);
+			}
 			kind.update();
 			flash("success", String.format("Kind %s is geüpdated.", kind));
 		} else {
