@@ -44,6 +44,14 @@ public class Dag extends Model {
 	public static Dag findById(Long id){
 		return find.byId(id);
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((dag == null) ? 0 : dag.hashCode());
+		return result;
+	}
 	
 	public boolean equals(Object obj){
 		if(obj == null)
