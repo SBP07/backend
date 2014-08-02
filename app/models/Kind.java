@@ -96,6 +96,12 @@ public class Kind extends Model{
 		return true;
 	}
 
+	@Override
+	public void update() {
+		super.update();
+		saveManyToManyAssociations("voormiddagen");
+	}
+	
 	/**
 	 * Register an attendance for a Kind in the morning
 	 * @param dag The day to register attendance for
