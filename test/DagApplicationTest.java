@@ -104,6 +104,8 @@ public class DagApplicationTest {
     	
     	assertThat(dag6).isNotEqualTo(dag5);
     	assertThat(dag5).isNotEqualTo(dag6);
+    	
+    	assertThat(dag5).isEqualTo(dag5);
     }
     
     
