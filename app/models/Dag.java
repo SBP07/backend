@@ -54,8 +54,8 @@ public class Dag extends Model {
 	}
 	
 	public boolean equals(Object obj){
-		if(obj == null)
-			return false;
+		if(this == obj)
+			return true;
 		
 		if(obj instanceof Dag) {
 			if(this.dag == null && ((Dag)obj).dag == null)
