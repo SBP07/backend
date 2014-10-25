@@ -2,13 +2,19 @@ name := "speelsysteem"
 
 version := "1.0-SNAPSHOT"
 
+lazy val root = (project in file(".")).enablePlugins(PlayScala)
+
+scalaVersion := "2.11.1"
+
+
 libraryDependencies ++= Seq(
-  javaJdbc,
-  javaEbean,
+  jdbc,
+  anorm,
   cache,
-  "org.webjars" %% "webjars-play" % "2.2.1-2",
+  ws,
+  javaEbean,
+  "org.webjars" %% "webjars-play" % "2.3.0-2",
   "org.webjars" % "bootstrap" % "3.1.1-2",
   "net.sf.opencsv" % "opencsv" % "2.0"
 )     
 
-play.Project.playJavaSettings
