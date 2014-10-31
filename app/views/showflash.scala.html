@@ -1,17 +1,18 @@
-@()
-          @if(flash.containsKey("error")) {
+@()(implicit flash: Flash)
+
+          if(flash.get("error").isDefined) {
           	<p class="bg-danger">
-          		@flash.get("error")
+          		flash.get("error")
           	</p>
           }
           
-          @if(flash.containsKey("success")) {
+          if(flash.get("success").isDefined) {
           	<p class="bg-success">
-          		@flash.get("success")
+          		flash.get("success")
           	</p>
           }
           
-          @if(flash.containsKey("warning")) {
+          @if(flash.get("warning").isDefined) {
           	<p class="bg-warning">
           		@flash.get("warning")
           	</p>
