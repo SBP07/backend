@@ -1,0 +1,43 @@
+@(children: List[Child])
+
+@main("Kinderen") {
+<h2 class="sub-header">Lijst van alle kinderen</h2>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Naam</th>
+                <th>Geboortedatum</th>
+                <th>Straat, nummer</th>
+                <th>Gemeente</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @for(child <- children) {
+            <tr>
+                <td>@child.id.getOrElse("/")</td>
+                <td>
+                    @if(child.id.isDefined) {
+                    <a href="@routes.Children.details(child.id.get)">
+                    }
+                        @child.firstName @child.lastName
+                    @if(child.id.isDefined) {
+                    </a>
+                    }
+                </td>
+                <td>
+                    @if(child.birthDate.isDefined) {
+                        @child.birthDate.orNull
+                    }
+                </td>
+                <td>@child.street</td>
+                <td>@child.city</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+}
