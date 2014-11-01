@@ -1,18 +1,12 @@
-# Routes
-# This file defines all application routes (Higher priority routes first)
-# ~~~~
-
 # Home page
-GET     /                           controllers.Application.index()
+#GET     /                           controllers.Application.index()
 
-# Kinderen
-GET		/kind/nieuw					controllers.Kinderen.nieuw()
-POST	/kind/save					controllers.Kinderen.save()
-GET		/kind/lijst					controllers.Kinderen.list()
-GET		/kind/edit/:id				controllers.Kinderen.edit(id: Long)
-GET		/kind/details/:id			controllers.Kinderen.details(id: Long)
-GET		/kind/inschrijven/:id		controllers.Kinderen.inschrijfForm(id: Long)
-POST	/kind/inschrijven			controllers.Kinderen.registreerAanwezigheden()
+# Children
+GET     /kind/lijst         controllers.Children.showList
+GET     /kind/nieuw         controllers.Children.newChild
+POST    /kind/nieuw         controllers.Children.saveChild
+GET     /kind/edit/:id      controllers.Children.editChild(id: Long)
+GET     /kind/detials/:id   controllers.Children.details(id: Long)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
