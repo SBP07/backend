@@ -16,6 +16,7 @@ libraryDependencies ++= Seq(
   "org.webjars" % "bootstrap" % "3.1.1-2",
   "net.sf.opencsv" % "opencsv" % "2.0",
   "com.typesafe.slick" %% "slick" % "2.1.0",
+  "com.typesafe.play" %% "play-slick" % "0.8.0",
   "com.h2database" % "h2" % "1.3.175"
 )     
 
