@@ -50,6 +50,7 @@ object ChildrenSlick {
   def findById(id: Long)(implicit s: Session): Option[Child] = children.filter(_.id === id).firstOption
   def findAll(implicit s: Session) = children.list
   def insert(child: Child)(implicit s: Session) = children.insert(child)
+  def count(implicit s: Session) = children.length.run
   def update(child: Child)(implicit s: Session) = {
     child.id match {
       case Some(id) => children.filter(_.id === id).update(child)
