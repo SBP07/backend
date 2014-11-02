@@ -7,7 +7,9 @@
 	@helper.form(action = routes.Children.saveChild, 'class -> "form-horizontal") {
 		<fieldset>
 			<legend>Kind (@childForm("firstName").value.getOrElse("nieuw") @childForm("lastName").value.getOrElse(""))</legend>
-			<input type="hidden" value="@childForm("id").value" class="form-control" id="id" name="id">
+                        @if(childForm("id").value.isDefined) {
+                            <input type="hidden" value="@childForm("id").value.get" class="form-control" id="id" name="id">
+                        }
 			@helper.inputText(childForm("firstName"), '_label -> "Voornaam", 'class -> "form-control")
 			@helper.inputText(childForm("lastName"), '_label -> "Achternaam", 'class -> "form-control")
 			@helper.inputText(childForm("mobilePhone"), '_label -> "GSM-nummer", 'class -> "form-control")

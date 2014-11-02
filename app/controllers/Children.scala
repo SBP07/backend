@@ -4,8 +4,11 @@ import play.api._
 import play.api.mvc._
 import play.api.data._
 import play.api.data.Forms._
+import play.api.data.format.Formats._
 import play.api.db.slick._
 import scala.slick.driver.H2Driver.simple._
+
+import play.api.Logger
 
 import views._
 import models._
@@ -14,7 +17,7 @@ object Children extends Controller {
 
   val childForm = Form(
     mapping(
-      "id" -> ignored(None:Option[Long]), // difference between this and optional(number)?
+      "id" -> optional(of[Long]), // difference between this and optional(number)?
       "firstName" -> nonEmptyText,
       "lastName" -> nonEmptyText,
       "mobilePhone" -> optional(text),
@@ -52,7 +55,7 @@ object Children extends Controller {
   def editChild(id: Long) = DBAction { implicit rs =>
     val child = ChildrenSlick.findById(id)
     child match{
-      case Some(ch) => Ok(html.child_form.render(childForm.fill(ch)));
+      case Some(ch) => Ok(html.child_form.render(childForm.fill(ch)))
       case _ => BadRequest("Geen geldige id")
     }
   }  
