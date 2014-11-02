@@ -8,8 +8,6 @@ import play.api.data.format.Formats._
 import play.api.db.slick._
 import scala.slick.driver.H2Driver.simple._
 
-import play.api.Logger
-
 import views._
 import models._
 
@@ -17,7 +15,7 @@ object Children extends Controller {
 
   val childForm = Form(
     mapping(
-      "id" -> optional(of[Long]), // difference between this and optional(number)?
+      "id" -> optional(of[Long]),
       "firstName" -> nonEmptyText,
       "lastName" -> nonEmptyText,
       "mobilePhone" -> optional(text),
@@ -33,13 +31,13 @@ object Children extends Controller {
   )
   
   
-  def showList = DBAction { implicit rs => Ok(html.child_list.render(models.ChildrenSlick.findAll)) }
+  def showList = DBAction { implicit rs => Ok(html.child_list.render(models.ChildrenSlick.findAll, rs.flash)) }
   
-  def newChild = Action { Ok(html.child_form.render(childForm)) }
+  def newChild = Action { implicit rs => Ok(html.child_form.render(childForm, rs.flash)) }
   
-  def saveChild = DBAction { implicit request =>
+  def saveChild = DBAction { implicit rs =>
     childForm.bindFromRequest.fold(
-      formWithErrors => BadRequest(html.child_form.render(formWithErrors)),
+      formWithErrors => BadRequest(html.child_form.render(formWithErrors, rs.flash)),
       child => {
         import models.ChildrenSlick
         child.id match{
@@ -55,7 +53,7 @@ object Children extends Controller {
   def editChild(id: Long) = DBAction { implicit rs =>
     val child = ChildrenSlick.findById(id)
     child match{
-      case Some(ch) => Ok(html.child_form.render(childForm.fill(ch)))
+      case Some(ch) => Ok(html.child_form.render(childForm.fill(ch), rs.flash))
       case _ => BadRequest("Geen geldige id")
     }
   }  

@@ -1,4 +1,4 @@
-@(childForm: Form[Child])
+@(childForm: Form[Child])(implicit flash: Flash)
 @import helper._
 
 @implicitField = @{ FieldConstructor(bootstrap3FieldConstructorTemplate.f) }

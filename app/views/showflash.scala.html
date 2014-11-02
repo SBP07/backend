@@ -1,14 +1,14 @@
 @()(implicit flash: Flash)
 
-          if(flash.get("error").isDefined) {
+          @if(flash.get("error").isDefined) {
           	<p class="bg-danger">
-          		flash.get("error")
+          		@flash.get("error")
           	</p>
           }
           
-          if(flash.get("success").isDefined) {
+          @if(flash.get("success").isDefined) {
           	<p class="bg-success">
-          		flash.get("success")
+          		@flash.get("success")
           	</p>
           }
           
