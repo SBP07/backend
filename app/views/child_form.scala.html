@@ -16,11 +16,8 @@
 			@helper.inputText(childForm("street"), '_label -> "Straat en nummer", 'class -> "form-control")
 			@helper.inputText(childForm("city"), '_label -> "Gemeente", 'class -> "form-control")
 			@helper.inputText(childForm("medicalRecordChecked"), '_label -> "Medische fiche laatst gecontroleerd op", 'class -> "form-control")
-			
-			@helper.input(childForm("medischeFicheInOrde"), '_label -> "Medische fiche in orde") { (id, name, value, args) =>
-                            <input type="checkbox" name="@name" id="@id" @toHtmlArgs(args)>
-			}
-			
+                        @helper.checkbox(childForm("medicalRecordGood"), '_label -> "Medische fiche in orde")
+                        
 			<button type="submit" class="btn btn-primary">Toevoegen</button>
 		</fieldset>
 	}

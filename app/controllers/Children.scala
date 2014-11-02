@@ -23,7 +23,7 @@ object Children extends Controller {
       "street" -> optional(text),
       "city" -> optional(text),
       
-      "birthdate" -> optional(date("dd-MM-yyyy")),
+      "birthDate" -> optional(date("dd-MM-yyyy")),
       "medicalRecordGood" -> boolean,
       "medicalRecordChecked" -> optional(date("dd-MM-yyyy"))
     )(Child.apply)(Child.unapply)
@@ -43,7 +43,7 @@ object Children extends Controller {
           case Some(x) => ChildrenSlick.update(child)
           case _ => ChildrenSlick.insert(child)
         }
-        Ok("Succes")
+        Redirect(routes.Children.showList)
       }
     )
     
@@ -55,10 +55,12 @@ object Children extends Controller {
       case Some(ch) => Ok(html.child_form.render(childForm.fill(ch)));
       case _ => BadRequest("Geen geldige id")
     }
+  }  
+  def details(id: Long) = DBAction { implicit rs => 
+    val child = ChildrenSlick.findById(id)
+    child match {
+      case Some(x) => Ok(html.child_details(x))
+      case None => BadRequest("Geen kind met die ID")
+    }
   }
-  
-  def testFlash = Action {implicit request => Ok( html.showflash.render(request.flash)) }
-  
-  def details(id: Long) = TODO
-
 }

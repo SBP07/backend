@@ -1,0 +1,66 @@
+@(child: Child)
+@import helper._
+@import java.text.SimpleDateFormat
+
+@main("Details voor " + child.firstName + " " + child.lastName) {
+	<h2>Gegevens</h2>
+	<p>
+		<a href="@routes.Children.editChild(child.id.get)">
+			<button type="button" class="btn btn-default">
+		  		<span class="glyphicon glyphicon-pencil"></span> Details bewerken
+			</button>
+		</a>
+		<a href="???">
+			<button type="button" class="btn btn-default">
+		  		<span class="glyphicon glyphicon-pencil"></span> Aanwezigheden aanpassen
+			</button>
+		</a>
+	</p>
+	<div class="row">
+		<div class="col-xs-6 col-md-6">
+			<table class="table table-striped">
+				<tr><td>Voornaam</td><td>@child.firstName</td></tr>
+				<tr><td>Achternaam</td><td>@child.lastName</td></tr>
+				<tr><td>Geboortedatum</td>
+					<td>
+						@if(child.birthDate.isDefined){
+							@(new java.text.SimpleDateFormat("dd/MM/yyyy").format(child.birthDate.get))
+						}
+					</td>
+				</tr>
+				<tr>
+					<td>Medische fiche in orde</td>
+                                        <td>
+                                            @if(child.medicalRecordGood) {
+                                                <span class="glyphicon glyphicon-ok-sign"></span> In orde
+                                            } else {
+                                                <span class="glyphicon glyphicon-remove-sign"></span> Niet in orde
+                                            }
+                                        </td>
+				</tr>
+				<tr>
+					<td>Medische fiche laatst gecontroleerd</td>
+					<td>
+						@if(child.medicalRecordChecked.isDefined){
+							@(new java.text.SimpleDateFormat("dd/MM/yyyy").format(child.medicalRecordChecked.get))
+						}
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="col-xs-6 col-md-6">
+			<table class="table table-striped">
+				<tr><td>Straat</td><td>@child.street</td></tr>
+				<tr><td>Gemeente</td><td>@child.city</td></tr>
+				<tr><td>GSM-nummer</td><td>@child.mobilePhone</td></tr>
+				<tr><td>Thuistelefoon</td><td>@child.landline</td></tr>
+			</table>
+		</div>
+	</div>
+	
+	<h2>Aanwezigheden</h2>
+	
+	<ul>
+	</ul>
+	
+}
