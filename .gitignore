@@ -15,6 +15,6 @@ dist
 /.settings
 /.target
 
-# contains sensitive information
-conf/kinderen.csv
+
+/conf/evolutions
 
