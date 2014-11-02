@@ -1,19 +1,25 @@
 @()(implicit flash: Flash)
 
-          @if(flash.get("error").isDefined) {
-          	<p class="bg-danger">
-          		@flash.get("error")
-          	</p>
-          }
-          
-          @if(flash.get("success").isDefined) {
-          	<p class="bg-success">
-          		@flash.get("success")
-          	</p>
-          }
-          
-          @if(flash.get("warning").isDefined) {
-          	<p class="bg-warning">
-          		@flash.get("warning")
-          	</p>
-          }
+        @if(flash.get("error").isDefined) {
+        <div class="alert alert-danger" role="alert">
+                      @flash.get("error")
+              </div>
+        }
+
+        @if(flash.get("success").isDefined) {
+              <div class="alert alert-success" role="alert">
+                      @flash.get("success")
+              </div>
+        }
+
+        @if(flash.get("warning").isDefined) {
+              <div class="alert alert-warning" role="alert">
+                      @flash.get("warning")
+              </div>
+        }
+
+       @if(flash.get("info").isDefined) {
+              <div class="alert alert-info" role="alert">
+                      @flash.get("info")
+              </div>
+        }

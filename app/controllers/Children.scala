@@ -41,10 +41,15 @@ object Children extends Controller {
       child => {
         import models.ChildrenSlick
         child.id match{
-          case Some(x) => ChildrenSlick.update(child)
-          case _ => ChildrenSlick.insert(child)
+          case Some(x) => {
+              ChildrenSlick.update(child)
+              Redirect(routes.Children.showList).flashing("success" -> "Kind upgedated")
+            }
+          case _ =>  {
+              ChildrenSlick.insert(child)
+              Redirect(routes.Children.showList).flashing("success" -> "Kind toegevoegd")
+            }
         }
-        Redirect(routes.Children.showList)
       }
     )
     
@@ -56,7 +61,8 @@ object Children extends Controller {
       case Some(ch) => Ok(html.child_form.render(childForm.fill(ch), rs.flash))
       case _ => BadRequest("Geen geldige id")
     }
-  }  
+  }
+  
   def details(id: Long) = DBAction { implicit rs => 
     val child = ChildrenSlick.findById(id)
     child match {
