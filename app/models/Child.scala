@@ -24,7 +24,7 @@ case class Child(
 )
 
 // Definition of the CHILDREN table
-class ChildrenSlick(tag: Tag) extends Table[Child](tag, "CHILDREN") {
+class Children(tag: Tag) extends Table[Child](tag, "CHILDREN") {
   implicit val dateColumnType = MappedColumnType.base[Date, Long](d => d.getTime, d => new Date(d))
 
   def id = column[Long]("ID", O.PrimaryKey, O.AutoInc)
@@ -44,8 +44,8 @@ class ChildrenSlick(tag: Tag) extends Table[Child](tag, "CHILDREN") {
   def * = (id.?, firstName, lastName, mobilePhone.?, landline.?, street.?, city.?, birthDate.?, medicalRecordGood, medicalRecordChecked.?) <> (Child.tupled, Child.unapply _)
 }
 
-object ChildrenSlick {
-  val children = TableQuery[ChildrenSlick]
+object Children {
+  val children = TableQuery[Children]
   
   def findById(id: Long)(implicit s: Session): Option[Child] = children.filter(_.id === id).firstOption
   def findAll(implicit s: Session) = children.list

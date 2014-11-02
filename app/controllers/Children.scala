@@ -10,6 +10,7 @@ import scala.slick.driver.H2Driver.simple._
 
 import views._
 import models._
+import models.{Children => ChildrenModel}
 
 object Children extends Controller {
 
@@ -31,7 +32,7 @@ object Children extends Controller {
   )
   
   
-  def showList = DBAction { implicit rs => Ok(html.child_list.render(models.ChildrenSlick.findAll, rs.flash)) }
+  def showList = DBAction { implicit rs => Ok(html.child_list.render(ChildrenModel.findAll, rs.flash)) }
   
   def newChild = Action { implicit rs => Ok(html.child_form.render(childForm, rs.flash)) }
   
@@ -39,14 +40,13 @@ object Children extends Controller {
     childForm.bindFromRequest.fold(
       formWithErrors => BadRequest(html.child_form.render(formWithErrors, rs.flash)),
       child => {
-        import models.ChildrenSlick
         child.id match{
           case Some(x) => {
-              ChildrenSlick.update(child)
+              ChildrenModel.update(child)
               Redirect(routes.Children.showList).flashing("success" -> "Kind upgedated")
             }
           case _ =>  {
-              ChildrenSlick.insert(child)
+              ChildrenModel.insert(child)
               Redirect(routes.Children.showList).flashing("success" -> "Kind toegevoegd")
             }
         }
@@ -56,7 +56,7 @@ object Children extends Controller {
   }
   
   def editChild(id: Long) = DBAction { implicit rs =>
-    val child = ChildrenSlick.findById(id)
+    val child = ChildrenModel.findById(id)
     child match{
       case Some(ch) => Ok(html.child_form.render(childForm.fill(ch), rs.flash))
       case _ => BadRequest("Geen geldige id")
@@ -64,7 +64,7 @@ object Children extends Controller {
   }
   
   def details(id: Long) = DBAction { implicit rs => 
-    val child = ChildrenSlick.findById(id)
+    val child = ChildrenModel.findById(id)
     child match {
       case Some(x) => Ok(html.child_details(x))
       case None => BadRequest("Geen kind met die ID")
