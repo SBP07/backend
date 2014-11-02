@@ -3,6 +3,12 @@
 @import java.text.SimpleDateFormat
 
 @main("Details voor " + child.firstName + " " + child.lastName) {
+
+        
+        <a href="@routes.Children.showList">
+            <span class="glyphicon glyphicon-chevron-left"></span> Terug naar lijst
+        </a>
+
 	<h2>Gegevens</h2>
 	<p>
 		<a href="@routes.Children.editChild(child.id.get)">
