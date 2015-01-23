@@ -1,7 +1,7 @@
 package models
 
 import java.util.Date
-import java.sql.{Date => SqlDate}
+import java.sql.{Date => SqlDate, Timestamp}
 import play.api.db.slick.Config.driver.simple._
 
 import scala.slick.lifted.{ProvenShape, ForeignKeyQuery}
@@ -25,7 +25,10 @@ case class Child(
 
 // Definition of the CHILDREN table
 class Children(tag: Tag) extends Table[Child](tag, "CHILDREN") {
-  implicit val dateColumnType = MappedColumnType.base[Date, Long](d => d.getTime, d => new Date(d))
+  implicit val JavaUtilDateMapper = MappedColumnType.base[Date, Timestamp] (
+    d => new Timestamp(d.getTime),
+    d => new Date(d.getTime)
+  )
 
   def id = column[Long]("ID", O.PrimaryKey, O.AutoInc)
   def firstName = column[String]("FIRST_NAME")
