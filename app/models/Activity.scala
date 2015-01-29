@@ -1,7 +1,7 @@
 package models
 
 import java.util.Date
-import java.sql.{Date => SqlDate}
+import java.sql.Timestamp
 import play.api.db.slick.Config.driver.simple._
 
 case class Activity(id: Option[Long] = None, date: Date, place: String, actNum: Long)
@@ -9,7 +9,7 @@ case class ActivityType(id: Option[Long], mnemonic: String, description: String)
 
 
 class Activities(tag: Tag) extends Table[Activity](tag, "ACTIVITY") {
-  implicit val dateColumnType = MappedColumnType.base[Date, Long](d => d.getTime, d => new Date(d))
+  import helpers.Db.dateToTimestampMapper
 
   def id = column[Long]("ID", O.PrimaryKey, O.AutoInc)
   def date = column[Date]("DATE", O.Nullable)
@@ -19,8 +19,6 @@ class Activities(tag: Tag) extends Table[Activity](tag, "ACTIVITY") {
   def * = (id.?, date, place, actNum) <> (Activity.tupled, Activity.unapply)
 
   def activityType = foreignKey("FK_ACT_TYPE", actNum, TableQuery[ActivityTypes])(_.id)
-
-  def testJoin = TableQuery[ActivityTypes].filter(_.id === actNum)
 }
 
 class ActivityTypes(tag: Tag) extends Table[ActivityType](tag, "ACTIVITY_TYPE") {
@@ -32,12 +30,16 @@ class ActivityTypes(tag: Tag) extends Table[ActivityType](tag, "ACTIVITY_TYPE") 
 }
 
 object Activities {
+  import helpers.Db.dateToTimestampMapper
+
   val activities = TableQuery[Activities]
 
   def findAll(implicit s: Session) = activities.list
   def findById(id: Long)(implicit s: Session) = activities.filter(_.id === id)
   def insert(activity: Activity)(implicit s: Session) = activities.insert(activity)
   def count(implicit s: Session) = activities.length.run
+
+  def findByDate(date: Date)(implicit s: Session) = activities.filter(_.date === date)
 }
 
 object ActivityTypes {

@@ -25,10 +25,7 @@ case class Child(
 
 // Definition of the CHILDREN table
 class Children(tag: Tag) extends Table[Child](tag, "CHILDREN") {
-  implicit val JavaUtilDateMapper = MappedColumnType.base[Date, Timestamp] (
-    d => new Timestamp(d.getTime),
-    d => new Date(d.getTime)
-  )
+  import helpers.Db.dateToTimestampMapper
 
   def id = column[Long]("ID", O.PrimaryKey, O.AutoInc)
   def firstName = column[String]("FIRST_NAME")
