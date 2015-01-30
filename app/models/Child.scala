@@ -1,10 +1,7 @@
 package models
 
-import java.util.Date
-import java.sql.{Date => SqlDate, Timestamp}
 import play.api.db.slick.Config.driver.simple._
-
-import scala.slick.lifted.{ProvenShape, ForeignKeyQuery}
+import org.joda.time.LocalDate
 
 case class Child(
   id: Option[Long] = None,
@@ -16,16 +13,15 @@ case class Child(
   street: Option[String],
   city: Option[String],
   
-  birthDate: Option[Date],
+  birthDate: Option[LocalDate],
   
   medicalRecordGood: Boolean = false,
   
-  medicalRecordChecked: Option[Date]
+  medicalRecordChecked: Option[LocalDate]
 )
 
-// Definition of the CHILDREN table
 class Children(tag: Tag) extends Table[Child](tag, "CHILDREN") {
-  import helpers.Db.dateToTimestampMapper
+  import helpers.Db.jodaDatetimeToSqldateMapper
 
   def id = column[Long]("ID", O.PrimaryKey, O.AutoInc)
   def firstName = column[String]("FIRST_NAME")
@@ -36,10 +32,10 @@ class Children(tag: Tag) extends Table[Child](tag, "CHILDREN") {
   def street = column[String]("STREET", O.Nullable)
   def city = column[String]("CITY", O.Nullable)
   
-  def birthDate = column[Date]("BIRTHDATE", O.Nullable)
+  def birthDate = column[LocalDate]("BIRTHDATE", O.Nullable)
   
   def medicalRecordGood = column[Boolean]("MED_REC_GOOD")
-  def medicalRecordChecked = column[Date]("MED_REC_CHECKED", O.Nullable)
+  def medicalRecordChecked = column[LocalDate]("MED_REC_CHECKED", O.Nullable)
   
   def * = (id.?, firstName, lastName, mobilePhone.?, landline.?, street.?, city.?, birthDate.?, medicalRecordGood, medicalRecordChecked.?) <> (Child.tupled, Child.unapply _)
 }

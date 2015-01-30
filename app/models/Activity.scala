@@ -1,18 +1,18 @@
 package models
 
-import java.util.Date
 import java.sql.Timestamp
+import org.joda.time.LocalDate
 import play.api.db.slick.Config.driver.simple._
 
-case class Activity(id: Option[Long] = None, date: Date, place: String, actNum: Long)
+case class Activity(id: Option[Long] = None, date: LocalDate, place: String, actNum: Long)
 case class ActivityType(id: Option[Long], mnemonic: String, description: String)
 
 
 class Activities(tag: Tag) extends Table[Activity](tag, "ACTIVITY") {
-  import helpers.Db.dateToTimestampMapper
+  import helpers.Db.jodaDatetimeToSqldateMapper
 
   def id = column[Long]("ID", O.PrimaryKey, O.AutoInc)
-  def date = column[Date]("DATE", O.Nullable)
+  def date = column[LocalDate]("DATE", O.Nullable)
   def place = column[String]("PLACE", O.Nullable)
   def actNum = column[Long]("ACT_TYPE_NUM", O.NotNull)
 
@@ -30,7 +30,7 @@ class ActivityTypes(tag: Tag) extends Table[ActivityType](tag, "ACTIVITY_TYPE") 
 }
 
 object Activities {
-  import helpers.Db.dateToTimestampMapper
+  import helpers.Db.jodaDatetimeToSqldateMapper
 
   val activities = TableQuery[Activities]
 
@@ -39,7 +39,7 @@ object Activities {
   def insert(activity: Activity)(implicit s: Session) = activities.insert(activity)
   def count(implicit s: Session) = activities.length.run
 
-  def findByDate(date: Date)(implicit s: Session) = activities.filter(_.date === date)
+  def findByDate(date: LocalDate)(implicit s: Session) = activities.filter(_.date === date)
 }
 
 object ActivityTypes {
