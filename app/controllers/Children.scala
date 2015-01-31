@@ -50,7 +50,7 @@ object Children extends Controller {
       )(c =>
         c match {
           case Child(id, firstName, lastName, mobilePhone, landline, street, city, birthDate, medRecGood, medRecChecked) =>
-            Some((id, firstName, lastName, mobilePhone, landline, street, city, birthDate.map(localDateToDate), medRecGood, medRecChecked.map(localDateToDate)))
+            Some((id, firstName, lastName, mobilePhone, landline, street, city, birthDate, medRecGood, medRecChecked))
           case _ => None
         }
       )
