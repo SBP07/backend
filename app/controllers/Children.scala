@@ -41,16 +41,15 @@ object Children extends Controller {
       "city" -> optional(text),
 
       "birthDate" -> optional(date("dd-MM-yyyy")),
-      "medicalRecordGood" -> boolean,
       "medicalRecordChecked" -> optional(date("dd-MM-yyyy"))
     )((id: Option[Long], firstName: String, lastName: String, mobilePhone: Option[String], landline: Option[String],
-       street: Option[String], city: Option[String], birthDate: Option[java.util.Date], medRecGood: Boolean,
+       street: Option[String], city: Option[String], birthDate: Option[java.util.Date],
        medRecChecked: Option[java.util.Date]) => Child.apply(id, firstName, lastName, mobilePhone, landline, street,
-      city, birthDate, medRecGood, medRecChecked)
+      city, birthDate, medRecChecked)
       )(c =>
         c match {
-          case Child(id, firstName, lastName, mobilePhone, landline, street, city, birthDate, medRecGood, medRecChecked) =>
-            Some((id, firstName, lastName, mobilePhone, landline, street, city, birthDate, medRecGood, medRecChecked))
+          case Child(id, firstName, lastName, mobilePhone, landline, street, city, birthDate, medRecChecked) =>
+            Some((id, firstName, lastName, mobilePhone, landline, street, city, birthDate, medRecChecked))
           case _ => None
         }
       )

@@ -15,9 +15,7 @@ case class Child(
   
   birthDate: Option[LocalDate],
   
-  medicalRecordGood: Boolean = false,
-  
-  medicalRecordChecked: Option[LocalDate]
+  medicalRecordChecked: Option[LocalDate] = None // None means not ok
 )
 
 class Children(tag: Tag) extends Table[Child](tag, "CHILDREN") {
@@ -33,11 +31,10 @@ class Children(tag: Tag) extends Table[Child](tag, "CHILDREN") {
   def city = column[String]("CITY", O.Nullable)
   
   def birthDate = column[LocalDate]("BIRTHDATE", O.Nullable)
-  
-  def medicalRecordGood = column[Boolean]("MED_REC_GOOD")
+
   def medicalRecordChecked = column[LocalDate]("MED_REC_CHECKED", O.Nullable)
   
-  def * = (id.?, firstName, lastName, mobilePhone.?, landline.?, street.?, city.?, birthDate.?, medicalRecordGood, medicalRecordChecked.?) <> (Child.tupled, Child.unapply _)
+  def * = (id.?, firstName, lastName, mobilePhone.?, landline.?, street.?, city.?, birthDate.?, medicalRecordChecked.?) <> (Child.tupled, Child.unapply _)
 }
 
 object Children {

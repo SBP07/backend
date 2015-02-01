@@ -37,7 +37,7 @@
 				<tr>
 					<td>Medische fiche in orde</td>
                                         <td>
-                                            @if(child.medicalRecordGood) {
+                                            @if(child.medicalRecordChecked == None) {
                                                 <span class="glyphicon glyphicon-ok-sign"></span> In orde
                                             } else {
                                                 <span class="glyphicon glyphicon-remove-sign"></span> Niet in orde
