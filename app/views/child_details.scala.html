@@ -30,7 +30,7 @@
 				<tr><td>Geboortedatum</td>
 					<td>
 						@if(child.birthDate.isDefined){
-							@(new java.text.SimpleDateFormat("dd/MM/yyyy").format(child.birthDate.get))
+							@child.birthDate.get
 						}
 					</td>
 				</tr>
@@ -48,7 +48,7 @@
 					<td>Medische fiche laatst gecontroleerd</td>
 					<td>
 						@if(child.medicalRecordChecked.isDefined){
-							@(new java.text.SimpleDateFormat("dd/MM/yyyy").format(child.medicalRecordChecked.get))
+							@child.medicalRecordChecked.get
 						}
 					</td>
 				</tr>

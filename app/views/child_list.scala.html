@@ -34,7 +34,7 @@
                 </td>
                 <td>
                     @if(child.birthDate.isDefined) {
-                        @child.birthDate.orNull
+                        @child.birthDate.get
                     }
                 </td>
                 <td>@child.street</td>
