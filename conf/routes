@@ -1,6 +1,9 @@
 # Home page
 #GET     /                           controllers.Application.index()
 
+# Animators
+GET     /animators/lijst        controllers.Animators.list
+
 # Children
 GET     /kind/lijst         controllers.Children.showList
 GET     /kind/nieuw         controllers.Children.newChild

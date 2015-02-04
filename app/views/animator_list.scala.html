@@ -1,0 +1,48 @@
+@(animators: List[Animator])(implicit flash: Flash)
+
+@main("Animatoren") {
+<h2 class="sub-header">Lijst van alle animatoren</h2>
+<a href="routes.Animators.newAnimator">
+        <button type="button" class="btn btn-default">
+                <span class="glyphicon glyphicon-pencil"></span> Nieuwe animator
+        </button>
+</a>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Naam</th>
+                <th>Geboortedatum</th>
+                <th>Straat, nummer</th>
+                <th>Gemeente</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @for(animator <- animators) {
+            <tr>
+                <td>@animator.id.getOrElse("/")</td>
+                <td>
+                    @if(animator.id.isDefined) {
+                    <a href="routes.Animators.details(animator.id.get)">
+                    }
+                    @animator.firstName @animator.lastName
+                    @if(animator.id.isDefined) {
+                    </a>
+                    }
+                </td>
+                <td>
+                @if(animator.birthDate.isDefined) {
+                    @animator.birthDate.get
+                }
+                </td>
+                <td>@animator.street</td>
+                <td>@animator.city</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+}
