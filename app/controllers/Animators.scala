@@ -17,4 +17,11 @@ import models.{Animators => AnimatorsModel}
 object Animators extends Controller {
   def list = DBAction { implicit rs => Ok(html.animator_list.render(AnimatorsModel.findAll, rs.flash))}
 
+  def details(id: Long) = DBAction { implicit rs =>
+    val child = AnimatorsModel.findById(id)
+    child match {
+      case Some(x) => Ok(html.animator_details(x))
+      case None => BadRequest("Geen animator met die ID")
+    }
+  }
 }

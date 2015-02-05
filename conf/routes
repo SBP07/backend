@@ -3,6 +3,7 @@
 
 # Animators
 GET     /animators/lijst        controllers.Animators.list
+GET     /animators/details/:id  controllers.Animators.details(id: Long)
 
 # Children
 GET     /kind/lijst         controllers.Children.showList
