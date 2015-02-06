@@ -2,8 +2,11 @@
 #GET     /                           controllers.Application.index()
 
 # Animators
-GET     /animators/lijst        controllers.Animators.list
-GET     /animators/details/:id  controllers.Animators.details(id: Long)
+GET     /animator/lijst        controllers.Animators.list
+GET     /animator/details/:id  controllers.Animators.details(id: Long)
+GET     /animator/nieuw        controllers.Animators.newAnimator
+POST    /animator/nieuw        controllers.Animators.saveAnimator
+GET     /animator/edit/:id     controllers.Animators.editAnimator(id: Long)
 
 # Children
 GET     /kind/lijst         controllers.Children.showList

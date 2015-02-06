@@ -26,18 +26,18 @@ class Animators(tag: Tag) extends Table[Animator](tag, "ANIMATORS") {
 def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
   def firstName = column[String]("first_name")
   def lastName = column[String]("last_name")
-  def mobilePhone = column[String]("mobile_phone")
-  def landline = column[String]("landline")
-  def email = column[String]("email")
+  def mobilePhone = column[String]("mobile_phone", O.Nullable)
+  def landline = column[String]("landline", O.Nullable)
+  def email = column[String]("email", O.Nullable)
 
-  def street = column[String]("street")
-  def city = column[String]("city")
+  def street = column[String]("street", O.Nullable)
+  def city = column[String]("city", O.Nullable)
 
-  def bankAccount = column[String]("bank_account")
-  def yearStartedVolunteering = column[Int]("year_started_volunteering")
+  def bankAccount = column[String]("bank_account", O.Nullable)
+  def yearStartedVolunteering = column[Int]("year_started_volunteering", O.Nullable)
   def isPartOfCore = column[Boolean]("is_core")
 
-  def birthDate = column[LocalDate]("birthdate")
+  def birthDate = column[LocalDate]("birthdate", O.Nullable)
 
   def * = (id.?, firstName, lastName, mobilePhone.?, landline.?, email.?, street.?, city.?, bankAccount.?,
     yearStartedVolunteering.?, isPartOfCore, birthDate.?) <> (Animator.tupled, Animator.unapply _)
