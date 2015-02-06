@@ -12,11 +12,9 @@ object Db {
     d => new Date(d.getTime)
   )
 
-  val jodaTzUTC: DateTimeZone = DateTimeZone.forID("UTC");
-
   implicit val jodaDatetimeToSqldateMapper = MappedColumnType.base[LocalDate, Sqldate](
-    d => new Sqldate(d.toDateTimeAtStartOfDay(jodaTzUTC).getMillis()),
-    d => new LocalDate(d.getTime(), jodaTzUTC)
+    d => new Sqldate(d.toDate().getTime()),
+    d => new LocalDate(d.getTime())
   )
 
 }
