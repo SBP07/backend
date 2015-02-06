@@ -1,6 +1,7 @@
 @(animator: Animator)(implicit flash: Flash)
 @import helper._
 @import java.text.SimpleDateFormat
+@import helpers.DateTime._
 
 @main("Details voor " + animator.firstName + " " + animator.lastName) {
 
@@ -36,7 +37,7 @@
                     <td>Geboortedatum</td>
                     <td>
                         @if(animator.birthDate.isDefined){
-                        @animator.birthDate.get
+                            @animator.birthDate.get.toString(fmt)
                         }
                     </td>
                 </tr>

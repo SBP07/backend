@@ -1,6 +1,7 @@
 @(child: Child)(implicit flash: Flash)
 @import helper._
 @import java.text.SimpleDateFormat
+@import helpers.DateTime._
 
 @main("Details voor " + child.firstName + " " + child.lastName) {
 
@@ -30,7 +31,7 @@
 				<tr><td>Geboortedatum</td>
 					<td>
 						@if(child.birthDate.isDefined){
-							@child.birthDate.get
+							@child.birthDate.get.toString(fmt)
 						}
 					</td>
 				</tr>
@@ -47,7 +48,7 @@
 				<tr>
 					<td>Medische fiche laatst gecontroleerd</td>
 					<td>
-                        @child.medicalRecordChecked.map(_.toString).getOrElse("Niet gecontroleerd")
+                        @child.medicalRecordChecked.map(_.toString(fmt)).getOrElse("Niet gecontroleerd")
 					</td>
 				</tr>
 			</table>

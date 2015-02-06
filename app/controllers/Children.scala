@@ -40,11 +40,11 @@ object Children extends Controller {
       "street" -> optional(text),
       "city" -> optional(text),
 
-      "birthDate" -> optional(date("dd-MM-yyyy")),
-      "medicalRecordChecked" -> optional(date("dd-MM-yyyy"))
+      "birthDate" -> optional(jodaLocalDate("dd-MM-yyyy")),
+      "medicalRecordChecked" -> optional(jodaLocalDate("dd-MM-yyyy"))
     )((id: Option[Long], firstName: String, lastName: String, mobilePhone: Option[String], landline: Option[String],
-       street: Option[String], city: Option[String], birthDate: Option[java.util.Date],
-       medRecChecked: Option[java.util.Date]) => Child.apply(id, firstName, lastName, mobilePhone, landline, street,
+       street: Option[String], city: Option[String], birthDate,
+       medRecChecked) => Child.apply(id, firstName, lastName, mobilePhone, landline, street,
       city, birthDate, medRecChecked)
       )(c =>
         c match {
