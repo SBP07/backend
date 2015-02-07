@@ -16,19 +16,6 @@ import models.{Children => ChildrenModel}
 
 object Children extends Controller {
 
-  val jodaTzUTC: DateTimeZone = DateTimeZone.forID("UTC");
-
-  implicit def dateToLocalDate(date: Option[Date]): Option[LocalDate] = date.map(d => new LocalDate(d.getTime(), jodaTzUTC))
-
-  implicit def dateToLocalDate(date: Date) = new LocalDate(date.getTime(), jodaTzUTC)
-
-  implicit def localDateToDate(localdate: Option[LocalDate]) = localdate.map(d =>
-    new Date(d.toDateTimeAtStartOfDay(jodaTzUTC).getMillis())
-  )
-
-  implicit def localDateToDate(localdate: LocalDate) = new Date(localdate.toDateTimeAtStartOfDay(jodaTzUTC).getMillis())
-
-
   val childForm = Form(
     mapping(
       "id" -> optional(of[Long]),
