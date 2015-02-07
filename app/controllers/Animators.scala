@@ -35,21 +35,21 @@ object Animators extends Controller {
     )(Animator.apply)(Animator.unapply _)
   )
 
-  def list = DBAction { implicit rs => Ok(html.animator_list.render(AnimatorsModel.findAll, rs.flash))}
+  def list = DBAction { implicit rs => Ok(html.animator.list.render(AnimatorsModel.findAll, rs.flash))}
 
   def details(id: Long) = DBAction { implicit rs =>
     val animator = AnimatorsModel.findById(id)
     animator match {
-      case Some(x) => Ok(html.animator_details(x))
+      case Some(x) => Ok(html.animator.details(x))
       case None => BadRequest("Geen animator met die ID")
     }
   }
 
-  def newAnimator = Action { implicit rs => Ok(html.animator_form.render(animatorForm, rs.flash))}
+  def newAnimator = Action { implicit rs => Ok(html.animator.form.render(animatorForm, rs.flash))}
 
   def saveAnimator = DBAction { implicit rs =>
     animatorForm.bindFromRequest.fold(
-      formWithErrors => BadRequest(html.animator_form.render(formWithErrors, rs.flash)),
+      formWithErrors => BadRequest(html.animator.form.render(formWithErrors, rs.flash)),
       animator => {
         animator.id match {
           case Some(id) => {
@@ -68,9 +68,8 @@ object Animators extends Controller {
   def editAnimator(id: Long) = DBAction { implicit rs =>
     val animator = AnimatorsModel.findById(id)
     animator match {
-      case Some(ch) => Ok(html.animator_form.render(animatorForm.fill(ch), rs.flash))
+      case Some(ch) => Ok(html.animator.form.render(animatorForm.fill(ch), rs.flash))
       case _ => BadRequest("Geen geldige id")
     }
   }
-
 }

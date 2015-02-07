@@ -41,13 +41,13 @@ object Children extends Controller {
       )
   )
 
-  def showList = DBAction { implicit rs => Ok(html.child_list.render(ChildrenModel.findAll, rs.flash))}
+  def showList = DBAction { implicit rs => Ok(html.child.list.render(ChildrenModel.findAll, rs.flash))}
 
-  def newChild = Action { implicit rs => Ok(html.child_form.render(childForm, rs.flash))}
+  def newChild = Action { implicit rs => Ok(html.child.form.render(childForm, rs.flash))}
 
   def saveChild = DBAction { implicit rs =>
     childForm.bindFromRequest.fold(
-      formWithErrors => BadRequest(html.child_form.render(formWithErrors, rs.flash)),
+      formWithErrors => BadRequest(html.child.form.render(formWithErrors, rs.flash)),
       child => {
         child.id match {
           case Some(id) => {
@@ -67,7 +67,7 @@ object Children extends Controller {
   def editChild(id: Long) = DBAction { implicit rs =>
     val child = ChildrenModel.findById(id)
     child match {
-      case Some(ch) => Ok(html.child_form.render(childForm.fill(ch), rs.flash))
+      case Some(ch) => Ok(html.child.form.render(childForm.fill(ch), rs.flash))
       case _ => BadRequest("Geen geldige id")
     }
   }
@@ -75,7 +75,7 @@ object Children extends Controller {
   def details(id: Long) = DBAction { implicit rs =>
     val child = ChildrenModel.findById(id)
     child match {
-      case Some(x) => Ok(html.child_details(x))
+      case Some(x) => Ok(html.child.details(x))
       case None => BadRequest("Geen kind met die ID")
     }
   }
