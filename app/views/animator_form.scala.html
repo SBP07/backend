@@ -1,0 +1,28 @@
+@(animatorForm: Form[Animator])(implicit flash: Flash)
+@import helper._
+
+@implicitField = @{ FieldConstructor(bootstrap3FieldConstructorTemplate.f) }
+
+@main("Nieuw kind") {
+	@helper.form(action = routes.Animators.saveAnimator, 'class -> "form-horizontal") {
+		<fieldset>
+			<legend>Kind (@animatorForm("firstName").value.getOrElse("nieuw") @animatorForm("lastName").value.getOrElse(""))</legend>
+            @if(animatorForm("id").value.isDefined) {
+                <input type="hidden" value="@animatorForm("id").value.get" class="form-control" id="id" name="id">
+            }
+			@helper.inputText(animatorForm("firstName"), '_label -> "Voornaam", 'class -> "form-control")
+			@helper.inputText(animatorForm("lastName"), '_label -> "Achternaam", 'class -> "form-control")
+			@helper.inputText(animatorForm("mobilePhone"), '_label -> "GSM-nummer", 'class -> "form-control")
+			@helper.inputText(animatorForm("landline"), '_label -> "Thuistelefoon", 'class -> "form-control")
+            @helper.inputText(animatorForm("email"), '_label -> "Emailadres", 'class -> "form-control")
+			@helper.inputText(animatorForm("birthDate"), '_label -> "Geboortedatum", 'class -> "form-control")
+			@helper.inputText(animatorForm("street"), '_label -> "Straat en nummer", 'class -> "form-control")
+			@helper.inputText(animatorForm("city"), '_label -> "Gemeente", 'class -> "form-control")
+			@helper.inputText(animatorForm("bankAccount"), '_label -> "Rekeningnummer", 'class -> "form-control")
+			@helper.inputText(animatorForm("yearStartedVolunteering"), '_label -> "Jaar gestart", 'class -> "form-control")
+			@helper.checkbox(animatorForm("isPartOfCore"), '_label -> "Is lid van Kern", 'class -> "form-control")
+
+			<button type="submit" class="btn btn-primary">Toevoegen</button>
+		</fieldset>
+	}
+}

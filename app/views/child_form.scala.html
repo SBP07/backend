@@ -7,9 +7,9 @@
 	@helper.form(action = routes.Children.saveChild, 'class -> "form-horizontal") {
 		<fieldset>
 			<legend>Kind (@childForm("firstName").value.getOrElse("nieuw") @childForm("lastName").value.getOrElse(""))</legend>
-                        @if(childForm("id").value.isDefined) {
-                            <input type="hidden" value="@childForm("id").value.get" class="form-control" id="id" name="id">
-                        }
+            @if(childForm("id").value.isDefined) {
+                <input type="hidden" value="@childForm("id").value.get" class="form-control" id="id" name="id">
+            }
 			@helper.inputText(childForm("firstName"), '_label -> "Voornaam", 'class -> "form-control")
 			@helper.inputText(childForm("lastName"), '_label -> "Achternaam", 'class -> "form-control")
 			@helper.inputText(childForm("mobilePhone"), '_label -> "GSM-nummer", 'class -> "form-control")
@@ -17,7 +17,7 @@
 			@helper.inputText(childForm("birthDate"), '_label -> "Geboortedatum", 'class -> "form-control")
 			@helper.inputText(childForm("street"), '_label -> "Straat en nummer", 'class -> "form-control")
 			@helper.inputText(childForm("city"), '_label -> "Gemeente", 'class -> "form-control")
-			@helper.checkbox(childForm("medicalRecordGood"), '_label -> "Medische fiche in orde")
+			@helper.inputText(childForm("medicalRecordChecked"), '_label -> "Medische fiche gecontroleerd", 'class -> "form-control")
                         
 			<button type="submit" class="btn btn-primary">Toevoegen</button>
 		</fieldset>

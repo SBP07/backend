@@ -33,8 +33,7 @@ object Children extends Controller {
        street: Option[String], city: Option[String], birthDate,
        medRecChecked) => Child.apply(id, firstName, lastName, mobilePhone, landline, street,
       city, birthDate, medRecChecked)
-      )(c =>
-        c match {
+      )(_ match {
           case Child(id, firstName, lastName, mobilePhone, landline, street, city, birthDate, medRecChecked) =>
             Some((id, firstName, lastName, mobilePhone, landline, street, city, birthDate, medRecChecked))
           case _ => None
@@ -51,9 +50,9 @@ object Children extends Controller {
       formWithErrors => BadRequest(html.child_form.render(formWithErrors, rs.flash)),
       child => {
         child.id match {
-          case Some(x) => {
+          case Some(id) => {
             ChildrenModel.update(child)
-            Redirect(routes.Children.showList).flashing("success" -> "Kind upgedated")
+            Redirect(routes.Children.details(id)).flashing("success" -> "Kind upgedated")
           }
           case _ => {
             ChildrenModel.insert(child)
