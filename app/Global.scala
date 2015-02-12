@@ -7,7 +7,7 @@ object Global extends GlobalSettings {
 
   override def onStart(app: Application) {
     import play.api.Play.current
-    Logger.info("Application has started")
+    Logger.debug("Application has started")
     play.api.db.slick.DB.withSession{ implicit session =>
       if(Children.count == 0) {
         Children.insert(Child(None, "Thomas", "Toye", Option("0455 55 55 55"), Option("056/55 55 55"),
@@ -38,7 +38,7 @@ object Global extends GlobalSettings {
   }  
   
   override def onStop(app: Application) {
-    Logger.info("Application shutdown...")
+    Logger.debug("Application shutdown...")
   }  
     
 }
