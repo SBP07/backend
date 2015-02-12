@@ -1,6 +1,5 @@
 package models
 
-import java.sql.Timestamp
 import org.joda.time.LocalDate
 import play.api.db.slick.Config.driver.simple._
 
@@ -19,6 +18,7 @@ class Activities(tag: Tag) extends Table[Activity](tag, "ACTIVITY") {
   def * = (id.?, date, place, actNum) <> (Activity.tupled, Activity.unapply)
 
   def activityType = foreignKey("FK_ACT_TYPE", actNum, TableQuery[ActivityTypes])(_.id)
+  def activityTypeJoin = TableQuery[ActivityTypes].filter(_.id === actNum)
 }
 
 class ActivityTypes(tag: Tag) extends Table[ActivityType](tag, "ACTIVITY_TYPE") {
@@ -35,18 +35,25 @@ object Activities {
   val activities = TableQuery[Activities]
 
   def findAll(implicit s: Session) = activities.list
-  def findById(id: Long)(implicit s: Session) = activities.filter(_.id === id)
+  def findById(id: Long)(implicit s: Session) = activities.filter(_.id === id).run
   def insert(activity: Activity)(implicit s: Session) = activities.insert(activity)
   def count(implicit s: Session) = activities.length.run
 
-  def findByDate(date: LocalDate)(implicit s: Session) = activities.filter(_.date === date)
+  def findByDate(date: LocalDate)(implicit s: Session) = activities.filter(_.date === date).run
+
+  def findAllWithType(implicit s: Session): Seq[(ActivityType, Activity)] = (for {
+    act <- activities
+    t <- act.activityTypeJoin} yield {
+    (t, act)
+  }).run
 }
 
 object ActivityTypes {
   val types = TableQuery[ActivityTypes]
 
-  def findAll(implicit s: Session) = types.list
-  def findById(id: Long)(implicit s: Session) = types.filter(_.id === id)
+  def findAll(implicit s: Session): List[ActivityType] = types.list
+  def findById(id: Long)(implicit s: Session): Option[ActivityType] = types.filter(_.id === id).firstOption
+  def findByMnemonic(mnemonic: String)(implicit s: Session): Option[ActivityType] = types.filter(_.mnemonic === mnemonic).firstOption
   def insert(actType: ActivityType)(implicit s: Session) = types.insert(actType)
-  def count(implicit s: Session) = types.length.run
+  def count(implicit s: Session): Int = types.length.run
 }

@@ -25,7 +25,13 @@ object Global extends GlobalSettings {
       }
 
       if(Activities.count == 0) {
-        Activities.insert(Activity(None, new LocalDate(2014, 8, 15), "Speelplein", ActivityTypes.findAll.head.id.get))
+        val actType = ActivityTypes.findByMnemonic("VM")
+        actType.map(
+          _.id.map(id => {
+            Activities.insert(Activity(None, new LocalDate(2014, 8, 15), "Speelplein", id))
+            Activities.insert(Activity(None, new LocalDate(2014, 8, 16), "Speelplein", id))
+          })
+        )
       }
 
       if(Animators.count == 0) {
