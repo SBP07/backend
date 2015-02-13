@@ -25,9 +25,14 @@ class Activities extends Specification{
 
       "Be able to join activity types table" in new WithApplication {
         DB.withSession { implicit session =>
-          ActivitiesModel.findAllWithType must not have size(0)
+          val all = ActivitiesModel.findAllWithType
 
-          ActivitiesModel.findAllWithType must have size(2)
+          all must not have size(0)
+
+          all must have size(2)
+
+          all(0)._1.mnemonic must be("VM")
+          all(0)._2.place must be("Speelplein")
         }
       }
     }

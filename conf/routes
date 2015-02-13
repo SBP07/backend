@@ -1,6 +1,11 @@
 # Home page
 #GET     /                           controllers.Application.index()
 
+# Activities
+GET     /activiteiten/          controllers.Activities.list
+GET     /activiteiten/lijst     controllers.Activities.list
+GET     /activiteiten/nieuw     controllers.Activities.newActivity
+
 # Animators
 GET     /animator/lijst        controllers.Animators.list
 GET     /animator/details/:id  controllers.Animators.details(id: Long)
