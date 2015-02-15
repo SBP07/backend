@@ -34,7 +34,7 @@ object Activities {
 
   val activities = TableQuery[Activities]
 
-  def findAll(implicit s: Session) = activities.list
+  def findAll(implicit s: Session): List[Activity] = activities.list
   def findById(id: Long)(implicit s: Session) = activities.filter(_.id === id).run
   def insert(activity: Activity)(implicit s: Session) = activities.insert(activity)
   def count(implicit s: Session) = activities.length.run
@@ -46,6 +46,8 @@ object Activities {
     t <- act.activityTypeJoin} yield {
     (t, act)
   }).run
+
+  def findByIds(ids: List[Long])(implicit s: Session): Seq[Activity] = activities.filter(_.id inSet ids).run
 }
 
 object ActivityTypes {

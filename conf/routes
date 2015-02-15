@@ -1,6 +1,12 @@
 # Home page
 #GET     /                           controllers.Application.index()
 
+# Presences
+GET     /aanwezigheden          controllers.Presences.presentToday
+GET     /aanwezigheden/nieuw    controllers.Presences.register
+POST    /aanwezigheden/nieuw    controllers.Presences.savePresence
+
+
 # Activities
 GET     /activiteiten/          controllers.Activities.list
 GET     /activiteiten/lijst     controllers.Activities.list

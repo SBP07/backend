@@ -1,0 +1,33 @@
+@(childForm: Form[models.formBindings.PresencesPost],
+    children: List[Child],
+    today: org.joda.time.LocalDate,
+    activitiesToday: List[(ActivityType, Activity)])(implicit flash: Flash)
+@import org.joda.time.LocalDate
+@import helper._
+@import helpers.DateTime.fmt
+
+@implicitField = @{ FieldConstructor(bootstrap3FieldConstructorTemplate.f) }
+
+
+@main("Registreer een nieuwe aanwezigheid") {
+    <h2>Nieuwe registratie</h2>
+    <p></p><em>Enkel activiteiten voor vandaag (@today.toString(fmt)) worden getoond.</em></p>
+
+    @helper.form(action = routes.Presences.savePresence, 'class -> "form-horizontal") {
+        @select(field = childForm("childId"),
+            options = (children.map(c => {
+                c.id.getOrElse(-1).toString -> {c.firstName + " " + c.lastName}
+            })), '_label -> "Kind", 'class -> "form-control selectpicker", Symbol("data-live-search") -> "true"
+        )
+
+        @for((act, idx) <- activitiesToday.zipWithIndex) {
+            @helper.checkbox(childForm(s"activityIds[$idx]"),
+                '_label -> s"${act._1.mnemonic} ${act._2.date.toString(fmt)}",
+                'class -> "form-control",
+                'value -> act._2.id
+            )
+        }
+
+        <button type="submit" class="btn btn-primary">Opslaan</button>
+    }
+}
