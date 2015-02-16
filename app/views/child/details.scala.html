@@ -1,4 +1,4 @@
-@(child: Child)(implicit flash: Flash)
+@(child: Child, presences: List[(Activity, ActivityType)])(implicit flash: Flash)
 @import helper._
 @import java.text.SimpleDateFormat
 @import helpers.DateTime._
@@ -66,6 +66,9 @@
 	<h2>Aanwezigheden</h2>
 	
 	<ul>
+        @for( (act, actType)  <- presences) {
+            <li>@act @actType</li>
+        }
 	</ul>
 	
 }

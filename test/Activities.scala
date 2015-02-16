@@ -29,7 +29,7 @@ class Activities extends Specification{
 
           all must not have size(0)
 
-          all must have size(2)
+          all must have size(10)
 
           all(0)._1.mnemonic must be("VM")
           all(0)._2.place must be("Speelplein")

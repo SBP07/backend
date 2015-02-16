@@ -19,6 +19,8 @@ class Activities(tag: Tag) extends Table[Activity](tag, "ACTIVITY") {
 
   def activityType = foreignKey("FK_ACT_TYPE", actNum, TableQuery[ActivityTypes])(_.id)
   def activityTypeJoin = TableQuery[ActivityTypes].filter(_.id === actNum)
+
+  def children = TableQuery[ChildrenToActivities].filter(_.childId === id).flatMap(_.childFK)
 }
 
 class ActivityTypes(tag: Tag) extends Table[ActivityType](tag, "ACTIVITY_TYPE") {

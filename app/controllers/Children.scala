@@ -75,7 +75,7 @@ object Children extends Controller {
   def details(id: Long) = DBAction { implicit rs =>
     val child = ChildrenModel.findById(id)
     child match {
-      case Some(x) => Ok(html.child.details(x))
+      case Some(x) => Ok(html.child.details(x, ChildPresences.findAllForChild(id).toList))
       case None => BadRequest("Geen kind met die ID")
     }
   }
