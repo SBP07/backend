@@ -36,7 +36,7 @@ class Children(tag: Tag) extends Table[Child](tag, "CHILDREN") {
   
   def * = (id.?, firstName, lastName, mobilePhone.?, landline.?, street.?, city.?, birthDate.?, medicalRecordChecked.?) <> (Child.tupled, Child.unapply _)
 
-  def activities = TableQuery[ChildrenToActivities].filter(_.activityId === id).flatMap(_.activityFK)
+  def activities = TableQuery[ChildrenToActivities].filter(_.childId === id).flatMap(_.activityFK)
 }
 
 object Children {
