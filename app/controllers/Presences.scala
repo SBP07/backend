@@ -7,7 +7,7 @@ import play.api.data._
 import play.api.data.Forms._
 import play.api.data.format.Formats._
 import play.api.db.slick._
-import models.{Children => ChildrenModel, Activities => ActivitiesModel, ChildToActivity, ChildPresences, Activity, Child}
+import models.{Children => ChildrenModel, Activities => ActivitiesModel, ChildPresences, Activity, Child, ChildPresence}
 import play.api.Play.current
 
 object Presences extends Controller {
@@ -40,7 +40,7 @@ object Presences extends Controller {
           case PresencesPost(None, _) => BadRequest("Ongeldig kind");
           case PresencesPost(Some(child), activities) => {
             rs.dbSession.withTransaction {
-              val childToActivities = activities.map(_.id).flatten.map(actId => ChildToActivity(child.id.get, actId))
+              val childToActivities = activities.map(_.id).flatten.map(actId => ChildPresence(child.id.get, actId))
               ChildPresences.register(childToActivities)
               Redirect(routes.Children.details(child.id.get)).flashing("success" -> "Aanwezigheden toegevoegd")
             }

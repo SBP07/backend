@@ -2,16 +2,16 @@ package models
 
 import play.api.db.slick.Config.driver.simple._
 
-case class ChildToActivity(childId: Long, activityId: Long)
+case class ChildPresence(childId: Long, activityId: Long)
 
-class ChildrenToActivities(tag: Tag) extends Table[ChildToActivity](tag, "child_to_activity") {
+class ChildrenToActivities(tag: Tag) extends Table[ChildPresence](tag, "child_to_activity") {
   val children = TableQuery[Children]
   val activities = TableQuery[Activities]
 
   def childId = column[Long]("child_id")
   def activityId = column[Long]("activity_id")
 
-  def * = (childId, activityId) <> (ChildToActivity.tupled, ChildToActivity.unapply _)
+  def * = (childId, activityId) <> (ChildPresence.tupled, ChildPresence.unapply _)
 
   def childFK = foreignKey("child_fk", childId, children)(child => child.id)
   def activityFK = foreignKey("activity_fk", activityId, activities)(act => act.id)
@@ -40,8 +40,8 @@ object ChildPresences {
     act <- child.activities if act.id === id
   } yield (child, act)).run
 
-  def register(childToActivity: ChildToActivity)(implicit s: Session) = presences += childToActivity
-  def register(childToActivity: List[ChildToActivity])(implicit s: Session) = presences ++= childToActivity
+  def register(childToActivity: ChildPresence)(implicit s: Session) = presences += childToActivity
+  def register(childToActivity: List[ChildPresence])(implicit s: Session) = presences ++= childToActivity
 
   def count(implicit s: Session) = presences.length.run
 }

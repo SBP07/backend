@@ -60,9 +60,11 @@ object Global extends GlobalSettings {
         val someAct = Activities.findAll.apply(4)
         val someOtherAct = Activities.findAll.last
         val someChild = Children.findAll.head
+        val anotherChild = Children.findAll.last
 
-        ChildPresences.register(ChildToActivity(someChild.id.get, someAct.id.get))
-        ChildPresences.register(ChildToActivity(someChild.id.get, someOtherAct.id.get))
+        ChildPresences.register(ChildPresence(someChild.id.get, someAct.id.get))
+        ChildPresences.register(ChildPresence(someChild.id.get, someOtherAct.id.get))
+        ChildPresences.register(ChildPresence(anotherChild.id.get, someOtherAct.id.get))
       }
     }
 
