@@ -17,7 +17,14 @@
 		  		<span class="glyphicon glyphicon-pencil"></span> Details bewerken
 			</button>
 		</a>
-		<a href="???">
+		<a href="
+		    @{
+                child.id match {
+                    case Some(id) => routes.Presences.registerWithId(id)
+                    case _ => routes.Presences.register
+                }
+		    }
+		">
 			<button type="button" class="btn btn-default">
 		  		<span class="glyphicon glyphicon-pencil"></span> Aanwezigheden aanpassen
 			</button>

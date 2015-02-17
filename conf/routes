@@ -1,10 +1,11 @@
 # Home page
-#GET     /                           controllers.Application.index()
+#GET     /                      controllers.Children.showList
 
 # Presences
-GET     /aanwezigheden          controllers.Presences.presentToday
-GET     /aanwezigheden/nieuw    controllers.Presences.register
-POST    /aanwezigheden/nieuw    controllers.Presences.savePresence
+GET     /aanwezigheden              controllers.Presences.presentToday
+GET     /aanwezigheden/nieuw        controllers.Presences.register
+GET     /aanwezigheden/nieuw/:id    controllers.Presences.registerWithId(id: Long)
+POST    /aanwezigheden/nieuw        controllers.Presences.savePresence
 
 
 # Activities

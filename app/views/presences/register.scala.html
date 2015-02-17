@@ -20,12 +20,22 @@
             })), '_label -> "Kind", 'class -> "form-control selectpicker", Symbol("data-live-search") -> "true"
         )
 
-        @for((act, idx) <- activitiesToday.zipWithIndex) {
-            @helper.checkbox(childForm(s"activityIds[$idx]"),
-                '_label -> s"${act._1.mnemonic} ${act._2.date.toString(fmt)}",
+        @inputCheckboxGroup(
+            childForm("selectedActivityIds"),
+            options = activitiesToday.map(a =>
+                (a._2.id.getOrElse(-1L).toString, s"${a._2.date.toString(fmt)} ${a._1.mnemonic} (${a._2.place})")
+            ).toSeq,
+            '_label -> "Hobbies"
+        )
+
+        @for(act <- childForm.get.possibleActivities) {
+            @helper.input(childForm("possibleActivityIds[]"),
+                '_label -> s"Hidden field, you should not be seeing this :) ${act}",
                 'class -> "form-control",
-                'value -> act._2.id
-            )
+                'value -> act.id.getOrElse(-1)
+            ) { (id, name, value, args) =>
+                <input type="hidden" name="@name" id="@id" @toHtmlArgs(args)>
+            }
         }
 
         <button type="submit" class="btn btn-primary">Opslaan</button>

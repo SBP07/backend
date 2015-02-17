@@ -43,5 +43,17 @@ object ChildPresences {
   def register(childToActivity: ChildPresence)(implicit s: Session) = presences += childToActivity
   def register(childToActivity: List[ChildPresence])(implicit s: Session) = presences ++= childToActivity
 
+  def unregister(childToActivity: ChildPresence)(implicit s: Session) = presences
+                                                                            .filter(_.activityId === childToActivity.activityId)
+                                                                            .filter(_.childId === childToActivity.childId)
+                                                                            .delete
+                                                                            .run
+
+  def unregister(childToActivity: List[ChildPresence])(implicit s: Session) = presences
+                                                                                .filter(_.activityId inSet childToActivity.map(_.activityId))
+                                                                                .filter(_.childId inSet childToActivity.map(_.childId))
+                                                                                .delete
+                                                                                .run
+
   def count(implicit s: Session) = presences.length.run
 }
