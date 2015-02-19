@@ -20,12 +20,12 @@
             })), '_label -> "Kind", 'class -> "form-control selectpicker", Symbol("data-live-search") -> "true"
         )
 
-        @inputCheckboxGroup(
+        @views.html.bootstrap3CheckboxGroup(
             childForm("selectedActivityIds"),
             options = activitiesToday.map(a =>
                 (a._2.id.getOrElse(-1L).toString, s"${a._2.date.toString(fmt)} ${a._1.mnemonic} (${a._2.place})")
             ).toSeq,
-            '_label -> "Hobbies"
+            '_label -> "Aanwezigheden"
         )
 
         @for(act <- childForm.get.possibleActivities) {
