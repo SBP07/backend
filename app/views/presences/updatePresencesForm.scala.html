@@ -1,5 +1,5 @@
 @(childForm: Form[models.formBindings.PresencesPost],
-    children: List[Child],
+    child: Child,
     today: org.joda.time.LocalDate,
     activitiesToday: List[(ActivityType, Activity)])(implicit flash: Flash)
 @import org.joda.time.LocalDate
@@ -9,16 +9,21 @@
 @implicitField = @{ FieldConstructor(bootstrap3FieldConstructorTemplate.f) }
 
 
-@main("Registreer een nieuwe aanwezigheid") {
-    <h2>Nieuwe registratie</h2>
-    <p></p><em>Enkel activiteiten voor vandaag (@today.toString(fmt)) worden getoond.</em></p>
+@main("Pas aanwezigheden aan") {
+    <h2>Pas aanwezigheden aan</h2>
+    <p>
+        <em>Dit kind wordt uitgeschreven voor alle activiteiten die je deselecteert.</em>
+    </p>
 
-    @helper.form(action = routes.Presences.savePresence, 'class -> "form-horizontal") {
-        @select(field = childForm("childId"),
-            options = (children.map(c => {
-                c.id.getOrElse(-1).toString -> {c.firstName + " " + c.lastName}
-            })), '_label -> "Kind", 'class -> "form-control selectpicker", Symbol("data-live-search") -> "true"
-        )
+    @helper.form(action = routes.Presences.saveUpdate, 'class -> "form-horizontal") {
+
+        <div class="form-group">
+            <label for="childId" class="col-sm-3 control-label">Kind</label>
+            <div class="col-sm-9">
+                <label class="control-label">@child.firstName @child.lastName</label>
+                <input type="hidden" name="childId" id="childId" value="@child.id.getOrElse(-1)">
+            </div>
+        </div>
 
         @views.html.bootstrap3CheckboxGroup(
             childForm("selectedActivityIds"),

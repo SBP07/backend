@@ -20,8 +20,8 @@
 		<a href="
 		    @{
                 child.id match {
-                    case Some(id) => routes.Presences.registerWithId(id)
-                    case _ => routes.Presences.register
+                    case Some(id) => routes.Presences.updateWithId(id)
+                    // TODO case _ => routes.Presences.update
                 }
 		    }
 		">
