@@ -14,10 +14,10 @@
 			@helper.inputText(childForm("lastName"), '_label -> "Achternaam", 'class -> "form-control")
 			@helper.inputText(childForm("mobilePhone"), '_label -> "GSM-nummer", 'class -> "form-control")
 			@helper.inputText(childForm("landline"), '_label -> "Thuistelefoon", 'class -> "form-control")
-			@helper.inputText(childForm("birthDate"), '_label -> "Geboortedatum", 'class -> "form-control")
+			@helper.inputText(childForm("birthDate"), '_label -> "Geboortedatum", 'class -> "form-control datepicker")
 			@helper.inputText(childForm("street"), '_label -> "Straat en nummer", 'class -> "form-control")
 			@helper.inputText(childForm("city"), '_label -> "Gemeente", 'class -> "form-control")
-			@helper.inputText(childForm("medicalRecordChecked"), '_label -> "Medische fiche gecontroleerd", 'class -> "form-control")
+			@helper.inputText(childForm("medicalRecordChecked"), '_label -> "Medische fiche gecontroleerd", 'class -> "form-control datepicker")
                         
 			<button type="submit" class="btn btn-primary">Opslaan</button>
 		</fieldset>
