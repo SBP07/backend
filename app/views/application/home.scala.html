@@ -1,0 +1,20 @@
+@()(implicit flash: Flash)
+
+@import helpers.DateTime._
+
+@main("Homepage") {
+    <div class="row">
+        <div class="col-xs-4">
+            <h2>Kinderen</h2>
+            @linklist(Map("Lijst van alle kinderen" -> routes.Children.showList, "Nieuw kind registreren" -> routes.Children.newChild))
+        </div>
+        <div class="col-xs-4">
+            <h2>Animatoren</h2>
+            @linklist(Map("Lijst van alle animatoren" -> routes.Animators.list, "Nieuwe animator registreren" -> routes.Animators.newAnimator))
+        </div>
+        <div class="col-xs-4">
+            <h2>Activiteiten</h2>
+            @linklist(Map("Lijst van alle activiteiten" -> routes.Activities.list, "Nieuwe activiteit toevoegen" -> routes.Activities.newActivity))
+        </div>
+    </div>
+}

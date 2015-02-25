@@ -1,9 +1,9 @@
 # Home page
-#GET     /                      controllers.Children.showList
+GET     /                      controllers.Application.home
 
 # Presences
 GET     /aanwezigheden              controllers.Presences.presentToday
-POST    /aanwezigheden/update/      controllers.Presences.saveUpdate
+POST    /aanwezigheden/update       controllers.Presences.saveUpdate
 GET     /aanwezigheden/update/:id   controllers.Presences.updateWithId(id: Long)
 GET     /aanwezigheden/nieuw        controllers.Presences.register
 GET     /aanwezigheden/nieuw/:id    controllers.Presences.registerWithId(id: Long)

@@ -1,0 +1,7 @@
+@(list: Map[String, Call])
+
+<ul>
+@for((name, link) <- list) {
+    <li><a href="@link">@name</a></li>
+}
+</ul>
