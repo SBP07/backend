@@ -21,6 +21,7 @@ libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play-slick" % "0.8.0",
   "com.h2database" % "h2" % "1.3.175",
   "mysql" % "mysql-connector-java" % "5.1.21",
-  "joda-time" % "joda-time" % "2.7"
+  "joda-time" % "joda-time" % "2.7",
+  "postgresql" % "postgresql" % "9.1-901.jdbc4"
 )     
 
