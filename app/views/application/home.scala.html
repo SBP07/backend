@@ -3,18 +3,33 @@
 @import helpers.DateTime._
 
 @main("Homepage") {
-    <div class="row">
-        <div class="col-xs-4">
-            <h2>Kinderen</h2>
-            @linklist(Map("Lijst van alle kinderen" -> routes.Children.showList, "Nieuw kind registreren" -> routes.Children.newChild))
-        </div>
-        <div class="col-xs-4">
-            <h2>Animatoren</h2>
-            @linklist(Map("Lijst van alle animatoren" -> routes.Animators.list, "Nieuwe animator registreren" -> routes.Animators.newAnimator))
-        </div>
-        <div class="col-xs-4">
-            <h2>Activiteiten</h2>
-            @linklist(Map("Lijst van alle activiteiten" -> routes.Activities.list, "Nieuwe activiteit toevoegen" -> routes.Activities.newActivity))
-        </div>
+<div class="jumbotron">
+    <h1>Speelsysteem</h1>
+    <em>Joepie, geen excel meer!</em>
+</div>
+<div class="row">
+    <div class="col-xs-6">
+        <h2>Aanwezigheden van kinderen</h2>
+        @linklist(Map("Een kind inschrijven voor een dagdeel/activiteit" -> routes.Presences.register,
+        "Een lijst van alle momenteel aanwezige kinderen weergeven" -> routes.Presences.presentToday)
+        )
     </div>
+    <div class="col-xs-6">
+        <h2>Aanwezigheden van animatoren</h2>
+    </div>
+</div>`
+<div class="row">
+    <div class="col-xs-4">
+        <h2>Kinderen</h2>
+        @linklist(Map("Lijst van alle kinderen" -> routes.Children.showList, "Nieuw kind registreren" -> routes.Children.newChild))
+    </div>
+    <div class="col-xs-4">
+        <h2>Animatoren</h2>
+        @linklist(Map("Lijst van alle animatoren" -> routes.Animators.list, "Nieuwe animator registreren" -> routes.Animators.newAnimator))
+    </div>
+    <div class="col-xs-4">
+        <h2>Activiteiten</h2>
+        @linklist(Map("Lijst van alle activiteiten" -> routes.Activities.list, "Nieuwe activiteit toevoegen" -> routes.Activities.newActivity))
+    </div>
+</div>
 }
