@@ -1,6 +1,10 @@
 # Home page
 GET     /                      controllers.Application.home
 
+# Medical files
+GET     /medischefiche              controllers.MedicalFiles.form
+POST    /medischefiche              controllers.MedicalFiles.postForm
+
 # Presences
 GET     /aanwezigheden              controllers.Presences.presentToday
 POST    /aanwezigheden/update       controllers.Presences.saveUpdate
