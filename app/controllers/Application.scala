@@ -18,4 +18,6 @@ object Application extends Controller {
   def home = Action { implicit request =>
     Ok(views.html.application.home.render(request.flash))
   }
+
+  def heartbeat = Action { Ok("online") }
 }
