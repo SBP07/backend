@@ -7,8 +7,9 @@ import play.api.data._
 import play.api.data.Forms._
 import play.api.data.format.Formats._
 import play.api.db.slick._
-import models.{Children => ChildrenModel, Activities => ActivitiesModel, ChildPresences, Activity, Child, ChildPresence}
+import models.{Children => ChildrenModel, Activities => ActivitiesModel, _}
 import play.api.Play.current
+import views.html.presences
 
 object Presences extends Controller {
   val registerForm = Form(
@@ -19,34 +20,48 @@ object Presences extends Controller {
     ) {
       (childId, selectedActivityIds, possibleActivityIds) => {
         DB.withSession(s => {
-          val child = (ChildrenModel.findById(childId)(s))
+          val child = ChildrenModel.findById(childId)(s)
           val selectedActivities = ActivitiesModel.findByIds(selectedActivityIds)(s).toList
           val possibleActivities = ActivitiesModel.findByIds(possibleActivityIds)(s).toList
           PresencesPost(child, selectedActivities, possibleActivities)
         })
       }
     } {
-      p: PresencesPost => Some((p.child.flatMap(_.id).getOrElse(-1L), p.selectedActivities.map(_.id).flatten, p.possibleActivities.map(_.id).flatten))
+      p: PresencesPost => {
+        val id = p.child.flatMap(_.id).getOrElse(-1L)
+        val activityIds = p.selectedActivities.map(_.id).flatten
+        val possibleActivityIds = p.possibleActivities.map(_.id).flatten
+        Some((id, activityIds, possibleActivityIds))
+      }
     }
   )
 
-  def updateWithId(childId: Long) = DBAction { implicit s =>
+  def updateWithId(childId: Long): Action[AnyContent] = DBAction { implicit s =>
     val child = ChildrenModel.findById(childId)
-    val presences = child.flatMap(_.id).map(ChildPresences.findAllForChild(_)).map(_.map(_._1)).map(_.toList).getOrElse(Nil)
+
+    val allPresences = (for {
+      child <- ChildrenModel.findById(childId)
+      id <- child.id
+    } yield ChildPresences.findAllForChild(id).map(_._1).toList).getOrElse(Nil)
+
     child match {
-      case Some(c) => Ok(
-        views.html.presences.updatePresencesForm.render(registerForm.fill(PresencesPost(child, presences, ActivitiesModel.findAllWithType.toList.map(_._2))),
-          c, LocalDate.now, ActivitiesModel.findAllWithType.toList, s.flash)
-      )
+      case Some(c) =>
+        val allActivities = ActivitiesModel.findAllWithType.toList
+        val filledForm = registerForm.fill(PresencesPost(child, allPresences, allActivities.map(_._2)))
+        Ok(presences.updatePresencesForm.render(filledForm, c, LocalDate.now, allActivities, s.flash))
       case _ => BadRequest("Kind niet gevonden")
     }
   }
 
-  def saveUpdate = DBAction { implicit rs =>
+  def saveUpdate: Action[AnyContent] = DBAction { implicit rs =>
     registerForm.bindFromRequest.fold(
       formWithErrors => {
-        formWithErrors.value.flatMap(_.child).flatMap(_.id.flatMap(ChildrenModel.findById(_))) match {
-          case Some(child) => BadRequest (views.html.presences.updatePresencesForm.render(formWithErrors, child, LocalDate.now, ActivitiesModel.findAllWithType.toList, rs.flash) )
+        formWithErrors.value.flatMap(_.child).flatMap(_.id.flatMap(ChildrenModel.findById)) match {
+          case Some(child) =>
+            val allActivities = ActivitiesModel.findAllWithType.toList
+            BadRequest(
+              presences.updatePresencesForm.render(formWithErrors, child, LocalDate.now, allActivities, rs.flash)
+            )
           case _ => BadRequest("Kind niet gevonden")
         }
       },
@@ -75,29 +90,39 @@ object Presences extends Controller {
     )
   }
 
-  def register = DBAction { implicit s =>
-    Ok(views.html.presences.register.render(registerForm.fill(PresencesPost(None, Nil, ActivitiesModel.findAllWithType.toList.map(_._2))), ChildrenModel.findAll, LocalDate.now, ActivitiesModel.findAllWithType.toList, s.flash))
+  def register: Action[AnyContent] = DBAction { implicit s =>
+    val allActivities = ActivitiesModel.findAllWithType.toList
+    val filledForm = registerForm.fill(PresencesPost(None, Nil, allActivities.map(_._2)))
+    Ok(presences.register.render(filledForm, ChildrenModel.findAll, LocalDate.now, allActivities, s.flash))
   }
 
-  def registerWithId(childId: Long) = DBAction { implicit s =>
+  def registerWithId(childId: Long): Action[AnyContent] = DBAction { implicit s =>
     val child = ChildrenModel.findById(childId)
-    val presences = child.flatMap(_.id).map(ChildPresences.findAllForChild(_)).map(_.map(_._1)).map(_.toList).getOrElse(Nil)
+    val allPresences = (for {
+      c <- child
+      id <- c.id
+    } yield ChildPresences.findAllForChild(id).map(_._1).toList).getOrElse(Nil)
+
+
+    val allActivities = ActivitiesModel.findAllWithType.toList
+    val filledForm = registerForm.fill(PresencesPost(child, allPresences, allActivities.map(_._2)))
+
     Ok(
-      views.html.presences.register.render(registerForm.fill(PresencesPost(child, presences, ActivitiesModel.findAllWithType.toList.map(_._2))),
-        ChildrenModel.findAll, LocalDate.now, ActivitiesModel.findAllWithType.toList, s.flash)
+      presences.register.render(filledForm,
+        ChildrenModel.findAll, LocalDate.now, allActivities, s.flash)
     )
   }
 
-  def savePresence = DBAction { implicit rs =>
+  def savePresence: Action[AnyContent] = DBAction { implicit rs =>
     registerForm.bindFromRequest.fold(
-      formWithErrors => BadRequest(views.html.presences.register.render(formWithErrors, ChildrenModel.findAll, LocalDate.now, ActivitiesModel.findAllWithType.toList, rs.flash)),
+      formWithErrors => BadRequest(presences.register.render(formWithErrors, ChildrenModel.findAll, LocalDate.now,
+          ActivitiesModel.findAllWithType.toList, rs.flash)),
       _ match {
         case PresencesPost(None, _, _) => BadRequest("Ongeldig kind");
-        case PresencesPost(Some(child), selectedActivities, possibleActivities) => {
+        case PresencesPost(Some(child), selectedActivities, possibleActivities) =>
           child.id match {
             case Some(id) => rs.dbSession.withTransaction {
               val alreadyPersisted = ChildPresences.findAllForChild(id).map(_._1).toList
-
               val toPersist = PresencesPost.presencesToInsert(selectedActivities, possibleActivities, alreadyPersisted)
 
               ChildPresences.register(toPersist.map(_.id).flatten.map(ChildPresence(id, _)))
@@ -107,12 +132,10 @@ object Presences extends Controller {
 
             case _ => BadRequest("Ongeldig kind")
           }
-
-        }
       }
 
     )
   }
 
-  def presentToday = TODO
+  def presentToday: Action[AnyContent] = TODO
 }

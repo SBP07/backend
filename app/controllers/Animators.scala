@@ -1,9 +1,5 @@
 package controllers
 
-import java.util.Date
-
-import org.joda.time.{DateTimeZone, LocalDate}
-import play.api._
 import play.api.mvc._
 import play.api.data._
 import play.api.data.Forms._
@@ -11,7 +7,7 @@ import play.api.data.format.Formats._
 import play.api.db.slick._
 
 import views._
-import models.{Animator, Animators => AnimatorsModel}
+import models.{Animators => AnimatorsModel, AnimatorVals, Animator}
 
 object Animators extends Controller {
 
@@ -27,16 +23,18 @@ object Animators extends Controller {
       "street" -> optional(text),
       "city" -> optional(text),
       "bankAccount" -> optional(text),
-      "yearStartedVolunteering" -> optional(number(2000,2030)),
+      "yearStartedVolunteering" -> optional(
+        number(AnimatorVals.minimumYearStartedVolunteering, AnimatorVals.maximumYearStartedVolunteering)
+      ),
       "isPartOfCore" -> boolean,
 
       "birthDate" -> optional(jodaLocalDate("dd-MM-yyyy"))
-    )(Animator.apply)(Animator.unapply _)
+    )(Animator.apply)(Animator.unapply)
   )
 
-  def list = DBAction { implicit rs => Ok(html.animator.list.render(AnimatorsModel.findAll, rs.flash))}
+  def list: Action[AnyContent] = DBAction { implicit rs => Ok(html.animator.list.render(AnimatorsModel.findAll, rs.flash))}
 
-  def details(id: Long) = DBAction { implicit rs =>
+  def details(id: Long): Action[AnyContent] = DBAction { implicit rs =>
     val animator = AnimatorsModel.findById(id)
     animator match {
       case Some(x) => Ok(html.animator.details(x))
@@ -44,9 +42,9 @@ object Animators extends Controller {
     }
   }
 
-  def newAnimator = Action { implicit rs => Ok(html.animator.form.render(animatorForm, rs.flash))}
+  def newAnimator: Action[AnyContent] = Action { implicit rs => Ok(html.animator.form.render(animatorForm, rs.flash))}
 
-  def saveAnimator = DBAction { implicit rs =>
+  def saveAnimator: Action[AnyContent] = DBAction { implicit rs =>
     animatorForm.bindFromRequest.fold(
       formWithErrors => BadRequest(html.animator.form.render(formWithErrors, rs.flash)),
       animator => {
@@ -64,7 +62,7 @@ object Animators extends Controller {
     )
   }
 
-  def editAnimator(id: Long) = DBAction { implicit rs =>
+  def editAnimator(id: Long): Action[AnyContent] = DBAction { implicit rs =>
     val animator = AnimatorsModel.findById(id)
     animator match {
       case Some(ch) => Ok(html.animator.form.render(animatorForm.fill(ch), rs.flash))

@@ -15,9 +15,9 @@ import models._
 import models.{Children => ChildrenModel}
 
 object Application extends Controller {
-  def home = Action { implicit request =>
+  def home: Action[AnyContent] = Action { implicit request =>
     Ok(views.html.application.home.render(request.flash))
   }
 
-  def heartbeat = Action { Ok("online") }
+  def heartbeat: Action[AnyContent] = Action { Ok("online") }
 }

@@ -1,18 +1,12 @@
 package controllers
 
-import java.util.Date
-
-import org.joda.time.{DateTimeZone, LocalDate}
-import play.api._
-import play.api.mvc._
-import play.api.data._
+import models.{Children => ChildrenModel, _}
 import play.api.data.Forms._
+import play.api.data._
 import play.api.data.format.Formats._
 import play.api.db.slick._
-
+import play.api.mvc._
 import views._
-import models._
-import models.{Children => ChildrenModel}
 
 object Children extends Controller {
 
@@ -34,18 +28,18 @@ object Children extends Controller {
        medRecChecked) => Child.apply(id, firstName, lastName, mobilePhone, landline, street,
       city, birthDate, medRecChecked)
       )(_ match {
-          case Child(id, firstName, lastName, mobilePhone, landline, street, city, birthDate, medRecChecked) =>
-            Some((id, firstName, lastName, mobilePhone, landline, street, city, birthDate, medRecChecked))
-          case _ => None
-        }
+      case Child(id, firstName, lastName, mobilePhone, landline, street, city, birthDate, medRecChecked) =>
+        Some((id, firstName, lastName, mobilePhone, landline, street, city, birthDate, medRecChecked))
+      case _ => None
+    }
       )
   )
 
-  def showList = DBAction { implicit rs => Ok(html.child.list.render(ChildrenModel.findAll, rs.flash))}
+  def showList: Action[AnyContent] = DBAction { implicit rs => Ok(html.child.list.render(ChildrenModel.findAll, rs.flash))}
 
-  def newChild = Action { implicit rs => Ok(html.child.form.render(childForm, rs.flash))}
+  def newChild: Action[AnyContent] = Action { implicit rs => Ok(html.child.form.render(childForm, rs.flash))}
 
-  def saveChild = DBAction { implicit rs =>
+  def saveChild: Action[AnyContent] = DBAction { implicit rs =>
     childForm.bindFromRequest.fold(
       formWithErrors => BadRequest(html.child.form.render(formWithErrors, rs.flash)),
       child => {
@@ -64,7 +58,7 @@ object Children extends Controller {
 
   }
 
-  def editChild(id: Long) = DBAction { implicit rs =>
+  def editChild(id: Long): Action[AnyContent] = DBAction { implicit rs =>
     val child = ChildrenModel.findById(id)
     child match {
       case Some(ch) => Ok(html.child.form.render(childForm.fill(ch), rs.flash))
@@ -72,7 +66,7 @@ object Children extends Controller {
     }
   }
 
-  def details(id: Long) = DBAction { implicit rs =>
+  def details(id: Long): Action[AnyContent] = DBAction { implicit rs =>
     val child = ChildrenModel.findById(id)
     child match {
       case Some(x) => Ok(html.child.details(x, ChildPresences.findAllForChild(id).toList))

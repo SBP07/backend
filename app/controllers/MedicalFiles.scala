@@ -41,11 +41,11 @@ object MedicalFiles extends Controller {
     )(MedicalFile.apply)(MedicalFile.unapply)
   )
 
-  def form = DBAction { implicit s =>
+  def form: Action[AnyContent] = DBAction { implicit s =>
     Ok(views.html.medicalFile.form.render(fileFormPart, s.flash))
   }
 
-  def postForm = DBAction { implicit  s =>
+  def postForm: Action[AnyContent] = DBAction { implicit  s =>
     fileFormPart.bindFromRequest.fold(
       formWithErrors => BadRequest(views.html.medicalFile.form.render(formWithErrors, s.flash)),
       medicalFile => {
