@@ -22,7 +22,7 @@ case class Animator(
   birthDate: Option[LocalDate]
 )
 
-private[models] class Animators(tag: Tag) extends Table[Animator](tag, "ANIMATORS") {
+private[models] class Animators(tag: Tag) extends Table[Animator](tag, "animator") {
   import helpers.Db.jodaDatetimeToSqldateMapper
 
   private[models] def id = column[Long]("id", O.PrimaryKey, O.AutoInc)

@@ -20,21 +20,21 @@ case class Child(
   medicalRecordChecked: Option[LocalDate] = None // None means not ok
 )
 
-private[models] class Children(tag: Tag) extends Table[Child](tag, "CHILDREN") {
+private[models] class Children(tag: Tag) extends Table[Child](tag, "child") {
   import helpers.Db.jodaDatetimeToSqldateMapper
 
-  private[models] def id = column[Long]("ID", O.PrimaryKey, O.AutoInc)
-  private[models] def firstName = column[String]("FIRST_NAME")
-  private[models] def lastName = column[String]("LAST_NAME")
-  private[models] def mobilePhone = column[String]("MOBILE_PHONE", O.Nullable)
-  private[models] def landline = column[String]("LANDLINE", O.Nullable)
+  private[models] def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
+  private[models] def firstName = column[String]("first_name")
+  private[models] def lastName = column[String]("last_name")
+  private[models] def mobilePhone = column[String]("mobile_phone", O.Nullable)
+  private[models] def landline = column[String]("landline", O.Nullable)
 
-  private[models] def street = column[String]("STREET", O.Nullable)
-  private[models] def city = column[String]("CITY", O.Nullable)
+  private[models] def street = column[String]("street", O.Nullable)
+  private[models] def city = column[String]("city", O.Nullable)
 
-  private[models] def birthDate = column[LocalDate]("BIRTHDATE", O.Nullable)
+  private[models] def birthDate = column[LocalDate]("birth_date", O.Nullable)
 
-  private[models] def medicalRecordChecked = column[LocalDate]("MED_REC_CHECKED", O.Nullable)
+  private[models] def medicalRecordChecked = column[LocalDate]("medical_file_checked", O.Nullable)
 
   def * : ProvenShape[Child] = (id.?, firstName, lastName, mobilePhone.?, landline.?, street.?,
     city.?, birthDate.?, medicalRecordChecked.?) <> (Child.tupled, Child.unapply)

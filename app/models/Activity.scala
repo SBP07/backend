@@ -9,18 +9,18 @@ case class Activity(id: Option[Long] = None, date: LocalDate, place: String, act
 case class ActivityType(id: Option[Long], mnemonic: String, description: String)
 
 
-private[models] class Activities(tag: Tag) extends Table[Activity](tag, "ACTIVITY") {
+private[models] class Activities(tag: Tag) extends Table[Activity](tag, "activity") {
   import helpers.Db.jodaDatetimeToSqldateMapper
 
-  private[models] def id = column[Long]("ID", O.PrimaryKey, O.AutoInc)
-  private[models] def date = column[LocalDate]("DATE", O.Nullable)
-  private[models] def place = column[String]("PLACE", O.Nullable)
-  private[models] def actNum = column[Long]("ACT_TYPE_NUM", O.NotNull)
+  private[models] def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
+  private[models] def date = column[LocalDate]("date", O.Nullable)
+  private[models] def place = column[String]("place", O.Nullable)
+  private[models] def actNum = column[Long]("activity_type", O.NotNull)
 
   def * : ProvenShape[Activity] = (id.?, date, place, actNum) <> (Activity.tupled, Activity.unapply)
 
   def activityType: ForeignKeyQuery[ActivityTypes, ActivityType] = {
-    foreignKey("FK_ACT_TYPE", actNum, TableQuery[ActivityTypes])(_.id)
+    foreignKey("fk_act_type", actNum, TableQuery[ActivityTypes])(_.id)
   }
   def activityTypeJoin: Query[ActivityTypes, ActivityTypes#TableElementType, Seq] = {
     TableQuery[ActivityTypes].filter(_.id === actNum)
@@ -31,10 +31,10 @@ private[models] class Activities(tag: Tag) extends Table[Activity](tag, "ACTIVIT
   }
 }
 
-private[models] class ActivityTypes(tag: Tag) extends Table[ActivityType](tag, "ACTIVITY_TYPE") {
-  private[models] def id = column[Long]("ID", O.PrimaryKey, O.AutoInc)
-  private[models] def mnemonic = column[String]("MNEMONIC", O.NotNull)
-  private[models] def description = column[String]("DESCRIPTION", O.NotNull)
+private[models] class ActivityTypes(tag: Tag) extends Table[ActivityType](tag, "activity_type") {
+  private[models] def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
+  private[models] def mnemonic = column[String]("mnemonic", O.NotNull)
+  private[models] def description = column[String]("description", O.NotNull)
 
   def * : ProvenShape[ActivityType] = (id.?, mnemonic, description) <>
     (ActivityType.tupled, ActivityType.unapply)

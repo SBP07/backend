@@ -35,10 +35,10 @@ case class MedicalFile(
   tetanusShot: Option[LocalDate]
 )
 
-private[models] class MedicalFiles(tag: Tag) extends Table[MedicalFile](tag, "MEDICAL_FILES") {
+private[models] class MedicalFiles(tag: Tag) extends Table[MedicalFile](tag, "medical_file") {
   import helpers.Db.jodaDatetimeToSqldateMapper
 
-  private[models] def id = column[Long]("ID", O.PrimaryKey, O.AutoInc)
+  private[models] def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
 
   private[models] def firstName = column[String]("first_name")
   private[models] def lastName = column[String]("last_name")
