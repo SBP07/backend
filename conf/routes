@@ -21,6 +21,7 @@ POST    /aanwezigheden/nieuw        controllers.Presences.savePresence
 GET     /activiteiten/          controllers.Activities.list
 GET     /activiteiten/lijst     controllers.Activities.list
 GET     /activiteiten/nieuw     controllers.Activities.newActivity
+POST    /activiteiten/nieuw     controllers.Activities.saveActivity
 
 # Animators
 GET     /animator/lijst        controllers.Animators.list

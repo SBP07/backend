@@ -28,10 +28,10 @@ object Children extends Controller {
        medRecChecked) => Child.apply(id, firstName, lastName, mobilePhone, landline, street,
       city, birthDate, medRecChecked)
       )(_ match {
-      case Child(id, firstName, lastName, mobilePhone, landline, street, city, birthDate, medRecChecked) =>
-        Some((id, firstName, lastName, mobilePhone, landline, street, city, birthDate, medRecChecked))
-      case _ => None
-    }
+          case Child(id, firstName, lastName, mobilePhone, landline, street, city, birthDate, medRecChecked) =>
+            Some((id, firstName, lastName, mobilePhone, landline, street, city, birthDate, medRecChecked))
+          case _ => None
+        }
       )
   )
 

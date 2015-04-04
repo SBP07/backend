@@ -45,7 +45,7 @@ object Activities {
 
   val activities = TableQuery[Activities]
 
-  def findAll(implicit s: Session): List[Activity] = activities.list
+  def findAll(implicit s: Session): List[Activity] = activities.sortBy(_.date).list
   def findById(id: Long)(implicit s: Session): Seq[Activity] = activities.filter(_.id === id).run
   def insert(activity: Activity)(implicit s: Session): Unit = activities.insert(activity)
   def count(implicit s: Session): Int = activities.length.run
@@ -53,12 +53,18 @@ object Activities {
   def findByDate(date: LocalDate)(implicit s: Session): Seq[Activity] = activities.filter(_.date === date).run
 
   def findAllWithType(implicit s: Session): Seq[(ActivityType, Activity)] = (for {
-    act <- activities
-    t <- act.activityTypeJoin} yield {
+    act <- activities.sortBy(_.date)
+    t <- act.activityTypeJoin.sortBy(_.id)
+  } yield {
     (t, act)
   }).run
 
   def findByIds(ids: List[Long])(implicit s: Session): Seq[Activity] = activities.filter(_.id inSet ids).run
+  def findByDateAndType(date: LocalDate, actType: ActivityType)(implicit s: Session): Option[Activity] = {
+    actType.id.flatMap { actType =>
+      activities.filter(_.actNum === actType).filter(_.date === date).firstOption
+    }
+  }
 }
 
 object ActivityTypes {

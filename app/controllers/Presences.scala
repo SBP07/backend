@@ -15,8 +15,8 @@ object Presences extends Controller {
   val registerForm = Form(
     mapping(
       "childId" -> of[Long],
-      "selectedActivityIds" -> list(of[Long]),
-      "possibleActivityIds" -> list(of[Long])
+      "selectedActivityIds" -> list(longNumber),
+      "possibleActivityIds" -> list(longNumber)
     ) {
       (childId, selectedActivityIds, possibleActivityIds) => {
         DB.withSession(s => {
