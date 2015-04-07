@@ -1,0 +1,34 @@
+@(activityForm: Form[controllers.Activities.ActivitiesPost],
+	activityTypes: Seq[ActivityType])(implicit flash: Flash)
+@import helper._
+
+@implicitField = @{ FieldConstructor(bootstrap3FieldConstructorTemplate.f) }
+
+@main("Nieuwe activiteit") {
+	@helper.form(action = routes.Activities.saveActivity, 'class -> "form-horizontal") {
+		<fieldset>
+			<legend>Activiteit</legend>
+            @if(activityForm("id").value.isDefined) {
+                <input type="hidden" value="@activityForm("id").value.get" class="form-control" id="id" name="id">
+            }
+			@helper.inputText(activityForm("date"), '_label -> "Datum", 'class -> "form-control datepicker")
+
+			@views.html.bootstrap3CheckboxGroup(
+				activityForm("selectedActivityTypes"),
+				options = activityTypes.map(a =>
+					(a.id.getOrElse(-1).toString, a.description)
+				).toSeq,
+				'_label -> "Types"
+			)
+
+			@helper.inputText(activityForm("externalLocation"), '_label -> "Externe locatie (indien externe activiteit)", 'class -> "form-control")
+			<div class="form-group">
+				<div class="col-sm-3"></div>
+				<div class="col-sm-9">
+					<p>Enkel invullen indien je ook "Externe activiteit" hebt aangeduidt. Dit is wanneer er bijvoorbeeld een activiteit in Waregem is. Het is best dat je iets invult met de plaats en wat het precies is, bijvoorbeeld "Waregem, kleutertoneel". Dat is gemakkelijk om later te weten welke activiteit het was.</p>
+				</div>
+			</div>
+			<button type="submit" class="btn btn-primary">Opslaan</button>
+		</fieldset>
+	}
+}
