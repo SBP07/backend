@@ -1,7 +1,7 @@
 @(childForm: Form[models.formBindings.PresencesPost],
     child: Child,
     today: org.joda.time.LocalDate,
-    activitiesToday: List[(ShiftType, Shift)])(implicit flash: Flash)
+    shiftsToday: List[(ShiftType, Shift)])(implicit flash: Flash)
 @import org.joda.time.LocalDate
 @import helper._
 @import helpers.DateTime.fmt
@@ -26,15 +26,15 @@
         </div>
 
         @views.html.bootstrap3CheckboxGroup(
-            childForm("selectedActivityIds"),
-            options = activitiesToday.map(a =>
+            childForm("selectedShiftIds"),
+            options = shiftsToday.map(a =>
                 (a._2.id.getOrElse(-1L).toString, s"${a._2.date.toString(fmt)} ${a._1.mnemonic} (${a._2.place})")
             ).toSeq,
             '_label -> "Aanwezigheden"
         )
 
-        @for(act <- childForm.value.map(_.possibleActivities).getOrElse(Nil)) {
-            @helper.input(childForm("possibleActivityIds[]"),
+        @for(act <- childForm.value.map(_.possibleShifts).getOrElse(Nil)) {
+            @helper.input(childForm("possibleShiftIds[]"),
                 '_label -> s"Hidden field, you should not be seeing this :) ${act}",
                 'class -> "form-control",
                 'value -> act.id.getOrElse(-1)

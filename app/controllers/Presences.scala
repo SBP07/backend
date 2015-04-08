@@ -7,7 +7,7 @@ import play.api.data._
 import play.api.data.Forms._
 import play.api.data.format.Formats._
 import play.api.db.slick._
-import models.{Children => ChildrenModel, Shifts => ActivitiesModel, _}
+import models.{Children => ChildrenModel, Shifts => ShiftsModel, _}
 import play.api.Play.current
 import views.html.presences
 
@@ -16,22 +16,22 @@ object Presences extends Controller {
     mapping(
       "childId" -> of[Long],
       "selectedShiftIds" -> list(longNumber),
-      "possibleActivityIds" -> list(longNumber)
+      "possibleShiftIds" -> list(longNumber)
     ) {
-      (childId, selectedActivityIds, possibleActivityIds) => {
+      (childId, selectedShiftIds, possibleShiftIds) => {
         DB.withSession(s => {
           val child = ChildrenModel.findById(childId)(s)
-          val selectedActivities = ActivitiesModel.findByIds(selectedActivityIds)(s).toList
-          val possibleActivities = ActivitiesModel.findByIds(possibleActivityIds)(s).toList
-          PresencesPost(child, selectedActivities, possibleActivities)
+          val selectedShifts = ShiftsModel.findByIds(selectedShiftIds)(s).toList
+          val possibleShifts = ShiftsModel.findByIds(possibleShiftIds)(s).toList
+          PresencesPost(child, selectedShifts, possibleShifts)
         })
       }
     } {
       p: PresencesPost => {
         val id = p.child.flatMap(_.id).getOrElse(-1L)
-        val activityIds = p.selectedActivities.map(_.id).flatten
-        val possibleActivityIds = p.possibleActivities.map(_.id).flatten
-        Some((id, activityIds, possibleActivityIds))
+        val shiftIds = p.selectedShifts.map(_.id).flatten
+        val possibleShiftIds = p.possibleShifts.map(_.id).flatten
+        Some((id, shiftIds, possibleShiftIds))
       }
     }
   )
@@ -46,9 +46,9 @@ object Presences extends Controller {
 
     child match {
       case Some(c) =>
-        val allActivities = ActivitiesModel.findAllWithType.toList
-        val filledForm = registerForm.fill(PresencesPost(child, allPresences, allActivities.map(_._2)))
-        Ok(presences.updatePresencesForm.render(filledForm, c, LocalDate.now, allActivities, s.flash))
+        val allShifts = ShiftsModel.findAllWithType.toList
+        val filledForm = registerForm.fill(PresencesPost(child, allPresences, allShifts.map(_._2)))
+        Ok(presences.updatePresencesForm.render(filledForm, c, LocalDate.now, allShifts, s.flash))
       case _ => BadRequest("Kind niet gevonden")
     }
   }
@@ -58,22 +58,22 @@ object Presences extends Controller {
       formWithErrors => {
         formWithErrors.value.flatMap(_.child).flatMap(_.id.flatMap(ChildrenModel.findById)) match {
           case Some(child) =>
-            val allActivities = ActivitiesModel.findAllWithType.toList
+            val allShifts = ShiftsModel.findAllWithType.toList
             BadRequest(
-              presences.updatePresencesForm.render(formWithErrors, child, LocalDate.now, allActivities, rs.flash)
+              presences.updatePresencesForm.render(formWithErrors, child, LocalDate.now, allShifts, rs.flash)
             )
           case _ => BadRequest("Kind niet gevonden")
         }
       },
       _ match {
         case PresencesPost(None, _, _) => BadRequest("Ongeldig kind");
-        case PresencesPost(Some(child), selectedActivities, possibleActivities) => {
+        case PresencesPost(Some(child), selected, possible) => {
           child.id match {
             case Some(id) => rs.dbSession.withTransaction {
               val alreadyPersisted = ChildPresences.findAllForChild(id).map(_._1).toList
 
-              val toPersist = PresencesPost.presencesToInsert(selectedActivities, possibleActivities, alreadyPersisted)
-              val toDelete = PresencesPost.presencesToDelete(selectedActivities, possibleActivities, alreadyPersisted)
+              val toPersist = PresencesPost.presencesToInsert(selected, possible, alreadyPersisted)
+              val toDelete = PresencesPost.presencesToDelete(selected, possible, alreadyPersisted)
 
               ChildPresences.register(toPersist.map(_.id).flatten.map(ChildPresence(id, _)))
               ChildPresences.unregister(toDelete.map(_.id).flatten.map(ChildPresence(id, _)))
@@ -91,9 +91,9 @@ object Presences extends Controller {
   }
 
   def register: Action[AnyContent] = DBAction { implicit s =>
-    val allActivities = ActivitiesModel.findAllWithType.toList
-    val filledForm = registerForm.fill(PresencesPost(None, Nil, allActivities.map(_._2)))
-    Ok(presences.register.render(filledForm, ChildrenModel.findAll, LocalDate.now, allActivities, s.flash))
+    val allShifts = ShiftsModel.findAllWithType.toList
+    val filledForm = registerForm.fill(PresencesPost(None, Nil, allShifts.map(_._2)))
+    Ok(presences.register.render(filledForm, ChildrenModel.findAll, LocalDate.now, allShifts, s.flash))
   }
 
   def registerWithId(childId: Long): Action[AnyContent] = DBAction { implicit s =>
@@ -104,26 +104,26 @@ object Presences extends Controller {
     } yield ChildPresences.findAllForChild(id).map(_._1).toList).getOrElse(Nil)
 
 
-    val allActivities = ActivitiesModel.findAllWithType.toList
-    val filledForm = registerForm.fill(PresencesPost(child, allPresences, allActivities.map(_._2)))
+    val allShifts = ShiftsModel.findAllWithType.toList
+    val filledForm = registerForm.fill(PresencesPost(child, allPresences, allShifts.map(_._2)))
 
     Ok(
       presences.register.render(filledForm,
-        ChildrenModel.findAll, LocalDate.now, allActivities, s.flash)
+        ChildrenModel.findAll, LocalDate.now, allShifts, s.flash)
     )
   }
 
   def savePresence: Action[AnyContent] = DBAction { implicit rs =>
     registerForm.bindFromRequest.fold(
       formWithErrors => BadRequest(presences.register.render(formWithErrors, ChildrenModel.findAll, LocalDate.now,
-          ActivitiesModel.findAllWithType.toList, rs.flash)),
+          ShiftsModel.findAllWithType.toList, rs.flash)),
       _ match {
         case PresencesPost(None, _, _) => BadRequest("Ongeldig kind");
-        case PresencesPost(Some(child), selectedActivities, possibleActivities) =>
+        case PresencesPost(Some(child), selectedShifts, possibleShifts) =>
           child.id match {
             case Some(id) => rs.dbSession.withTransaction {
               val alreadyPersisted = ChildPresences.findAllForChild(id).map(_._1).toList
-              val toPersist = PresencesPost.presencesToInsert(selectedActivities, possibleActivities, alreadyPersisted)
+              val toPersist = PresencesPost.presencesToInsert(selectedShifts, possibleShifts, alreadyPersisted)
 
               ChildPresences.register(toPersist.map(_.id).flatten.map(ChildPresence(id, _)))
 
