@@ -7,7 +7,7 @@ import play.api.data._
 import play.api.data.Forms._
 import play.api.data.format.Formats._
 import play.api.db.slick._
-import models.{Children => ChildrenModel, Activities => ActivitiesModel, _}
+import models.{Children => ChildrenModel, Shifts => ActivitiesModel, _}
 import play.api.Play.current
 import views.html.presences
 
@@ -15,7 +15,7 @@ object Presences extends Controller {
   val registerForm = Form(
     mapping(
       "childId" -> of[Long],
-      "selectedActivityIds" -> list(longNumber),
+      "selectedShiftIds" -> list(longNumber),
       "possibleActivityIds" -> list(longNumber)
     ) {
       (childId, selectedActivityIds, possibleActivityIds) => {

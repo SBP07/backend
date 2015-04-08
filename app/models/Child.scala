@@ -39,8 +39,8 @@ private[models] class Children(tag: Tag) extends Table[Child](tag, "child") {
   def * : ProvenShape[Child] = (id.?, firstName, lastName, mobilePhone.?, landline.?, street.?,
     city.?, birthDate.?, medicalRecordChecked.?) <> (Child.tupled, Child.unapply)
 
-  def activities: Query[Activities, Activity, Seq] = {
-    TableQuery[ChildrenToActivities].filter(_.childId === id).flatMap(_.activityFK)
+  def shifts: Query[Shifts, Shift, Seq] = {
+    TableQuery[ChildrenToShifts].filter(_.childId === id).flatMap(_.shiftFK)
   }
 }
 

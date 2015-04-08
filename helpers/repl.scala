@@ -13,6 +13,6 @@ try {
 implicit val session = play.api.db.slick.DB.createSession
 println("An implicit Session is now available")
 
-val tq = TableQuery[ChildrenToActivities]
+val tq = TableQuery[ChildrenToShifts]
 val children = TableQuery[Children]
-val activities = TableQuery[Activities]
+val activities = TableQuery[Shifts]

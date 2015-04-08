@@ -1,4 +1,4 @@
-@(child: Child, presences: List[(Activity, ActivityType)])(implicit flash: Flash)
+@(child: Child, presences: List[(Shift, ShiftType)])(implicit flash: Flash)
 @import helper._
 @import java.text.SimpleDateFormat
 @import helpers.DateTime._
@@ -74,7 +74,7 @@
 	
 	<ul>
         @for( (act, actType)  <- presences) {
-            <li>@act @actType</li>
+            <li>@act.date.toString(fmt), <abbr title="@actType.description">@actType.mnemonic</abbr> (locatie: @act.place)</li>
         }
 	</ul>
 	

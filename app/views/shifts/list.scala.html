@@ -1,0 +1,52 @@
+@(shifts: Seq[(ShiftType, Shift, Int)])(implicit flash: Flash)
+
+@import helpers.DateTime._
+
+@main("Dagdelen") {
+    <h2 class="sub-header">Lijst van alle dagdelen</h2>
+    <a href="@routes.Shifts.newShift">
+            <button type="button" class="btn btn-default">
+                    <span class="glyphicon glyphicon-pencil"></span> Nieuw dagdeel
+            </button>
+    </a>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Type</th>
+                    <th>Dag</th>
+                    <th>Plaats</th>
+                    <th>Aantal deelnemers</th>
+                    <th>Opties</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @for(shift <- shifts) {
+                <tr>
+                    <td>@shift._2.id.getOrElse("/")</td>
+                    <td>
+                        @shift._1.mnemonic
+                    </td>
+                    <td>
+                        <a href="@routes.Shifts.updateShift(shift._2.date.toString(fmt))">
+                            @shift._2.date.toString(fmt)
+                        </a>
+                    </td>
+                    <td>@shift._2.place</td>
+                    <td>
+                        @shift._3
+                    </td>
+                    <td>
+                        @shift._2.id.map { id =>
+                            <a href="@routes.Shifts.deleteShift(id)">Verwijderen</a>
+                        }
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+}

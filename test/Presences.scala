@@ -1,5 +1,5 @@
 import org.junit.runner.RunWith
-import models.{Activities => ActivitiesModel, ChildPresences, ActivityTypes}
+import models.{Shifts => ActivitiesModel, ChildPresences, ShiftTypes}
 import org.specs2.mutable._
 import org.specs2.runner._
 import org.junit.runner._

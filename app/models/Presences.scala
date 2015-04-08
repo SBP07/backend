@@ -4,57 +4,57 @@ import play.api.db.slick.Config.driver.simple._
 
 import scala.slick.lifted.{ProvenShape, ForeignKeyQuery}
 
-case class ChildPresence(childId: Long, activityId: Long)
+case class ChildPresence(childId: Long, shiftId: Long)
 
-private[models] class ChildrenToActivities(tag: Tag) extends Table[ChildPresence](tag, "child_to_activity") {
+private[models] class ChildrenToShifts(tag: Tag) extends Table[ChildPresence](tag, "child_to_shift") {
   private[models] val children = TableQuery[Children]
-  private[models] val activities = TableQuery[Activities]
+  private[models] val shifts = TableQuery[Shifts]
 
   private[models] def childId = column[Long]("child_id")
-  private[models] def activityId = column[Long]("activity_id")
+  private[models] def shiftId = column[Long]("shift_id")
 
-  def * : ProvenShape[ChildPresence] = (childId, activityId) <> (ChildPresence.tupled, ChildPresence.unapply _)
+  def * : ProvenShape[ChildPresence] = (childId, shiftId) <> (ChildPresence.tupled, ChildPresence.unapply _)
 
   def childFK: ForeignKeyQuery[Children, Child] = foreignKey("child_fk", childId, children)(child => child.id)
-  def activityFK: ForeignKeyQuery[Activities, Activity] = foreignKey("activity_fk",
-    activityId, activities)(act => act.id)
+  def shiftFK: ForeignKeyQuery[Shifts, Shift] = foreignKey("shift_fk",
+    shiftId, shifts)(act => act.id)
 
-  private[models] def pk = primaryKey("child_to_activity_pk", (childId, activityId))
+  private[models] def pk = primaryKey("child_to_shift_pk", (childId, shiftId))
 }
 
 object ChildPresences {
   private val children = TableQuery[Children]
-  private val activities = TableQuery[Activities]
-  private val presences = TableQuery[ChildrenToActivities]
+  private val shifts = TableQuery[Shifts]
+  private val presences = TableQuery[ChildrenToShifts]
 
-  def all(implicit s: Session): Seq[(Child, Activity)] = (for {
+  def all(implicit s: Session): Seq[(Child, Shift)] = (for {
     child <- children
-    act <- child.activities
+    act <- child.shifts
   } yield (child, act)).run
 
-  def findAllForChild(id: Long)(implicit s: Session): Seq[(Activity, ActivityType)] = (for {
+  def findAllForChild(id: Long)(implicit s: Session): Seq[(Shift, ShiftType)] = (for {
     child <- children if child.id === id
-    act <- child.activities
-    actType <- act.activityType
+    act <- child.shifts
+    actType <- act.shiftType
   } yield (act, actType)).run
 
-  def findAllForActivity(id: Long)(implicit s: Session): Seq[(Child, Activity)] = (for {
+  def findAllForShift(id: Long)(implicit s: Session): Seq[(Child, Shift)] = (for {
     child <- children
-    act <- child.activities if act.id === id
+    act <- child.shifts if act.id === id
   } yield (child, act)).run
 
-  def register(childToActivity: ChildPresence)(implicit s: Session): Unit = presences += childToActivity
-  def register(childToActivity: List[ChildPresence])(implicit s: Session): Unit = presences ++= childToActivity
+  def register(presence: ChildPresence)(implicit s: Session): Unit = presences += presence
+  def register(presence: List[ChildPresence])(implicit s: Session): Unit = presences ++= presence
 
-  def unregister(childToActivity: ChildPresence)(implicit s: Session): Unit =
-    presences.filter(_.activityId === childToActivity.activityId)
-              .filter(_.childId === childToActivity.childId)
+  def unregister(presence: ChildPresence)(implicit s: Session): Unit =
+    presences.filter(_.shiftId === presence.shiftId)
+              .filter(_.childId === presence.childId)
               .delete
               .run
 
-  def unregister(childToActivity: List[ChildPresence])(implicit s: Session): Unit =
-    presences.filter(_.activityId inSet childToActivity.map(_.activityId))
-              .filter(_.childId inSet childToActivity.map(_.childId))
+  def unregister(presence: List[ChildPresence])(implicit s: Session): Unit =
+    presences.filter(_.shiftId inSet presence.map(_.shiftId))
+              .filter(_.childId inSet presence.map(_.childId))
               .delete
               .run
 

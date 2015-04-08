@@ -1,7 +1,7 @@
 @(childForm: Form[models.formBindings.PresencesPost],
     child: Child,
     today: org.joda.time.LocalDate,
-    activitiesToday: List[(ActivityType, Activity)])(implicit flash: Flash)
+    activitiesToday: List[(ShiftType, Shift)])(implicit flash: Flash)
 @import org.joda.time.LocalDate
 @import helper._
 @import helpers.DateTime.fmt

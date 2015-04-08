@@ -1,27 +1,27 @@
-@(activityForm: Form[controllers.Activities.ActivitiesPost],
-	activityTypes: Seq[ActivityType])(implicit flash: Flash)
+@(shiftForm: Form[controllers.Shifts.ShiftsPost],
+	shiftTypes: Seq[ShiftType])(implicit flash: Flash)
 @import helper._
 
 @implicitField = @{ FieldConstructor(bootstrap3FieldConstructorTemplate.f) }
 
-@main("Nieuwe activiteit") {
-	@helper.form(action = routes.Activities.saveActivity, 'class -> "form-horizontal") {
+@main("Nieuw dagedeel") {
+	@helper.form(action = routes.Shifts.saveShift, 'class -> "form-horizontal") {
 		<fieldset>
-			<legend>Activiteit</legend>
-            @if(activityForm("id").value.isDefined) {
-                <input type="hidden" value="@activityForm("id").value.get" class="form-control" id="id" name="id">
+			<legend>Dagdeel</legend>
+            @if(shiftForm("id").value.isDefined) {
+                <input type="hidden" value="@shiftForm("id").value.get" class="form-control" id="id" name="id">
             }
-			@helper.inputText(activityForm("date"), '_label -> "Datum", 'class -> "form-control datepicker")
+			@helper.inputText(shiftForm("date"), '_label -> "Datum", 'class -> "form-control datepicker")
 
 			@views.html.bootstrap3CheckboxGroup(
-				activityForm("selectedActivityTypes"),
-				options = activityTypes.map(a =>
+				shiftForm("selectedShiftTypes"),
+				options = shiftTypes.map(a =>
 					(a.id.getOrElse(-1).toString, a.description)
 				).toSeq,
 				'_label -> "Types"
 			)
 
-			@helper.inputText(activityForm("externalLocation"), '_label -> "Externe locatie (indien externe activiteit)", 'class -> "form-control")
+			@helper.inputText(shiftForm("externalLocation"), '_label -> "Externe locatie (indien externe activiteit)", 'class -> "form-control")
 			<div class="form-group">
 				<div class="col-sm-3"></div>
 				<div class="col-sm-9">

@@ -17,11 +17,13 @@ GET     /aanwezigheden/nieuw/:id    controllers.Presences.registerWithId(id: Lon
 POST    /aanwezigheden/nieuw        controllers.Presences.savePresence
 
 
-# Activities
-GET     /activiteiten/          controllers.Activities.list
-GET     /activiteiten/lijst     controllers.Activities.list
-GET     /activiteiten/nieuw     controllers.Activities.newActivity
-POST    /activiteiten/nieuw     controllers.Activities.saveActivity
+# Shifts
+GET     /dagdelen/              controllers.Shifts.list
+GET     /dagdelen/lijst         controllers.Shifts.list
+GET     /dagdelen/nieuw         controllers.Shifts.newShift
+POST    /dagdelen/nieuw         controllers.Shifts.saveShift
+GET     /dagdelen/update/:date  controllers.Shifts.updateShift(date: String)
+GET     /dagdelen/delete/:id    controllers.Shifts.deleteShift(id: Long)
 
 # Animators
 GET     /animator/lijst        controllers.Animators.list

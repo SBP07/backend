@@ -22,8 +22,8 @@ object Global extends GlobalSettings {
 
   private def insertChildActivities(implicit s: Session) {
     if (ChildPresences.count == 0) {
-      val someAct = Activities.findAll.apply(4)
-      val someOtherAct = Activities.findAll.last
+      val someAct = Shifts.findAll.apply(4)
+      val someOtherAct = Shifts.findAll.last
       val someChild = Children.findAll.head
       val anotherChild = Children.findAll.last
 
@@ -42,38 +42,38 @@ object Global extends GlobalSettings {
   }
 
   def insertActivities(implicit s: Session) {
-    if (Activities.count == 0) {
-      val vm = ActivityTypes.findByMnemonic("VM")
+    if (Shifts.count == 0) {
+      val vm = ShiftTypes.findByMnemonic("VM")
       val firstDay = new LocalDate(2014, 8, 15)
       vm.map(
         _.id.map(id => {
-          Activities.insert(Activity(None, firstDay, "Speelplein", id))
-          Activities.insert(Activity(None, firstDay.plusDays(1), "Speelplein", id))
-          Activities.insert(Activity(None, firstDay.plusDays(2), "Speelplein", id))
-          Activities.insert(Activity(None, firstDay.plusDays(3), "Speelplein", id))
-          Activities.insert(Activity(None, firstDay.plusDays(4), "Speelplein", id))
+          Shifts.insert(Shift(None, firstDay, "Speelplein", id))
+          Shifts.insert(Shift(None, firstDay.plusDays(1), "Speelplein", id))
+          Shifts.insert(Shift(None, firstDay.plusDays(2), "Speelplein", id))
+          Shifts.insert(Shift(None, firstDay.plusDays(3), "Speelplein", id))
+          Shifts.insert(Shift(None, firstDay.plusDays(4), "Speelplein", id))
         })
       )
 
-      val nm = ActivityTypes.findByMnemonic("NM")
+      val nm = ShiftTypes.findByMnemonic("NM")
       nm.map(
         _.id.map(id => {
-          Activities.insert(Activity(None, firstDay, "Speelplein", id))
-          Activities.insert(Activity(None, firstDay.plusDays(1), "Speelplein", id))
-          Activities.insert(Activity(None, firstDay.plusDays(2), "Speelplein", id))
-          Activities.insert(Activity(None, firstDay.plusDays(3), "Speelplein", id))
-          Activities.insert(Activity(None, firstDay.plusDays(4), "Speelplein", id))
+          Shifts.insert(Shift(None, firstDay, "Speelplein", id))
+          Shifts.insert(Shift(None, firstDay.plusDays(1), "Speelplein", id))
+          Shifts.insert(Shift(None, firstDay.plusDays(2), "Speelplein", id))
+          Shifts.insert(Shift(None, firstDay.plusDays(3), "Speelplein", id))
+          Shifts.insert(Shift(None, firstDay.plusDays(4), "Speelplein", id))
         })
       )
     }
   }
 
   private def insertActivityTypes(implicit s: Session) {
-    if (ActivityTypes.count == 0) {
-      ActivityTypes.insert(ActivityType(None, "VM", "Voormiddag"))
-      ActivityTypes.insert(ActivityType(None, "NM", "Namiddag"))
-      ActivityTypes.insert(ActivityType(None, "MID", "Middag"))
-      ActivityTypes.insert(ActivityType(None, "EXT", "Externe activitieit (niet op het speelplein)"))
+    if (ShiftTypes.count == 0) {
+      ShiftTypes.insert(ShiftType(None, "VM", "Voormiddag"))
+      ShiftTypes.insert(ShiftType(None, "NM", "Namiddag"))
+      ShiftTypes.insert(ShiftType(None, "MID", "Middag"))
+      ShiftTypes.insert(ShiftType(None, "EXT", "Externe activitieit (niet op het speelplein)"))
     }
   }
 
