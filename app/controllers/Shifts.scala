@@ -26,19 +26,19 @@ object Shifts extends Controller {
     )(ShiftsPost.apply)(ShiftsPost.unapply)
   )
 
-  def list: Action[AnyContent] = DBAction { implicit s =>
-    Ok(views.html.shifts.list.render(ShiftsModel.findAllWithTypeAndNumberOfPresences, s.flash))
+  def list: Action[AnyContent] = DBAction { implicit req =>
+    Ok(views.html.shifts.list.render(ShiftsModel.findAllWithTypeAndNumberOfPresences, req.flash))
   }
 
-  def newShift: Action[AnyContent] = DBAction { implicit s =>
+  def newShift: Action[AnyContent] = DBAction { implicit req =>
     val types = ShiftTypes.findAll
-    Ok(views.html.shifts.form.render(shiftsForm, types, s.flash))
+    Ok(views.html.shifts.form.render(shiftsForm, types, req.flash))
   }
-  def saveShift: Action[AnyContent] = DBAction { implicit s =>
+  def saveShift: Action[AnyContent] = DBAction { implicit req =>
     shiftsForm.bindFromRequest.fold(
       formWithErrors => {
         val types = ShiftTypes.findAll
-        BadRequest(views.html.shifts.form.render(formWithErrors, types, s.flash))
+        BadRequest(views.html.shifts.form.render(formWithErrors, types, req.flash))
       },
       post => {
         val shiftTypes = post.shiftTypes.map(ShiftTypes.findById).flatten.toSet
@@ -62,20 +62,20 @@ object Shifts extends Controller {
     )
   }
 
-  def updateShift(dateString: String): Action[AnyContent] = DBAction { implicit s =>
+  def updateShift(dateString: String): Action[AnyContent] = DBAction { implicit req =>
     try{
       val date: LocalDate = LocalDate.parse(dateString, fmt)
       val shift = models.Shifts.findByDate(date)
       val extPlace = "Test"
       val fill = ShiftsPost(date, shift.map(_.shiftId).toList, extPlace)
       val types = ShiftTypes.findAll
-      Ok(views.html.shifts.form.render(shiftsForm.fill(fill), types, s.flash))
+      Ok(views.html.shifts.form.render(shiftsForm.fill(fill), types, req.flash))
     } catch {
       case e: IllegalArgumentException => BadRequest("Could not parse date")
     }
   }
 
-  def deleteShift(id: Long): Action[AnyContent] = DBAction { implicit s =>
+  def deleteShift(id: Long): Action[AnyContent] = DBAction { implicit req =>
     val found = models.Shifts.findByIdWithTypeAndNumberOfPresences(id)
     val numChildren = 4
 
@@ -85,7 +85,7 @@ object Shifts extends Controller {
 
   }
 
-  def reallyDeleteShift(): Action[AnyContent] = DBAction { implicit s =>
+  def reallyDeleteShift(): Action[AnyContent] = DBAction { implicit req =>
     deleteForm.bindFromRequest.fold(
       errorForm => BadRequest("Bad id"),
       deleteShift => {

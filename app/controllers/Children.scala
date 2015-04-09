@@ -35,13 +35,13 @@ object Children extends Controller {
       )
   )
 
-  def showList: Action[AnyContent] = DBAction { implicit rs => Ok(html.child.list.render(ChildrenModel.findAll, rs.flash))}
+  def showList: Action[AnyContent] = DBAction { implicit req => Ok(html.child.list.render(ChildrenModel.findAll, req.flash))}
 
-  def newChild: Action[AnyContent] = Action { implicit rs => Ok(html.child.form.render(childForm, rs.flash))}
+  def newChild: Action[AnyContent] = Action { implicit req => Ok(html.child.form.render(childForm, req.flash))}
 
-  def saveChild: Action[AnyContent] = DBAction { implicit rs =>
+  def saveChild: Action[AnyContent] = DBAction { implicit req =>
     childForm.bindFromRequest.fold(
-      formWithErrors => BadRequest(html.child.form.render(formWithErrors, rs.flash)),
+      formWithErrors => BadRequest(html.child.form.render(formWithErrors, req.flash)),
       child => {
         child.id match {
           case Some(id) => {
@@ -58,15 +58,15 @@ object Children extends Controller {
 
   }
 
-  def editChild(id: Long): Action[AnyContent] = DBAction { implicit rs =>
+  def editChild(id: Long): Action[AnyContent] = DBAction { implicit req =>
     val child = ChildrenModel.findById(id)
     child match {
-      case Some(ch) => Ok(html.child.form.render(childForm.fill(ch), rs.flash))
+      case Some(ch) => Ok(html.child.form.render(childForm.fill(ch), req.flash))
       case _ => BadRequest("Geen geldige id")
     }
   }
 
-  def details(id: Long): Action[AnyContent] = DBAction { implicit rs =>
+  def details(id: Long): Action[AnyContent] = DBAction { implicit req =>
     val child = ChildrenModel.findById(id)
     child match {
       case Some(x) => Ok(html.child.details(x, ChildPresences.findAllForChild(id).toList))

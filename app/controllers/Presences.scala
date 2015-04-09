@@ -36,7 +36,7 @@ object Presences extends Controller {
     }
   )
 
-  def updateWithId(childId: Long): Action[AnyContent] = DBAction { implicit s =>
+  def updateWithId(childId: Long): Action[AnyContent] = DBAction { implicit req =>
     val child = ChildrenModel.findById(childId)
 
     val allPresences = (for {
@@ -48,19 +48,19 @@ object Presences extends Controller {
       case Some(c) =>
         val allShifts = ShiftsModel.findAllWithType.toList
         val filledForm = registerForm.fill(PresencesPost(child, allPresences, allShifts.map(_._2)))
-        Ok(presences.updatePresencesForm.render(filledForm, c, LocalDate.now, allShifts, s.flash))
+        Ok(presences.updatePresencesForm.render(filledForm, c, LocalDate.now, allShifts, req.flash))
       case _ => BadRequest("Kind niet gevonden")
     }
   }
 
-  def saveUpdate: Action[AnyContent] = DBAction { implicit rs =>
+  def saveUpdate: Action[AnyContent] = DBAction { implicit req =>
     registerForm.bindFromRequest.fold(
       formWithErrors => {
         formWithErrors.value.flatMap(_.child).flatMap(_.id.flatMap(ChildrenModel.findById)) match {
           case Some(child) =>
             val allShifts = ShiftsModel.findAllWithType.toList
             BadRequest(
-              presences.updatePresencesForm.render(formWithErrors, child, LocalDate.now, allShifts, rs.flash)
+              presences.updatePresencesForm.render(formWithErrors, child, LocalDate.now, allShifts, req.flash)
             )
           case _ => BadRequest("Kind niet gevonden")
         }
@@ -69,7 +69,7 @@ object Presences extends Controller {
         case PresencesPost(None, _, _) => BadRequest("Ongeldig kind");
         case PresencesPost(Some(child), selected, possible) => {
           child.id match {
-            case Some(id) => rs.dbSession.withTransaction {
+            case Some(id) => req.dbSession.withTransaction {
               val alreadyPersisted = ChildPresences.findAllForChild(id).map(_._1).toList
 
               val toPersist = PresencesPost.presencesToInsert(selected, possible, alreadyPersisted)
@@ -90,13 +90,13 @@ object Presences extends Controller {
     )
   }
 
-  def register: Action[AnyContent] = DBAction { implicit s =>
+  def register: Action[AnyContent] = DBAction { implicit req =>
     val allShifts = ShiftsModel.findAllWithType.toList
     val filledForm = registerForm.fill(PresencesPost(None, Nil, allShifts.map(_._2)))
-    Ok(presences.register.render(filledForm, ChildrenModel.findAll, LocalDate.now, allShifts, s.flash))
+    Ok(presences.register.render(filledForm, ChildrenModel.findAll, LocalDate.now, allShifts, req.flash))
   }
 
-  def registerWithId(childId: Long): Action[AnyContent] = DBAction { implicit s =>
+  def registerWithId(childId: Long): Action[AnyContent] = DBAction { implicit req =>
     val child = ChildrenModel.findById(childId)
     val allPresences = (for {
       c <- child
@@ -109,19 +109,19 @@ object Presences extends Controller {
 
     Ok(
       presences.register.render(filledForm,
-        ChildrenModel.findAll, LocalDate.now, allShifts, s.flash)
+        ChildrenModel.findAll, LocalDate.now, allShifts, req.flash)
     )
   }
 
-  def savePresence: Action[AnyContent] = DBAction { implicit rs =>
+  def savePresence: Action[AnyContent] = DBAction { implicit req =>
     registerForm.bindFromRequest.fold(
       formWithErrors => BadRequest(presences.register.render(formWithErrors, ChildrenModel.findAll, LocalDate.now,
-          ShiftsModel.findAllWithType.toList, rs.flash)),
+          ShiftsModel.findAllWithType.toList, req.flash)),
       _ match {
         case PresencesPost(None, _, _) => BadRequest("Ongeldig kind");
         case PresencesPost(Some(child), selectedShifts, possibleShifts) =>
           child.id match {
-            case Some(id) => rs.dbSession.withTransaction {
+            case Some(id) => req.dbSession.withTransaction {
               val alreadyPersisted = ChildPresences.findAllForChild(id).map(_._1).toList
               val toPersist = PresencesPost.presencesToInsert(selectedShifts, possibleShifts, alreadyPersisted)
 

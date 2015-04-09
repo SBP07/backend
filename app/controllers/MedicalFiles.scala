@@ -41,13 +41,13 @@ object MedicalFiles extends Controller {
     )(MedicalFile.apply)(MedicalFile.unapply)
   )
 
-  def form: Action[AnyContent] = DBAction { implicit s =>
-    Ok(views.html.medicalFile.form.render(fileFormPart, s.flash))
+  def form: Action[AnyContent] = DBAction { implicit req =>
+    Ok(views.html.medicalFile.form.render(fileFormPart, req.flash))
   }
 
-  def postForm: Action[AnyContent] = DBAction { implicit  s =>
+  def postForm: Action[AnyContent] = DBAction { implicit  req =>
     fileFormPart.bindFromRequest.fold(
-      formWithErrors => BadRequest(views.html.medicalFile.form.render(formWithErrors, s.flash)),
+      formWithErrors => BadRequest(views.html.medicalFile.form.render(formWithErrors, req.flash)),
       medicalFile => {
         medicalFile.id match {
           case Some(id) => {
@@ -56,8 +56,8 @@ object MedicalFiles extends Controller {
             Ok("Gelukt update")
           }
           case _ => {
-            MedicalFilesModel.insert(medicalFile)(s.dbSession)
-            Ok(views.html.medicalFile.successfullyCreated()(s.flash))
+            MedicalFilesModel.insert(medicalFile)(req.dbSession)
+            Ok(views.html.medicalFile.successfullyCreated()(req.flash))
           }
         }
       }
