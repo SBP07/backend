@@ -54,6 +54,13 @@ object Shifts {
   def insert(shift: Shift)(implicit s: Session): Unit = shifts.insert(shift)
   def count(implicit s: Session): Int = shifts.length.run
 
+  def findByIdWithTypeAndNumberOfPresences(id: Long)(implicit s: Session): Option[(Shift, ShiftType, Int)] = (for {
+    shift <- shifts.filter(_.id === id)
+    shiftType <- shift.shiftTypeJoin
+  } yield {
+      (shift, shiftType, shift.children.length)
+  }).firstOption
+
   def findByDate(date: LocalDate)(implicit s: Session): Seq[Shift] = shifts.filter(_.date === date).run
 
   def findAllWithType(implicit s: Session): Seq[(ShiftType, Shift)] = (for {
@@ -76,7 +83,7 @@ object Shifts {
       shifts.filter(_.shiftId === shiftType).filter(_.date === date).firstOption
     }
   }
-  def delete(shift: Shift)(implicit s: Session) = shifts.filter(_.id === shift.id).delete
+  def delete(shift: Shift)(implicit s: Session): Int = shifts.filter(_.id === shift.id).delete
 }
 
 object ShiftTypes {

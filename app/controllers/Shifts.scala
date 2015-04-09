@@ -10,6 +10,13 @@ import helpers.DateTime._
 
 object Shifts extends Controller {
   case class ShiftsPost(date: LocalDate, shiftTypes: List[Long], externalLocation: String)
+  case class ShiftDelete(id: Long)
+
+  val deleteForm = Form(
+      mapping(
+      "id" -> longNumber
+    )(ShiftDelete.apply)(ShiftDelete.unapply)
+  )
 
   val shiftsForm = Form(
     mapping(
@@ -55,7 +62,7 @@ object Shifts extends Controller {
     )
   }
 
-  def updateShift(dateString: String) = DBAction { implicit s =>
+  def updateShift(dateString: String): Action[AnyContent] = DBAction { implicit s =>
     try{
       val date: LocalDate = LocalDate.parse(dateString, fmt)
       val shift = models.Shifts.findByDate(date)
@@ -68,13 +75,28 @@ object Shifts extends Controller {
     }
   }
 
-  def deleteShift(id: Long) = DBAction { implicit s =>
-    val shift = models.Shifts.findById(id)
+  def deleteShift(id: Long): Action[AnyContent] = DBAction { implicit s =>
+    val found = models.Shifts.findByIdWithTypeAndNumberOfPresences(id)
+    val numChildren = 4
 
-    shift.map { act =>
-      models.Shifts.delete(act)
-      Redirect(routes.Shifts.list()).flashing("success" -> "Dagdeel verwijderd")
-    }.getOrElse(BadRequest("Activiteit niet gevonden"))
+    found.map { found =>
+      Ok(views.html.shifts.confirm_delete(found._3, found._1, found._2))
+    }.getOrElse(BadRequest("Dagdeel niet gevonden"))
+
+  }
+
+  def reallyDeleteShift(): Action[AnyContent] = DBAction { implicit s =>
+    deleteForm.bindFromRequest.fold(
+      errorForm => BadRequest("Bad id"),
+      deleteShift => {
+        val shift = models.Shifts.findById(deleteShift.id)
+
+        shift.map { act =>
+          models.Shifts.delete(act)
+          Redirect(routes.Shifts.list()).flashing("success" -> "Dagdeel verwijderd")
+        }.getOrElse(BadRequest("Dagdeel niet gevonden"))
+      }
+    )
   }
 
 }

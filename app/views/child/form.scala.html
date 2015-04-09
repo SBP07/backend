@@ -18,6 +18,18 @@
 			@helper.inputText(childForm("street"), '_label -> "Straat en nummer", 'class -> "form-control")
 			@helper.inputText(childForm("city"), '_label -> "Gemeente", 'class -> "form-control")
 			@helper.inputText(childForm("medicalRecordChecked"), '_label -> "Medische fiche gecontroleerd", 'class -> "form-control datepicker")
+
+			<div class="form-group">
+				<label class="col-sm-3 control-label">
+					Opmerkingen
+				</label>
+				<div class="col-sm-9">
+					<ul>
+						<li>Medische fiche gecontroleerd enkel invullen als de medische fiche in orde is.</li>
+						<li>Niet alle posten zijn verplicht (bv. telefoonnummer en adres zijn niet verplicht)</li>
+					</ul>
+				</div>
+			</div>
                         
 			<button type="submit" class="btn btn-primary">Opslaan</button>
 		</fieldset>

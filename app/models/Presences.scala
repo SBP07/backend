@@ -15,9 +15,9 @@ private[models] class ChildrenToShifts(tag: Tag) extends Table[ChildPresence](ta
 
   def * : ProvenShape[ChildPresence] = (childId, shiftId) <> (ChildPresence.tupled, ChildPresence.unapply _)
 
-  def childFK: ForeignKeyQuery[Children, Child] = foreignKey("child_fk", childId, children)(child => child.id)
+  def childFK: ForeignKeyQuery[Children, Child] = foreignKey("child_fk", childId, children)(_.id)
   def shiftFK: ForeignKeyQuery[Shifts, Shift] = foreignKey("shift_fk",
-    shiftId, shifts)(act => act.id)
+    shiftId, shifts)(_.id, onDelete=ForeignKeyAction.Cascade)
 
   private[models] def pk = primaryKey("child_to_shift_pk", (childId, shiftId))
 }
