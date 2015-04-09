@@ -8,8 +8,8 @@
 	@helper.form(action = routes.MedicalFiles.postForm, 'class -> "form-horizontal") {
 		<fieldset>
 			<legend>Medische fiche registreren</legend>
-            @if(medicalFormPart("id").value.isDefined) {
-                <input type="hidden" value="@medicalFormPart("id").value.get" class="form-control" id="id" name="id">
+            @medicalFormPart("id").value.map { id =>
+                <input type="hidden" value="@id" class="form-control" id="id" name="id">
             }
 			@helper.inputText(medicalFormPart("firstName"), '_label -> "Voornaam", 'class -> "form-control")
 			@helper.inputText(medicalFormPart("lastName"), '_label -> "Achternaam", 'class -> "form-control")

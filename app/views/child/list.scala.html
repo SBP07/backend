@@ -25,18 +25,16 @@
             <tr>
                 <td>@child.id.getOrElse("/")</td>
                 <td>
-                    @if(child.id.isDefined) {
-                    <a href="@routes.Children.details(child.id.get)">
+                    @child.id.map { id =>
+                        <a href="@routes.Children.details(id)">
                     }
-                        @child.firstName @child.lastName
-                    @if(child.id.isDefined) {
-                    </a>
+                            @child.firstName @child.lastName
+                    @child.id.map { id =>
+                        </a>
                     }
                 </td>
                 <td>
-                    @if(child.birthDate.isDefined) {
-                        @child.birthDate.get.toString(fmt)
-                    }
+                    @child.birthDate.map(_.toString(fmt))
                 </td>
                 <td>@child.street</td>
                 <td>@child.city</td>

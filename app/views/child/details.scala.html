@@ -37,9 +37,7 @@
 				<tr><td>Achternaam</td><td>@child.lastName</td></tr>
 				<tr><td>Geboortedatum</td>
 					<td>
-						@if(child.birthDate.isDefined){
-							@child.birthDate.get.toString(fmt)
-						}
+						@child.birthDate.map(_.toString(fmt))
 					</td>
 				</tr>
 				<tr>

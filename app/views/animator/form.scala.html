@@ -7,8 +7,8 @@
 	@helper.form(action = routes.Animators.saveAnimator, 'class -> "form-horizontal") {
 		<fieldset>
 			<legend>Kind (@animatorForm("firstName").value.getOrElse("nieuw") @animatorForm("lastName").value.getOrElse(""))</legend>
-            @if(animatorForm("id").value.isDefined) {
-                <input type="hidden" value="@animatorForm("id").value.get" class="form-control" id="id" name="id">
+            @animatorForm("id").value.map { id =>
+                <input type="hidden" value="@id" class="form-control" id="id" name="id">
             }
 			@helper.inputText(animatorForm("firstName"), '_label -> "Voornaam", 'class -> "form-control")
 			@helper.inputText(animatorForm("lastName"), '_label -> "Achternaam", 'class -> "form-control")

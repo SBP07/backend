@@ -8,8 +8,8 @@
 	@helper.form(action = routes.Shifts.saveShift, 'class -> "form-horizontal") {
 		<fieldset>
 			<legend>Dagdeel</legend>
-            @if(shiftForm("id").value.isDefined) {
-                <input type="hidden" value="@shiftForm("id").value.get" class="form-control" id="id" name="id">
+            @shiftForm("id").value.map { id =>
+                <input type="hidden" value="@id" class="form-control" id="id" name="id">
             }
 			@helper.inputText(shiftForm("date"), '_label -> "Datum", 'class -> "form-control datepicker")
 

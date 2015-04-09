@@ -36,9 +36,7 @@
                 <tr>
                     <td>Geboortedatum</td>
                     <td>
-                        @if(animator.birthDate.isDefined){
-                            @animator.birthDate.get.toString(fmt)
-                        }
+                        @animator.birthDate.map(_.toString(fmt))
                     </td>
                 </tr>
                 <tr>

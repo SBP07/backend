@@ -25,18 +25,16 @@
                 <tr>
                     <td>@animator.id.getOrElse("/")</td>
                     <td>
-                        @if(animator.id.isDefined) {
-                            <a href="@routes.Animators.details(animator.id.get)">
+                        @animator.id.map { id =>
+                            <a href="@routes.Animators.details(id)">
                         }
                         @animator.firstName @animator.lastName
-                        @if(animator.id.isDefined) {
+                        @animator.id.map { id =>
                             </a>
                         }
                     </td>
                     <td>
-                    @if(animator.birthDate.isDefined) {
-                        @animator.birthDate.get.toString(fmt)
-                    }
+                    @animator.birthDate.map(_.toString(fmt))
                     </td>
                     <td>@animator.street</td>
                     <td>@animator.city</td>
