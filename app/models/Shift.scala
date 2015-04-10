@@ -9,7 +9,7 @@ case class Shift(id: Option[Long] = None, date: LocalDate, place: String, shiftI
 case class ShiftType(id: Option[Long], mnemonic: String, description: String)
 
 
-private[models] class Shifts(tag: Tag) extends Table[Shift](tag, "shift") {
+private[models] class ShiftRepository(tag: Tag) extends Table[Shift](tag, "shift") {
   import helpers.Db.jodaDatetimeToSqldateMapper
 
   private[models] def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
@@ -19,23 +19,23 @@ private[models] class Shifts(tag: Tag) extends Table[Shift](tag, "shift") {
 
   def * : ProvenShape[Shift] = (id.?, date, place, shiftId) <> (Shift.tupled, Shift.unapply)
 
-  def shiftType: ForeignKeyQuery[ShiftTypes, ShiftType] = {
-    foreignKey("fk_shift_type", shiftId, TableQuery[ShiftTypes])(_.id)
+  def shiftType: ForeignKeyQuery[ShiftTypeRepository, ShiftType] = {
+    foreignKey("fk_shift_type", shiftId, TableQuery[ShiftTypeRepository])(_.id)
   }
-  def shiftTypeJoin: Query[ShiftTypes, ShiftTypes#TableElementType, Seq] = {
-    TableQuery[ShiftTypes].filter(_.id === shiftId)
+  def shiftTypeJoin: Query[ShiftTypeRepository, ShiftTypeRepository#TableElementType, Seq] = {
+    TableQuery[ShiftTypeRepository].filter(_.id === shiftId)
   }
 
-  def childrenJoin: Query[Children, Children#TableElementType, Seq] = {
+  def childrenJoin: Query[ChildRepository, ChildRepository#TableElementType, Seq] = {
     TableQuery[ChildrenToShifts].filter(_.shiftId === id).flatMap(_.childFK)
   }
 
-  def children: Query[Children, Child, Seq] = {
+  def children: Query[ChildRepository, Child, Seq] = {
     TableQuery[ChildrenToShifts].filter(_.shiftId === id).flatMap(_.childFK)
   }
 }
 
-private[models] class ShiftTypes(tag: Tag) extends Table[ShiftType](tag, "shift_type") {
+private[models] class ShiftTypeRepository(tag: Tag) extends Table[ShiftType](tag, "shift_type") {
   private[models] def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
   private[models] def mnemonic = column[String]("mnemonic", O.NotNull)
   private[models] def description = column[String]("description", O.NotNull)
@@ -44,10 +44,10 @@ private[models] class ShiftTypes(tag: Tag) extends Table[ShiftType](tag, "shift_
     (ShiftType.tupled, ShiftType.unapply)
 }
 
-object Shifts {
+object ShiftRepository {
   import helpers.Db.jodaDatetimeToSqldateMapper
 
-  val shifts = TableQuery[Shifts]
+  val shifts = TableQuery[ShiftRepository]
 
   def findAll(implicit s: Session): List[Shift] = shifts.sortBy(_.date).list
   def findById(id: Long)(implicit s: Session): Option[Shift] = shifts.filter(_.id === id).firstOption
@@ -86,8 +86,8 @@ object Shifts {
   def delete(shift: Shift)(implicit s: Session): Int = shifts.filter(_.id === shift.id).delete
 }
 
-object ShiftTypes {
-  val types = TableQuery[ShiftTypes]
+object ShiftTypeRepository {
+  val types = TableQuery[ShiftTypeRepository]
 
   def findAll(implicit s: Session): List[ShiftType] = types.list
   def findById(id: Long)(implicit s: Session): Option[ShiftType] = types.filter(_.id === id).firstOption

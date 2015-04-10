@@ -22,7 +22,7 @@ case class Animator(
   birthDate: Option[LocalDate]
 )
 
-private[models] class Animators(tag: Tag) extends Table[Animator](tag, "animator") {
+private[models] class AnimatorRepository(tag: Tag) extends Table[Animator](tag, "animator") {
   import helpers.Db.jodaDatetimeToSqldateMapper
 
   private[models] def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
@@ -45,8 +45,8 @@ private[models] class Animators(tag: Tag) extends Table[Animator](tag, "animator
     street.?, city.?, bankAccount.?, yearStartedVolunteering.?, isPartOfCore, birthDate.?) <>
     (Animator.tupled, Animator.unapply)
 }
-object Animators {
-  val animators = TableQuery[Animators]
+object AnimatorRepository {
+  val animators = TableQuery[AnimatorRepository]
 
   def findById(id: Long)(implicit s: Session): Option[Animator] = animators.filter(_.id === id).firstOption
   def findAll(implicit s: Session): List[Animator] = animators.list
@@ -60,7 +60,7 @@ object Animators {
   }
 }
 
-object AnimatorVals {
+object AnimatorConstants {
   val minimumYearStartedVolunteering: Int = 2000
   val maximumYearStartedVolunteering: Int = 2030
 }

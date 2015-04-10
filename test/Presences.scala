@@ -1,5 +1,5 @@
 import org.junit.runner.RunWith
-import models.{Shifts => ActivitiesModel, ChildPresences, ShiftTypes}
+import models.{ShiftRepository => ActivitiesModel, ChildPresenceRepository, ShiftTypeRepository}
 import org.specs2.mutable._
 import org.specs2.runner._
 import org.junit.runner._
@@ -13,7 +13,7 @@ class Presences extends Specification{
   "Getting all presences" should {
     "have correct size" in new WithApplication {
       DB.withSession { implicit session =>
-        ChildPresences.all must have size(3)
+        ChildPresenceRepository.all must have size(3)
       }
     }
   }

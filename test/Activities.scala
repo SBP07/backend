@@ -1,4 +1,4 @@
-import models.{ShiftTypes, Shifts => ActivitiesModel}
+import models.{ShiftTypeRepository, ShiftRepository => ActivitiesModel}
 import org.specs2.mutable._
 import org.specs2.runner._
 import org.junit.runner._
@@ -12,7 +12,7 @@ class Activities extends Specification {
   "Activitytypes table" should {
     "Not be empty" in new WithApplication {
       DB.withSession { implicit session =>
-        ShiftTypes.findAll must not have size(0)
+        ShiftTypeRepository.findAll must not have size(0)
       }
     }
 

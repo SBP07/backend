@@ -35,7 +35,7 @@ case class MedicalFile(
   tetanusShot: Option[LocalDate]
 )
 
-private[models] class MedicalFiles(tag: Tag) extends Table[MedicalFile](tag, "medical_file") {
+private[models] class MedicalFileRepository(tag: Tag) extends Table[MedicalFile](tag, "medical_file") {
   import helpers.Db.jodaDatetimeToSqldateMapper
 
   private[models] def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
@@ -69,8 +69,8 @@ private[models] class MedicalFiles(tag: Tag) extends Table[MedicalFile](tag, "me
       (MedicalFile.tupled, MedicalFile.unapply)
 }
 
-object MedicalFiles {
-  private val table = TableQuery[MedicalFiles]
+object MedicalFileRepository {
+  private val table = TableQuery[MedicalFileRepository]
 
   def insert(file: MedicalFile)(implicit s: Session): Unit = table += file
 }

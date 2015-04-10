@@ -1,6 +1,6 @@
 package controllers
 
-import models.{Children => ChildrenModel, _}
+import models._
 import play.api.data.Forms._
 import play.api.data._
 import play.api.data.format.Formats._
@@ -35,7 +35,7 @@ object Children extends Controller {
       )
   )
 
-  def showList: Action[AnyContent] = DBAction { implicit req => Ok(html.child.list.render(ChildrenModel.findAll, req.flash))}
+  def showList: Action[AnyContent] = DBAction { implicit req => Ok(html.child.list.render(ChildRepository.findAll, req.flash))}
 
   def newChild: Action[AnyContent] = Action { implicit req => Ok(html.child.form.render(childForm, req.flash))}
 
@@ -45,11 +45,11 @@ object Children extends Controller {
       child => {
         child.id match {
           case Some(id) => {
-            ChildrenModel.update(child)
+            ChildRepository.update(child)
             Redirect(routes.Children.details(id)).flashing("success" -> "Kind upgedated")
           }
           case _ => {
-            ChildrenModel.insert(child)
+            ChildRepository.insert(child)
             Redirect(routes.Children.showList).flashing("success" -> "Kind toegevoegd")
           }
         }
@@ -59,7 +59,7 @@ object Children extends Controller {
   }
 
   def editChild(id: Long): Action[AnyContent] = DBAction { implicit req =>
-    val child = ChildrenModel.findById(id)
+    val child = ChildRepository.findById(id)
     child match {
       case Some(ch) => Ok(html.child.form.render(childForm.fill(ch), req.flash))
       case _ => BadRequest("Geen geldige id")
@@ -67,9 +67,9 @@ object Children extends Controller {
   }
 
   def details(id: Long): Action[AnyContent] = DBAction { implicit req =>
-    val child = ChildrenModel.findById(id)
+    val child = ChildRepository.findById(id)
     child match {
-      case Some(x) => Ok(html.child.details(x, ChildPresences.findAllForChild(id).toList))
+      case Some(x) => Ok(html.child.details(x, ChildPresenceRepository.findAllForChild(id).toList))
       case None => BadRequest("Geen kind met die ID")
     }
   }

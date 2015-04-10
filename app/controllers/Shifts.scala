@@ -1,6 +1,6 @@
 package controllers
 
-import models.{Shifts => ShiftsModel, Shift, ShiftTypes}
+import models.{ShiftRepository, Shift, ShiftTypeRepository}
 import org.joda.time.LocalDate
 import play.api.mvc._
 import play.api.db.slick._
@@ -27,34 +27,34 @@ object Shifts extends Controller {
   )
 
   def list: Action[AnyContent] = DBAction { implicit req =>
-    Ok(views.html.shifts.list.render(ShiftsModel.findAllWithTypeAndNumberOfPresences, req.flash))
+    Ok(views.html.shifts.list.render(ShiftRepository.findAllWithTypeAndNumberOfPresences, req.flash))
   }
 
   def newShift: Action[AnyContent] = DBAction { implicit req =>
-    val types = ShiftTypes.findAll
+    val types = ShiftTypeRepository.findAll
     Ok(views.html.shifts.form.render(shiftsForm, types, req.flash))
   }
   def saveShift: Action[AnyContent] = DBAction { implicit req =>
     shiftsForm.bindFromRequest.fold(
       formWithErrors => {
-        val types = ShiftTypes.findAll
+        val types = ShiftTypeRepository.findAll
         BadRequest(views.html.shifts.form.render(formWithErrors, types, req.flash))
       },
       post => {
-        val shiftTypes = post.shiftTypes.map(ShiftTypes.findById).flatten.toSet
+        val shiftTypes = post.shiftTypes.map(ShiftTypeRepository.findById).flatten.toSet
         val alreadyPersisted: Set[Long] = shiftTypes.map { t =>
-          models.Shifts.findByDateAndType(post.date, t)
+          models.ShiftRepository.findByDateAndType(post.date, t)
         }.flatten.map(_.shiftId)
 
         val notPersistedYet = shiftTypes.filterNot(_.id.map(a =>
           alreadyPersisted.contains(a)
         ).get)
 
-        val externalActivityId: Long = ShiftTypes.findByMnemonic("EXT").flatMap(_.id).getOrElse(-1)
+        val externalActivityId: Long = ShiftTypeRepository.findByMnemonic("EXT").flatMap(_.id).getOrElse(-1)
 
         notPersistedYet.map(_.id).flatten foreach { id =>
           val place = if(id == externalActivityId) post.externalLocation else "Speelplein"
-          models.Shifts insert Shift(None, post.date, place, id)
+          models.ShiftRepository insert Shift(None, post.date, place, id)
         }
 
         Redirect(routes.Shifts.list).flashing("success" -> s"${notPersistedYet.size} dagdelen toegevoegd")
@@ -65,10 +65,10 @@ object Shifts extends Controller {
   def updateShift(dateString: String): Action[AnyContent] = DBAction { implicit req =>
     try{
       val date: LocalDate = LocalDate.parse(dateString, fmt)
-      val shift = models.Shifts.findByDate(date)
+      val shift = models.ShiftRepository.findByDate(date)
       val extPlace = "Test"
       val fill = ShiftsPost(date, shift.map(_.shiftId).toList, extPlace)
-      val types = ShiftTypes.findAll
+      val types = ShiftTypeRepository.findAll
       Ok(views.html.shifts.form.render(shiftsForm.fill(fill), types, req.flash))
     } catch {
       case e: IllegalArgumentException => BadRequest("Could not parse date")
@@ -76,7 +76,7 @@ object Shifts extends Controller {
   }
 
   def deleteShift(id: Long): Action[AnyContent] = DBAction { implicit req =>
-    val found = models.Shifts.findByIdWithTypeAndNumberOfPresences(id)
+    val found = models.ShiftRepository.findByIdWithTypeAndNumberOfPresences(id)
     val numChildren = 4
 
     found.map { found =>
@@ -89,10 +89,10 @@ object Shifts extends Controller {
     deleteForm.bindFromRequest.fold(
       errorForm => BadRequest("Bad id"),
       deleteShift => {
-        val shift = models.Shifts.findById(deleteShift.id)
+        val shift = models.ShiftRepository.findById(deleteShift.id)
 
         shift.map { act =>
-          models.Shifts.delete(act)
+          models.ShiftRepository.delete(act)
           Redirect(routes.Shifts.list()).flashing("success" -> "Dagdeel verwijderd")
         }.getOrElse(BadRequest("Dagdeel niet gevonden"))
       }

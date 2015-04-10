@@ -1,10 +1,9 @@
 package controllers
 
-import org.joda.time.LocalDate
 import play.api.data.Form
 import play.api.db.slick.DBAction
 import play.api.mvc._
-import models.{MedicalFile, MedicalFiles => MedicalFilesModel}
+import models.{MedicalFile, MedicalFileRepository}
 
 import play.api.data.Forms._
 import play.api.data.format.Formats._
@@ -56,7 +55,7 @@ object MedicalFiles extends Controller {
             Ok("Gelukt update")
           }
           case _ => {
-            MedicalFilesModel.insert(medicalFile)(req.dbSession)
+            MedicalFileRepository.insert(medicalFile)(req.dbSession)
             Ok(views.html.medicalFile.successfullyCreated()(req.flash))
           }
         }

@@ -7,24 +7,24 @@ import scala.slick.lifted.{ProvenShape, ForeignKeyQuery}
 case class ChildPresence(childId: Long, shiftId: Long)
 
 private[models] class ChildrenToShifts(tag: Tag) extends Table[ChildPresence](tag, "child_to_shift") {
-  private[models] val children = TableQuery[Children]
-  private[models] val shifts = TableQuery[Shifts]
+  private[models] val children = TableQuery[ChildRepository]
+  private[models] val shifts = TableQuery[ShiftRepository]
 
   private[models] def childId = column[Long]("child_id")
   private[models] def shiftId = column[Long]("shift_id")
 
   def * : ProvenShape[ChildPresence] = (childId, shiftId) <> (ChildPresence.tupled, ChildPresence.unapply _)
 
-  def childFK: ForeignKeyQuery[Children, Child] = foreignKey("child_fk", childId, children)(_.id)
-  def shiftFK: ForeignKeyQuery[Shifts, Shift] = foreignKey("shift_fk",
+  def childFK: ForeignKeyQuery[ChildRepository, Child] = foreignKey("child_fk", childId, children)(_.id)
+  def shiftFK: ForeignKeyQuery[ShiftRepository, Shift] = foreignKey("shift_fk",
     shiftId, shifts)(_.id, onDelete=ForeignKeyAction.Cascade)
 
   private[models] def pk = primaryKey("child_to_shift_pk", (childId, shiftId))
 }
 
-object ChildPresences {
-  private val children = TableQuery[Children]
-  private val shifts = TableQuery[Shifts]
+object ChildPresenceRepository {
+  private val children = TableQuery[ChildRepository]
+  private val shifts = TableQuery[ShiftRepository]
   private val presences = TableQuery[ChildrenToShifts]
 
   def all(implicit s: Session): Seq[(Child, Shift)] = (for {

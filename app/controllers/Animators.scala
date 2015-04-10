@@ -7,7 +7,7 @@ import play.api.data.format.Formats._
 import play.api.db.slick._
 
 import views._
-import models.{Animators => AnimatorsModel, AnimatorVals, Animator}
+import models.{AnimatorRepository, AnimatorConstants, Animator}
 
 object Animators extends Controller {
 
@@ -24,7 +24,7 @@ object Animators extends Controller {
       "city" -> optional(text),
       "bankAccount" -> optional(text),
       "yearStartedVolunteering" -> optional(
-        number(AnimatorVals.minimumYearStartedVolunteering, AnimatorVals.maximumYearStartedVolunteering)
+        number(AnimatorConstants.minimumYearStartedVolunteering, AnimatorConstants.maximumYearStartedVolunteering)
       ),
       "isPartOfCore" -> boolean,
 
@@ -32,10 +32,10 @@ object Animators extends Controller {
     )(Animator.apply)(Animator.unapply)
   )
 
-  def list: Action[AnyContent] = DBAction { implicit req => Ok(html.animator.list.render(AnimatorsModel.findAll, req.flash))}
+  def list: Action[AnyContent] = DBAction { implicit req => Ok(html.animator.list.render(AnimatorRepository.findAll, req.flash))}
 
   def details(id: Long): Action[AnyContent] = DBAction { implicit req =>
-    val animator = AnimatorsModel.findById(id)
+    val animator = AnimatorRepository.findById(id)
     animator match {
       case Some(x) => Ok(html.animator.details(x))
       case None => BadRequest("Geen animator met die ID")
@@ -50,11 +50,11 @@ object Animators extends Controller {
       animator => {
         animator.id match {
           case Some(id) => {
-            AnimatorsModel.update(animator)
+            AnimatorRepository.update(animator)
             Redirect(routes.Animators.details(id)).flashing("success" -> "Animator upgedated")
           }
           case _ => {
-            AnimatorsModel.insert(animator)
+            AnimatorRepository.insert(animator)
             Redirect(routes.Animators.list).flashing("success" -> "Animator toegevoegd")
           }
         }
@@ -63,7 +63,7 @@ object Animators extends Controller {
   }
 
   def editAnimator(id: Long): Action[AnyContent] = DBAction { implicit req =>
-    val animator = AnimatorsModel.findById(id)
+    val animator = AnimatorRepository.findById(id)
     animator match {
       case Some(ch) => Ok(html.animator.form.render(animatorForm.fill(ch), req.flash))
       case _ => BadRequest("Geen geldige id")

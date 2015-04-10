@@ -20,7 +20,7 @@ case class Child(
   medicalRecordChecked: Option[LocalDate] = None // None means not ok
 )
 
-private[models] class Children(tag: Tag) extends Table[Child](tag, "child") {
+private[models] class ChildRepository(tag: Tag) extends Table[Child](tag, "child") {
   import helpers.Db.jodaDatetimeToSqldateMapper
 
   private[models] def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
@@ -39,13 +39,13 @@ private[models] class Children(tag: Tag) extends Table[Child](tag, "child") {
   def * : ProvenShape[Child] = (id.?, firstName, lastName, mobilePhone.?, landline.?, street.?,
     city.?, birthDate.?, medicalRecordChecked.?) <> (Child.tupled, Child.unapply)
 
-  def shifts: Query[Shifts, Shift, Seq] = {
+  def shifts: Query[ShiftRepository, Shift, Seq] = {
     TableQuery[ChildrenToShifts].filter(_.childId === id).flatMap(_.shiftFK)
   }
 }
 
-object Children {
-  val children = TableQuery[Children]
+object ChildRepository {
+  val children = TableQuery[ChildRepository]
 
   def findById(id: Long)(implicit s: Session): Option[Child] = children.filter(_.id === id).firstOption
   def findAll(implicit s: Session): List[Child] = children.list
