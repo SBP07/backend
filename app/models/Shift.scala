@@ -64,7 +64,7 @@ object ShiftRepository {
   def findByDate(date: LocalDate)(implicit s: Session): Seq[Shift] = shifts.filter(_.date === date).run
 
   def findAllWithType(implicit s: Session): Seq[(ShiftType, Shift)] = (for {
-    shift <- shifts.sortBy(_.date)
+    shift <- shifts.sortBy(_.date.desc)
     t <- shift.shiftTypeJoin.sortBy(_.id)
   } yield {
     (t, shift)

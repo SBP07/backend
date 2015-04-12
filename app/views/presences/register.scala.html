@@ -23,7 +23,7 @@
         @views.html.bootstrap3CheckboxGroup(
             childForm("selectedShiftIds"),
             options = shiftsToday.map(a =>
-                (a._2.id.getOrElse(-1L).toString, s"${a._2.date.toString(fmt)} ${a._1.mnemonic} (${a._2.place})")
+                (a._2.id.getOrElse(-1L).toString, s"${a._2.date.toString(fmt)} ${a._1.mnemonic} (${a._2.place}) ${if(a._2.date == today) "(vandaag)" else ""}")
             ).toSeq,
             '_label -> "Aanwezigheden"
         )
