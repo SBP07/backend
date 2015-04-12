@@ -57,4 +57,7 @@ object ChildRepository {
       case _ =>
     }
   }
+  def findByFirstAndLastname(firstName: String, lastName: String)(implicit s: Session): Option[Child] = {
+    children.filter(_.firstName === firstName).filter(_.lastName === lastName).firstOption
+  }
 }

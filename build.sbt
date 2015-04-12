@@ -22,6 +22,8 @@ libraryDependencies ++= Seq(
   "com.h2database" % "h2" % "1.3.175",
   "mysql" % "mysql-connector-java" % "5.1.21",
   "joda-time" % "joda-time" % "2.7",
-  "postgresql" % "postgresql" % "9.1-901.jdbc4"
+  "postgresql" % "postgresql" % "9.1-901.jdbc4",
+  "com.github.tototoshi" %% "scala-csv" % "1.2.1",
+  "com.github.nscala-time" %% "nscala-time" % "1.8.0"
 )     
 
