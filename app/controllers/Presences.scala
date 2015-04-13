@@ -91,7 +91,7 @@ object Presences extends Controller {
   }
 
   def register: Action[AnyContent] = DBAction { implicit req =>
-    val allShifts = ShiftRepository.findAllWithType.toList
+    val allShifts = ShiftRepository.findAllWithTypeToday(LocalDate.now).toList
     val filledForm = registerForm.fill(PresencesPost(None, Nil, allShifts.map(_._2)))
     Ok(presences.register.render(filledForm, ChildRepository.findAll, LocalDate.now, allShifts, req.flash))
   }

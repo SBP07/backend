@@ -1,7 +1,8 @@
 @(childForm: Form[models.formBindings.PresencesPost],
     children: List[Child],
     today: org.joda.time.LocalDate,
-    shiftsToday: List[(ShiftType, Shift)])(implicit flash: Flash)
+    shiftsToday: List[(ShiftType, Shift)]
+    )(implicit flash: Flash)
 @import org.joda.time.LocalDate
 @import helper._
 @import helpers.DateTime.fmt
@@ -11,7 +12,7 @@
 
 @main("Registreer een nieuwe aanwezigheid") {
     <h2>Nieuwe registratie</h2>
-    <p></p><em>Enkel activiteiten voor vandaag (@today.toString(fmt)) worden getoond (niet volledig waar voor de moment :)).</em></p>
+    <p></p><em>Enkel activiteiten voor vandaag (@today.toString(fmt)).</em></p>
 
     @helper.form(action = routes.Presences.savePresence, 'class -> "form-horizontal") {
         @select(field = childForm("childId"),

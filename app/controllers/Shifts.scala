@@ -34,6 +34,7 @@ object Shifts extends Controller {
     val types = ShiftTypeRepository.findAll
     Ok(views.html.shifts.form.render(shiftsForm, types, req.flash))
   }
+
   def saveShift: Action[AnyContent] = DBAction { implicit req =>
     shiftsForm.bindFromRequest.fold(
       formWithErrors => {
@@ -77,7 +78,6 @@ object Shifts extends Controller {
 
   def deleteShift(id: Long): Action[AnyContent] = DBAction { implicit req =>
     val found = models.ShiftRepository.findByIdWithTypeAndNumberOfPresences(id)
-    val numChildren = 4
 
     found.map { found =>
       Ok(views.html.shifts.confirm_delete(found._3, found._1, found._2))

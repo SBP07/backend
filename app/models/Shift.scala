@@ -70,8 +70,15 @@ object ShiftRepository {
     (t, shift)
   }).run
 
+  def findAllWithTypeToday(today: LocalDate)(implicit s: Session): Seq[(ShiftType, Shift)] = (for {
+    shift <- shifts.filter(_.date === today).sortBy(_.date.desc)
+    t <- shift.shiftTypeJoin.sortBy(_.id)
+  } yield {
+      (t, shift)
+  }).run
+
   def findAllWithTypeAndNumberOfPresences(implicit s: Session): Seq[(ShiftType, Shift, Int)] = (for {
-    shift <- shifts.sortBy(_.date)
+    shift <- shifts.sortBy(_.date.desc)
     t <- shift.shiftTypeJoin.sortBy(_.id)
   } yield {
     (t, shift, shift.children.length)
