@@ -99,4 +99,16 @@ object Shifts extends Controller {
     )
   }
 
+  def detailsShifts(id: Long): Action[AnyContent] = DBAction { implicit req =>
+    val a = for {
+      shift <- ShiftRepository.findByIdWithTypeAndNumberOfPresences(id).map(_._1)
+      shiftType <- ShiftRepository.findByIdWithTypeAndNumberOfPresences(id).map(_._2)
+      shiftId <- shift.id
+    } yield {
+        val presentChildren = ChildPresenceRepository.findAllForShift(shiftId).map(_._1)
+        Ok(views.html.shifts.details.render(shift, shiftType, presentChildren, req.flash))
+      } //.getOrElse(BadRequest("Dagdeel niet gevonden"))
+
+    a.getOrElse(BadRequest("Dagdeel niet gevonden"))
+  }
 }

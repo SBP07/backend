@@ -25,14 +25,17 @@
 
                 @for(shift <- shifts) {
                 <tr>
-                    <td>@shift._2.id.getOrElse("/")</td>
                     <td>
                         @shift._1.mnemonic
                     </td>
                     <td>
-                        <a href="@routes.Shifts.updateShift(shift._2.date.toString(fmt))">
-                            @shift._2.date.toString(fmt)
-                        </a>
+                        @shift._2.id.map { id =>
+                            <a href="@routes.Shifts.detailsShifts(id)">
+                        }
+                                @shift._2.date.toString(fmt)
+                        @shift._2.id.map { id =>
+                            </a>
+                        }
                     </td>
                     <td>@shift._2.place</td>
                     <td>

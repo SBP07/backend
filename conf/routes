@@ -18,14 +18,15 @@ POST    /aanwezigheden/nieuw        controllers.Presences.savePresence
 
 
 # Shifts
-GET     /dagdelen               controllers.Shifts.list
-GET     /dagdelen/              controllers.Shifts.list
-GET     /dagdelen/lijst         controllers.Shifts.list
-GET     /dagdelen/nieuw         controllers.Shifts.newShift
-POST    /dagdelen/nieuw         controllers.Shifts.saveShift
-GET     /dagdelen/update/:date  controllers.Shifts.updateShift(date: String)
-GET     /dagdelen/delete/:id    controllers.Shifts.deleteShift(id: Long)
-POST    /dagdelen/delete        controllers.Shifts.reallyDeleteShift
+GET     /dagdelen                 controllers.Shifts.list
+GET     /dagdelen/                controllers.Shifts.list
+GET     /dagdelen/lijst           controllers.Shifts.list
+GET     /dagdelen/nieuw           controllers.Shifts.newShift
+POST    /dagdelen/nieuw           controllers.Shifts.saveShift
+GET     /dagdelen/update/:date    controllers.Shifts.updateShift(date: String)
+GET     /dagdelen/details/:id     controllers.Shifts.detailsShifts(id: Long)
+GET     /dagdelen/delete/:id      controllers.Shifts.deleteShift(id: Long)
+POST    /dagdelen/delete          controllers.Shifts.reallyDeleteShift
 
 # Animators
 GET     /animator              controllers.Animators.list

@@ -1,0 +1,62 @@
+@(shift: Shift, shiftType: ShiftType, presentChildren: Seq[Child])(implicit flash: Flash)
+@import helper._
+@import helpers.DateTime.fmt
+
+@implicitField = @{ FieldConstructor(bootstrap3FieldConstructorTemplate.f) }
+
+@main(s"Details voor ${shift.date.toString(fmt)} ${shiftType.mnemonic}") {
+    <a href="@routes.Shifts.list">
+        <span class="glyphicon glyphicon-chevron-left"></span> Terug naar lijst
+    </a>
+
+    <h2>Details voor @shift.date.toString(fmt) @shiftType.mnemonic</h2>
+    <p>
+        <a href="@routes.Shifts.updateShift(shift.date.toString(fmt))">
+            <button type="button" class="btn btn-default">
+                <span class="glyphicon glyphicon-pencil"></span> Aanpassen
+            </button>
+        </a>
+    </p>
+    <table class="table table-striped">
+        <tr>
+            <td>Datum</td>
+            <td>@shift.date</td>
+        </tr>
+        <tr>
+            <td>Type</td>
+            <td>@shiftType.description</td>
+        </tr>
+        <tr>
+            <td>Plaats</td>
+            <td>@shift.place</td>
+        </tr>
+        <tr>
+            <td>Aanwezige kinderen</td>
+            <td>@presentChildren.length</td>
+        </tr>
+        <tr>
+            <td>Aanwezige animatoren</td>
+            <td>
+                TODO
+            </td>
+        </tr>
+    </table>
+
+    <h2>Aanwezige kinderen (@presentChildren.length)</h2>
+
+    <ol>
+        @for(child <- presentChildren) {
+            <li>
+                @child.id.map { id =>
+                    <a href="@routes.Children.details(id)">
+                }
+                        @child.firstName @child.lastName
+
+                @child.id.map { id =>
+                    </a>
+                }
+            </li>
+        }
+    </ol>
+}
+`
