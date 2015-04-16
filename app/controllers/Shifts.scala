@@ -1,19 +1,21 @@
 package controllers
 
-import models.{ShiftRepository, Shift, ShiftTypeRepository}
+import helpers.DateTime._
+import models._
 import org.joda.time.LocalDate
-import play.api.mvc._
-import play.api.db.slick._
 import play.api.data.Forms._
 import play.api.data._
-import helpers.DateTime._
+import play.api.db.slick._
+import play.api.mvc._
 
 object Shifts extends Controller {
+
   case class ShiftsPost(date: LocalDate, shiftTypes: List[Long], externalLocation: String)
+
   case class ShiftDelete(id: Long)
 
   val deleteForm = Form(
-      mapping(
+    mapping(
       "id" -> longNumber
     )(ShiftDelete.apply)(ShiftDelete.unapply)
   )
@@ -54,7 +56,7 @@ object Shifts extends Controller {
         val externalActivityId: Long = ShiftTypeRepository.findByMnemonic("EXT").flatMap(_.id).getOrElse(-1)
 
         notPersistedYet.map(_.id).flatten foreach { id =>
-          val place = if(id == externalActivityId) post.externalLocation else "Speelplein"
+          val place = if (id == externalActivityId) post.externalLocation else "Speelplein"
           models.ShiftRepository insert Shift(None, post.date, place, id)
         }
 
@@ -64,7 +66,7 @@ object Shifts extends Controller {
   }
 
   def updateShift(dateString: String): Action[AnyContent] = DBAction { implicit req =>
-    try{
+    try {
       val date: LocalDate = LocalDate.parse(dateString, fmt)
       val shift = models.ShiftRepository.findByDate(date)
       val extPlace = "Test"
@@ -85,7 +87,7 @@ object Shifts extends Controller {
 
   }
 
-  def reallyDeleteShift(): Action[AnyContent] = DBAction { implicit req =>
+  def reallyDeleteShift: Action[AnyContent] = DBAction { implicit req =>
     deleteForm.bindFromRequest.fold(
       errorForm => BadRequest("Bad id"),
       deleteShift => {
