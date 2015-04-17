@@ -48,7 +48,7 @@ object Presences extends Controller {
       case Some(c) =>
         val allShifts = ShiftRepository.findAllWithType.toList
         val filledForm = registerForm.fill(PresencesPost(child, allPresences, allShifts.map(_._2)))
-        Ok(presences.updatePresencesForm.render(filledForm, c, LocalDate.now, allShifts, req.flash))
+        Ok(presences.updatePresencesForm.render(filledForm, c, LocalDate.now, allShifts))
       case _ => BadRequest("Kind niet gevonden")
     }
   }
@@ -60,7 +60,7 @@ object Presences extends Controller {
           case Some(child) =>
             val allShifts = ShiftRepository.findAllWithType.toList
             BadRequest(
-              presences.updatePresencesForm.render(formWithErrors, child, LocalDate.now, allShifts, req.flash)
+              presences.updatePresencesForm.render(formWithErrors, child, LocalDate.now, allShifts)
             )
           case _ => BadRequest("Kind niet gevonden")
         }
@@ -93,7 +93,7 @@ object Presences extends Controller {
   def register: Action[AnyContent] = DBAction { implicit req =>
     val allShifts = ShiftRepository.findAllWithTypeToday(LocalDate.now).toList
     val filledForm = registerForm.fill(PresencesPost(None, Nil, allShifts.map(_._2)))
-    Ok(presences.register.render(filledForm, ChildRepository.findAll, LocalDate.now, allShifts, req.flash))
+    Ok(presences.register.render(filledForm, ChildRepository.findAll, LocalDate.now, allShifts))
   }
 
   def registerWithId(childId: Long): Action[AnyContent] = DBAction { implicit req =>
@@ -109,14 +109,14 @@ object Presences extends Controller {
 
     Ok(
       presences.register.render(filledForm,
-        ChildRepository.findAll, LocalDate.now, allShifts, req.flash)
+        ChildRepository.findAll, LocalDate.now, allShifts)
     )
   }
 
   def savePresence: Action[AnyContent] = DBAction { implicit req =>
     registerForm.bindFromRequest.fold(
       formWithErrors => BadRequest(presences.register.render(formWithErrors, ChildRepository.findAll, LocalDate.now,
-          ShiftRepository.findAllWithType.toList, req.flash)),
+          ShiftRepository.findAllWithType.toList)),
       _ match {
         case PresencesPost(None, _, _) => BadRequest("Ongeldig kind");
         case PresencesPost(Some(child), selectedShifts, possibleShifts) =>

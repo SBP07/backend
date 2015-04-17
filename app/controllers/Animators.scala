@@ -32,7 +32,7 @@ object Animators extends Controller {
     )(Animator.apply)(Animator.unapply)
   )
 
-  def list: Action[AnyContent] = DBAction { implicit req => Ok(html.animator.list.render(AnimatorRepository.findAll, req.flash))}
+  def list: Action[AnyContent] = DBAction { implicit req => Ok(html.animator.list.render(AnimatorRepository.findAll))}
 
   def details(id: Long): Action[AnyContent] = DBAction { implicit req =>
     val animator = AnimatorRepository.findById(id)
@@ -42,11 +42,11 @@ object Animators extends Controller {
     }
   }
 
-  def newAnimator: Action[AnyContent] = Action { implicit req => Ok(html.animator.form.render(animatorForm, req.flash))}
+  def newAnimator: Action[AnyContent] = Action { implicit req => Ok(html.animator.form.render(animatorForm))}
 
   def saveAnimator: Action[AnyContent] = DBAction { implicit req =>
     animatorForm.bindFromRequest.fold(
-      formWithErrors => BadRequest(html.animator.form.render(formWithErrors, req.flash)),
+      formWithErrors => BadRequest(html.animator.form.render(formWithErrors)),
       animator => {
         animator.id match {
           case Some(id) => {
@@ -65,7 +65,7 @@ object Animators extends Controller {
   def editAnimator(id: Long): Action[AnyContent] = DBAction { implicit req =>
     val animator = AnimatorRepository.findById(id)
     animator match {
-      case Some(ch) => Ok(html.animator.form.render(animatorForm.fill(ch), req.flash))
+      case Some(ch) => Ok(html.animator.form.render(animatorForm.fill(ch)))
       case _ => BadRequest("Geen geldige id")
     }
   }

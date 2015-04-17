@@ -29,19 +29,19 @@ object Shifts extends Controller {
   )
 
   def list: Action[AnyContent] = DBAction { implicit req =>
-    Ok(views.html.shifts.list.render(ShiftRepository.findAllWithTypeAndNumberOfPresences, req.flash))
+    Ok(views.html.shifts.list.render(ShiftRepository.findAllWithTypeAndNumberOfPresences))
   }
 
   def newShift: Action[AnyContent] = DBAction { implicit req =>
     val types = ShiftTypeRepository.findAll
-    Ok(views.html.shifts.form.render(shiftsForm, types, req.flash))
+    Ok(views.html.shifts.form.render(shiftsForm, types))
   }
 
   def saveShift: Action[AnyContent] = DBAction { implicit req =>
     shiftsForm.bindFromRequest.fold(
       formWithErrors => {
         val types = ShiftTypeRepository.findAll
-        BadRequest(views.html.shifts.form.render(formWithErrors, types, req.flash))
+        BadRequest(views.html.shifts.form.render(formWithErrors, types))
       },
       post => {
         val shiftTypes = post.shiftTypes.map(ShiftTypeRepository.findById).flatten.toSet
@@ -72,7 +72,7 @@ object Shifts extends Controller {
       val extPlace = "Test"
       val fill = ShiftsPost(date, shift.map(_.shiftId).toList, extPlace)
       val types = ShiftTypeRepository.findAll
-      Ok(views.html.shifts.form.render(shiftsForm.fill(fill), types, req.flash))
+      Ok(views.html.shifts.form.render(shiftsForm.fill(fill), types))
     } catch {
       case e: IllegalArgumentException => BadRequest("Could not parse date")
     }
@@ -108,7 +108,7 @@ object Shifts extends Controller {
       shiftId <- shift.id
     } yield {
         val presentChildren = ChildPresenceRepository.findAllForShift(shiftId).map(_._1)
-        Ok(views.html.shifts.details.render(shift, shiftType, presentChildren, req.flash))
+        Ok(views.html.shifts.details.render(shift, shiftType, presentChildren))
       } //.getOrElse(BadRequest("Dagdeel niet gevonden"))
 
     a.getOrElse(BadRequest("Dagdeel niet gevonden"))

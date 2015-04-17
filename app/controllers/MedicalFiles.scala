@@ -41,12 +41,12 @@ object MedicalFiles extends Controller {
   )
 
   def form: Action[AnyContent] = DBAction { implicit req =>
-    Ok(views.html.medicalFile.form.render(fileFormPart, req.flash))
+    Ok(views.html.medicalFile.form.render(fileFormPart))
   }
 
   def postForm: Action[AnyContent] = DBAction { implicit  req =>
     fileFormPart.bindFromRequest.fold(
-      formWithErrors => BadRequest(views.html.medicalFile.form.render(formWithErrors, req.flash)),
+      formWithErrors => BadRequest(views.html.medicalFile.form.render(formWithErrors)),
       medicalFile => {
         medicalFile.id match {
           case Some(id) => {
@@ -56,7 +56,7 @@ object MedicalFiles extends Controller {
           }
           case _ => {
             MedicalFileRepository.insert(medicalFile)(req.dbSession)
-            Ok(views.html.medicalFile.successfullyCreated()(req.flash))
+            Ok(views.html.medicalFile.successfullyCreated())
           }
         }
       }

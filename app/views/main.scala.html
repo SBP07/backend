@@ -1,4 +1,4 @@
-@(title: String)(content: Html)(implicit flash: Flash)
+@(title: String)(content: Html)
 
 <!DOCTYPE html>
 <html lang="nl">
@@ -24,7 +24,6 @@
   <body>
   	@navbar()
   	<div class="container">
-  		@showflash()
     	@content
     </div>
 

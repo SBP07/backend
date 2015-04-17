@@ -35,13 +35,13 @@ object Children extends Controller {
       )
   )
 
-  def showList: Action[AnyContent] = DBAction { implicit req => Ok(html.child.list.render(ChildRepository.findAll, req.flash))}
+  def showList: Action[AnyContent] = DBAction { implicit req => Ok(html.child.list.render(ChildRepository.findAll))}
 
-  def newChild: Action[AnyContent] = Action { implicit req => Ok(html.child.form.render(childForm, req.flash))}
+  def newChild: Action[AnyContent] = Action { implicit req => Ok(html.child.form.render(childForm))}
 
   def saveChild: Action[AnyContent] = DBAction { implicit req =>
     childForm.bindFromRequest.fold(
-      formWithErrors => BadRequest(html.child.form.render(formWithErrors, req.flash)),
+      formWithErrors => BadRequest(html.child.form.render(formWithErrors)),
       child => {
         child.id match {
           case Some(id) => {
@@ -61,7 +61,7 @@ object Children extends Controller {
   def editChild(id: Long): Action[AnyContent] = DBAction { implicit req =>
     val child = ChildRepository.findById(id)
     child match {
-      case Some(ch) => Ok(html.child.form.render(childForm.fill(ch), req.flash))
+      case Some(ch) => Ok(html.child.form.render(childForm.fill(ch)))
       case _ => BadRequest("Geen geldige id")
     }
   }
