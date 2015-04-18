@@ -6,37 +6,52 @@ This is the system that will power Speelplein De Speelberg. Since it's created f
 
 ### Minimum
 
-- [x] Een gebruiker moet nieuwe kinderen kunnen toevoegen
-- [ ] Een gebruiker moet kunnen opgeven dat kinderen blijven (voormiddag, middag, namiddag)
-- [ ] Een gebruiker moet nieuwe animatoren kunnen toevoegen
-- [ ] Een gebruiker moet kunnen opgeven welke animatoren er waren op een dag
+- [x] Een animator moet nieuwe kinderen kunnen toevoegen
+- [x] Een animator moet bestaande kinderen kunnen wijzigen
+- [ ] Een animator moet bestaande kinderen kunnen verwijderen
+- [x] Een animator moet nieuwe animatoren kunnen toevoegen
+- [x] Een animator moet bestaande animatoren kunnen wijzigen
+- [ ] Een animator moet bestaande animatoren kunnen verwijderen
 
-### Iets grotere doelen
+### Dagdelen
 
-- [ ] Een gebruiker moet kunnen zien hoeveel kinderen er zijn per dag
-- [ ] Een gebruiker moet kunnen zien welke kinderen er waren op een dag
-- [ ] Een gebruiker moet kunnen zien wanneer een kind er was
+- [x] Een animator moet een nieuw dagdeel kunnen aanmaken met een bepaald type (voormiddag, middag, namiddag)
+- [x] Een animator moet een externe activiteit kunnen aanmaken
+- [x] Een animator moet een bestaand dagdeel kunnen wijzigen
+- [x] Een animator moet kunnen zien hoeveel kinderen er aanwezig waren tijdens een bepaald dagdeel
+- [x] Een animator moet kunnen zien welke kinderen er aanwezig waren tijdens een bepaald dagdeel
+- [ ] De lijst met alle dagdelen moet gesorteerd worden per dag, dan per type, en gegroepeerd per dag
+
+### Aanwezigheden kinderen
+
+- [x] Een animator moet kinderen kunnen opgeven als aanwezig voor een dagdeel
+- [x] Een animator moet kunnen zien op welke dagdelen een kind aanwezig was
+- [ ] Een animator moet een fiscale fiche kunnen maken voor een kind, waarop staat wanneer het kind aanwezig was en hoeveel het betaald heeft in totaal
+- [x] Een animator moet kunnen aanpassen op welke dagdelen een kind aanwezig was
+- [ ] Een animator moet een kind kunnen verwijderen
+- 
+### Aanwezigheden animatoren
+
+- [ ] De verantwoordelijke van de dag moet animatoren kunnen opgeven als aanwezig voor een dagdeel
+- [ ] De verantwoordelijke van de dag moet kunnen zien op welke dagdelen een animator aanwezig was
+- [ ] De financieel verantwoordelijke moet een loonfiche kunnen maken voor een animator, waarop staat wanneer de animator aanwezig was, welk attest hij/zij heeft en hoeveel hij/zij betaald zal worden
+- [ ] De verantwoordelijke van de dag moet kunnen aanpassen op welke dagdelen een animator aanwezig was
+- [ ] De verantwoordelijke van de dag moet een animator kunnen verwijderen
 
 ### Medische fiches
 
-- [ ] Een gebruiker moet kunnen zien of de medische fiche van een kind in orde is
-- [ ] Een gebruiker moet kunnen veranderen of de medische fiche van een kind in orde is
-- [ ] Een gebruiker moet kunnen zien wanneer de medische fiche van een kind laatst is nagekeken
-- [ ] Een gebruiker moet de medische fiche op de computer kunnen invullen
-- [ ] Een ouder moet thuis online de medische fiche kunnen invullen
+- [x] Een animator moet kunnen zien of de medische fiche van een kind in orde is
+- [x] Een animator moet kunnen veranderen of de medische fiche van een kind in orde is
+- [x] Een animator moet kunnen zien wanneer de medische fiche van een kind laatst is nagekeken
+- [ ] Een animator moet de medische fiche op de computer kunnen invullen en aanpassen
 
-### Grotere doelen
+### Export
 
-- [ ] Een gebruiker moet kunnen fiscale attesten afdrukken
-- [ ] Een gebruiker moet kunnen "loonfiches" afdrukken
-
-### Verre, verre doelen
-
-- [ ] Een gebruiker moet kinderen kunnen inschrijven met QR-codes
+- [ ] De lijst van alle kinderen, met hun details en al hun aanwezigheden moet naar excel kunnen worden ge-exporteerd
 
 ## Development notes
 
 - `~run` to watch source files and recompile on changes
 - Default address and port during development are http://localhost:9000
-- Use `eclipse with-source=true` to also download sources. This can take a while. Then `compile`. Re-importing in Eclipse shouldn't be necessary.
+- Postgres is used as the database in production, and H2 locally for development
 
