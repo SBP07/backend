@@ -1,3 +1,6 @@
+
+### Non-API routes
+
 # Home page
 GET     /                      controllers.Application.home
 
@@ -45,6 +48,14 @@ GET     /kind/nieuw         controllers.Children.newChild
 POST    /kind/nieuw         controllers.Children.saveChild
 GET     /kind/edit/:id      controllers.Children.editChild(id: Long)
 GET     /kind/details/:id   controllers.Children.details(id: Long)
+
+### API
+
+# Children
+GET     /api/child/all       controllers.ApiChildren.allChildren
+GET     /api/child/:id       controllers.ApiChildren.childById(id: Long)
+
+### Assets
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
