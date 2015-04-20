@@ -1,7 +1,7 @@
 package controllers
 
-import models.ChildRepository
 import models.Child.childWrites
+import models.repository.ChildRepository
 import play.api.db.slick.DBAction
 import play.api.libs.json._
 import play.api.mvc._
