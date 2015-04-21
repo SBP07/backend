@@ -55,6 +55,14 @@ GET     /kind/details/:id   controllers.Children.details(id: Long)
 GET     /api/child/all       controllers.ApiChildren.allChildren
 GET     /api/child/:id       controllers.ApiChildren.childById(id: Long)
 
+# Animators
+GET     /api/animator/all       controllers.ApiAnimators.allAnimators
+GET     /api/animator/:id       controllers.ApiAnimators.animatorById(id: Long)
+
+# Shifts
+GET     /api/shift/all          controllers.ApiShifts.allShifts
+GET     /api/shift/:id          controllers.ApiShifts.shiftById(id: Long)
+
 ### Assets
 
 # Map static resources from the /public folder to the /assets URL path

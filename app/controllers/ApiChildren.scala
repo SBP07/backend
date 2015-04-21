@@ -9,15 +9,13 @@ import play.api.mvc._
 object ApiChildren extends Controller {
 
   def allChildren = DBAction { implicit req =>
-    val allChildren = ChildRepository.findAll(req.dbSession)
-    val json = Json.toJson(allChildren)
+    val json = Json.toJson(ChildRepository.findAll(req.dbSession))
     Ok(json)
   }
 
   def childById(id: Long) = DBAction { implicit req =>
     ChildRepository.findById(id)(req.dbSession).map { child =>
-      val json = Json.toJson(child)
-      Ok(json)
+      Ok(Json.toJson(child))
     }.getOrElse(BadRequest("Id not found"))
   }
 }

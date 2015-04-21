@@ -38,7 +38,3 @@ object Child {
 
     )(unlift(Child.unapply))
 }
-
-
-
-

@@ -63,7 +63,7 @@ private[models] class ShiftRepository(tag: Tag) extends Table[Shift](tag, "shift
   private[models] def place = column[String]("place", O.Nullable)
   private[models] def shiftId = column[Long]("shift_type", O.NotNull)
 
-  def * : ProvenShape[Shift] = (id.?, date, place, shiftId) <> (Shift.tupled, Shift.unapply)
+  def * : ProvenShape[Shift] = (id.?, date, place, shiftId) <> ((Shift.apply _).tupled, Shift.unapply)
 
   def shiftType: ForeignKeyQuery[ShiftTypeRepository, ShiftType] = {
     foreignKey("fk_shift_type", shiftId, TableQuery[ShiftTypeRepository])(_.id)
