@@ -29,8 +29,8 @@ object Shifts extends Controller {
     )(ShiftsPost.apply)(ShiftsPost.unapply)
   )
 
-  def list: Action[AnyContent] = DBAction { implicit req =>
-    Ok(views.html.shifts.list.render(ShiftRepository.findAllWithTypeAndNumberOfPresences))
+  def list: Action[AnyContent] = Action { implicit req =>
+    Ok(views.html.shifts.list.render)
   }
 
   def newShift: Action[AnyContent] = DBAction { implicit req =>

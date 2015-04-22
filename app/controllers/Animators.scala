@@ -33,7 +33,7 @@ object Animators extends Controller {
     )(Animator.apply)(Animator.unapply)
   )
 
-  def list: Action[AnyContent] = DBAction { implicit req => Ok(html.animator.list.render(AnimatorRepository.findAll))}
+  def list: Action[AnyContent] = Action { implicit req => Ok(html.animator.list.render) }
 
   def details(id: Long): Action[AnyContent] = DBAction { implicit req =>
     val animator = AnimatorRepository.findById(id)

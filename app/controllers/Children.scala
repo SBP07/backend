@@ -36,7 +36,7 @@ object Children extends Controller {
       )
   )
 
-  def showList: Action[AnyContent] = DBAction { implicit req => Ok(html.child.list.render(ChildRepository.findAll))}
+  def showList: Action[AnyContent] = Action { implicit req => Ok(html.child.list.render) }
 
   def newChild: Action[AnyContent] = Action { implicit req => Ok(html.child.form.render(childForm))}
 

@@ -63,6 +63,8 @@ GET     /api/animator/:id       controllers.ApiAnimators.animatorById(id: Long)
 GET     /api/shift/all          controllers.ApiShifts.allShifts
 GET     /api/shift/:id          controllers.ApiShifts.shiftById(id: Long)
 
+GET     /angular                controllers.AngularTest.index
+
 ### Assets
 
 # Map static resources from the /public folder to the /assets URL path

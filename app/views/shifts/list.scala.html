@@ -1,15 +1,15 @@
-@(shifts: Seq[(ShiftType, Shift, Int)])
+@()
 
 @import helpers.DateTime._
 
-@main("Dagdelen") {
+@main("Alle dagdelen") {
     <h2 class="sub-header">Lijst van alle dagdelen</h2>
     <a href="@routes.Shifts.newShift">
             <button type="button" class="btn btn-default">
                     <span class="glyphicon glyphicon-pencil"></span> Nieuw dagdeel
             </button>
     </a>
-    <div class="table-responsive">
+    <div class="table-responsive" ng-app="speelsysteemApp" ng-controller="shiftCtrl">
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -22,33 +22,32 @@
             </thead>
             <tbody>
 
-                @for(shift <- shifts) {
-                <tr>
+                <tr ng-repeat="shift in shifts">
                     <td>
-                        @shift._1.mnemonic
+                        {{ shift.shiftType.mnemonic }}
                     </td>
                     <td>
-                        @shift._2.id.map { id =>
-                            <a href="@routes.Shifts.detailsShifts(id)">
-                        }
-                                @shift._2.date.toString(fmt)
-                        @shift._2.id.map { id =>
-                            </a>
-                        }
+                        <a href="/dagdelen/details/{{ shift.shiftId }}">{{ shift.date }}</a>
                     </td>
-                    <td>@shift._2.place</td>
+                    <td>{{ shift.place }}</td>
                     <td>
-                        @shift._3
+                        {{ shift.numberOfChildren }}
                     </td>
                     <td>
-                        @shift._2.id.map { id =>
-                            <a href="@routes.Shifts.deleteShift(id)">Verwijderen</a>
-                        }
+                        <a href="/dagdelen/delete/{{ shift.shiftId }}">Verwijderen</a>
                     </td>
                 </tr>
-                }
             </tbody>
         </table>
     </div>
+
+    <script>
+        var app = angular.module('speelsysteemApp', []);
+        app.controller('shiftCtrl', function($scope, $http) {
+          $http.get("/api/shift/all")
+          .success(function (response) {$scope.shifts = response;});
+        });
+    </script>
+
 
 }

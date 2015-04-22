@@ -1,14 +1,13 @@
-@(animators: List[Animator])
-@import helpers.DateTime._
+@()
 
-@main("Animatoren") {
+@main("Alle animatoren") {
     <h2 class="sub-header">Lijst van alle animatoren</h2>
     <a href="@routes.Animators.newAnimator">
             <button type="button" class="btn btn-default">
                     <span class="glyphicon glyphicon-pencil"></span> Nieuwe animator
             </button>
     </a>
-    <div class="table-responsive">
+    <div class="table-responsive" ng-app="speelsysteemApp" ng-controller="animatorCtrl">
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -21,27 +20,30 @@
             </thead>
             <tbody>
 
-                @for(animator <- animators) {
-                <tr>
-                    <td>@animator.id.getOrElse("/")</td>
+                <tr ng-repeat="animator in animators">
+                    <td>{{ animator.id }}</td>
                     <td>
-                        @animator.id.map { id =>
-                            <a href="@routes.Animators.details(id)">
-                        }
-                        @animator.firstName @animator.lastName
-                        @animator.id.map { id =>
-                            </a>
-                        }
+                        <a href="/animator/details/{{ animator.id }}">
+                            {{ animator.firstName + " " + animator.lastName }}
+                        </a>
                     </td>
                     <td>
-                    @animator.birthDate.map(_.toString(fmt))
+                    {{ animator.birthDate }}
                     </td>
-                    <td>@animator.street</td>
-                    <td>@animator.city</td>
+                    <td>{{ animator.street }}</td>
+                    <td>{{ animator.city }}</td>
                 </tr>
-                }
             </tbody>
         </table>
     </div>
+
+
+    <script>
+        var app = angular.module('speelsysteemApp', []);
+        app.controller('animatorCtrl', function($scope, $http) {
+          $http.get("/api/animator/all")
+          .success(function (response) {$scope.animators = response;});
+        });
+    </script>
 
 }

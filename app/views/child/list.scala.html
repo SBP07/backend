@@ -1,47 +1,49 @@
-@(children: List[Child])
-@import helpers.DateTime._
+@()
 
-@main("Kinderen") {
+@main("Alle kinderen") {
+
 <h2 class="sub-header">Lijst van alle kinderen</h2>
 <a href="@routes.Children.newChild">
-        <button type="button" class="btn btn-default">
-                <span class="glyphicon glyphicon-pencil"></span> Nieuw kind
-        </button>
+    <button type="button" class="btn btn-default">
+        <span class="glyphicon glyphicon-pencil"></span> Nieuw kind
+    </button>
 </a>
-<div class="table-responsive">
+<div class="table-responsive" ng-app="speelsysteemApp" ng-controller="childrenCtrl">
     <table class="table table-striped">
         <thead>
-            <tr>
-                <th>#</th>
-                <th>Naam</th>
-                <th>Geboortedatum</th>
-                <th>Straat, nummer</th>
-                <th>Gemeente</th>
-            </tr>
+        <tr>
+            <th>#</th>
+            <th>Naam</th>
+            <th>Geboortedatum</th>
+            <th>Straat, nummer</th>
+            <th>Gemeente</th>
+        </tr>
         </thead>
         <tbody>
 
-            @for(child <- children) {
-            <tr>
-                <td>@child.id.getOrElse("/")</td>
-                <td>
-                    @child.id.map { id =>
-                        <a href="@routes.Children.details(id)">
-                    }
-                            @child.firstName @child.lastName
-                    @child.id.map { id =>
-                        </a>
-                    }
-                </td>
-                <td>
-                    @child.birthDate.map(_.toString(fmt))
-                </td>
-                <td>@child.street</td>
-                <td>@child.city</td>
-            </tr>
-            }
+        <tr ng-repeat="child in children">
+            <td>{{ child.id }}</td>
+            <td>
+                <a href="/kind/details/{{ child.id }}">
+                    {{ child.firstName + ' ' + child.lastName }}
+                </a>
+            </td>
+            <td>
+                {{ child.birthDate }}
+            </td>
+            <td>{{ child.street }}</td>
+            <td>{{ child.city }}</td>
+        </tr>
         </tbody>
     </table>
 </div>
+
+<script>
+    var app = angular.module('speelsysteemApp', []);
+    app.controller('childrenCtrl', function($scope, $http) {
+      $http.get("/api/child/all")
+      .success(function (response) {$scope.children = response;});
+    });
+</script>
 
 }
