@@ -37,13 +37,4 @@
         </tbody>
     </table>
 </div>
-
-<script>
-    var app = angular.module('speelsysteemApp', []);
-    app.controller('childrenCtrl', function($scope, $http) {
-      $http.get("/api/child/all")
-      .success(function (response) {$scope.children = response;});
-    });
-</script>
-
 }

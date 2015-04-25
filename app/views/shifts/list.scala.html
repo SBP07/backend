@@ -40,14 +40,4 @@
             </tbody>
         </table>
     </div>
-
-    <script>
-        var app = angular.module('speelsysteemApp', []);
-        app.controller('shiftCtrl', function($scope, $http) {
-          $http.get("/api/shift/all")
-          .success(function (response) {$scope.shifts = response;});
-        });
-    </script>
-
-
 }
