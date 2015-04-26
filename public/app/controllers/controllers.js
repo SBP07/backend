@@ -1,17 +1,24 @@
-var app = angular.module('speelsysteemApp', []);
+var speelsysteemControllers = angular.module('speelsysteemControllers', ['ui.bootstrap']);
 
-app.controller('animatorCtrl', function($scope, $http) {
-    $http.get("/api/animator/all")
+speelsysteemControllers.controller('animatorsController', function($scope, $http) {
+    $http.get('/api/animator/all')
         .success(function (response) {$scope.animators = response;});
 });
 
-app.controller('shiftCtrl', function($scope, $http) {
-    $http.get("/api/shift/all")
+speelsysteemControllers.controller('shiftsController', function($scope, $http) {
+    $http.get('/api/shift/all')
         .success(function (response) {$scope.shifts = response;});
 });
 
-app.controller('childrenCtrl', function($scope, $http) {
-    $http.get("/api/child/all")
+speelsysteemControllers.controller('childrenController', function($scope, $http) {
+    $http.get('/api/child/all')
         .success(function (response) {$scope.children = response;});
 });
 
+speelsysteemControllers.controller('homeController', function() {
+
+});
+
+speelsysteemControllers.controller('navbarController', function() {
+
+});

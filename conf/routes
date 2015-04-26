@@ -63,7 +63,7 @@ GET     /api/animator/:id       controllers.ApiAnimators.animatorById(id: Long)
 GET     /api/shift/all          controllers.ApiShifts.allShifts
 GET     /api/shift/:id          controllers.ApiShifts.shiftById(id: Long)
 
-GET     /angular                controllers.AngularTest.index
+GET     /angular                controllers.Angular.index
 
 ### Assets
 

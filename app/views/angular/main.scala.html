@@ -1,19 +1,21 @@
-@(title: String)(content: Html)
+@()
 
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="nl" ng-app="speelsysteemApp">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@title</title>
+    <title>speelsysteem</title>
 
     <!-- Bootstrap -->
     <link href="@routes.WebJarAssets.at(WebJarAssets.locate("css/bootstrap.min.css"))" rel="stylesheet">
 
     <link href="@routes.Assets.at("stylesheets/main.css")" rel="stylesheet">
 
-    <script src="@routes.WebJarAssets.at(WebJarAssets.locate("angular.min.js"))"></script>
+    <script src="@routes.WebJarAssets.at(WebJarAssets.locate("angular.js"))"></script>
+    <script src="@routes.WebJarAssets.at(WebJarAssets.locate("angular-route.js"))"></script>
+    <script src="@routes.Assets.at("app/controllers/controllers.js")"></script>
     <script src="@routes.WebJarAssets.at(WebJarAssets.locate("ui-bootstrap-tpls.min.js"))"></script>
     <script src="@routes.Assets.at("app/main.js")"></script>
 
@@ -26,8 +28,10 @@
   </head>
   <body>
   	@navbar()
-  	<div class="container">
-    	@content
+    <div class="container">
+        <a href="#/">Home</a> - <a href="#/animatoren">Animatoren</a> - <a href="#/kinderen">Kinderen</a> - <a href="#/dagdelen">Dagdelen</a>
+    </div>
+  	<div class="container" ng-view>
     </div>
   </body>
 </html>

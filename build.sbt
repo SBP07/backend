@@ -24,6 +24,7 @@ libraryDependencies ++= Seq(
   "com.github.tototoshi" %% "scala-csv" % "1.2.1",
   "com.github.nscala-time" %% "nscala-time" % "1.8.0",
   "org.webjars.bower" % "angular-bootstrap" % "0.12.1",
-  "org.webjars.bower" % "angular" % "1.3.15"
+  "org.webjars.bower" % "angular" % "1.3.15",
+  "org.webjars.bower" % "angular-route" % "1.3.15"
 )     
 
