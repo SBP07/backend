@@ -14,7 +14,7 @@
         <tr ng-repeat="child in children">
             <td>{{ child.id }}</td>
             <td>
-                <a ng-href="/kind/details/{{ child.id }}">
+                <a href="" ng-click="details(child)">
                     {{ child.firstName + ' ' + child.lastName }}
                 </a>
             </td>

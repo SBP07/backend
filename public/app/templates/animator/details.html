@@ -1,0 +1,37 @@
+<div class="modal-header">
+    <div class="row">
+        <div class="col-md-9">
+            <h3 class="modal-title">{{ animator.firstName + ' ' + animator.lastName }}</h3>
+        </div>
+        <div class="col-md-3">
+            <a class="btn btn-default" href="" ng-click="edit(anichildmator)">
+                <span class="glyphicon glyphicon-pencil"></span> Bewerken
+            </a>
+        </div>
+    </div>
+</div>
+<div class="modal-body">
+    <ul>
+        <li ng-show="animator.birthDate">Geboren op {{ animator.birthDate }}</li>
+        <li ng-show="animator.street">{{ animator.street + ', ' + animator.city }}</li>
+        <li ng-show="animator.mobilePhone">{{ animator.mobilePhone }}</li>
+        <li ng-show="animator.landline">{{ animator.landline }}</li>
+        <li ng-show="animator.isPartOfCore">Zit in de kern</li>
+        <li ng-hide="animator.isPartOfCore">Zit niet in de kern</li>
+        <li ng-show="animator.yearStartedVolunteering">Staat op het speelplein sinds {{ animator.yearStartedVolunteering }}</li>
+        <li ng-show="animator.email"><a ng-href="{{'mailto:' + animator.email}}">{{ animator.email }}</a></li>
+        <li ng-show="animator.bankAccount">Rekeningnummer: {{ animator.bankAccount }}</li>
+    </ul>
+    <ul>
+        <li ng-hide="animator.birthDate"><em>Geen geboortedatum opgegeven</em></li>
+        <li ng-hide="animator.street"><em>Geen adres opgegeven</em></li>
+        <li ng-hide="animator.mobilePhone"><em>Geen GSM-nummer opgegeven</em></li>
+        <li ng-hide="animator.landline"><em>Geen telefoonnummer opgegeven</em></li>
+        <li ng-hide="animator.yearStartedVolunteering"><em>Niet opgegeven sinds wanneer deze animator op het speelplein staat</em></li>
+        <li ng-hide="animator.email"><em>Geen emailadres opgegeven</em></li>
+        <li ng-hide="animator.bankAccount"><em>Geen bankrekening opgegeven</em></li>
+    </ul>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()">OK</button>
+</div>
