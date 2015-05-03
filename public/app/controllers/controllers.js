@@ -3,46 +3,21 @@ var speelsysteemControllers = angular.module('speelsysteemControllers',
         'speelsysteemChildServices']
 );
 
-speelsysteemControllers.controller('AnimatorsController', function ($scope, $modal, allAnimators) {
-    allAnimators.success(function (response) {
+speelsysteemControllers.controller('AnimatorsController', function ($scope, $location, animators) {
+    animators.all().success(function (response) {
         $scope.animators = response;
     });
 
-    $scope.details = function (animator) {
-        var modalInstance = $modal.open({
-            templateUrl: '/assets/app/templates/animator/details.html',
-            controller: 'AnimatorDetailsController',
-            size: "lg",
-            scope: $scope,
-            resolve: {
-                animator: function () {
-                    return animator;
-                }
-            }
-        });
-    };
+    $scope.details = function (animator) { $location.path('/animatoren/details/' + animator.id); };
 });
 
-speelsysteemControllers.controller('AnimatorDetailsController', function ($scope, $modalInstance, $modal, animator) {
-    $scope.animator = animator;
+speelsysteemControllers.controller('AnimatorDetailsController', function ($scope, $location, $routeParams, animators) {
+    $scope.animator = {};
 
-    $scope.modalWrapper = {
-        include: '/assets/app/templates/animator/form.html',
-        title: 'Animator bewerken'
-    };
+    animators.byId($routeParams.id).success(function(response) { $scope.animator = response; });
 
-    $scope.edit = function (animator) {
-        var modalInstance = $modal.open({
-            templateUrl: '/assets/app/templates/misc/modalWrapper.html',
-            controller: 'AnimatorFormController',
-            size: "lg",
-            scope: $scope,
-            resolve: {
-                animator: function () {
-                    return animator;
-                }
-            }
-        });
+    $scope.edit = function(animator) {
+        $location.path('/animatoren/bewerken/' + animator.id);
     };
 
     $scope.ok = function () {
@@ -50,76 +25,32 @@ speelsysteemControllers.controller('AnimatorDetailsController', function ($scope
     };
 });
 
-speelsysteemControllers.controller('ShiftsController', function ($scope, $modal, allShifts) {
-    allShifts.success(function (response) {
+speelsysteemControllers.controller('ShiftsController', function ($scope, $modal, $location, shifts) {
+    shifts.all().success(function (response) {
         $scope.shifts = response;
     });
-
-    $scope.modalWrapper = {
-        include: '/assets/app/templates/shift/details.html',
-        title: 'Details voor dagdeel'
-    };
-
     $scope.details = function (shift) {
-        var modalInstance = $modal.open({
-            templateUrl: '/assets/app/templates/misc/modalWrapper.html',
-            controller: 'ShiftDetailsController',
-            size: "lg",
-            scope: $scope,
-            resolve: {
-                shift: function () {
-                    return shift;
-                }
-            }
-        });
-    };
+        $location.path('dagdelen/details/' + shift.shiftId) };
 });
 
-speelsysteemControllers.controller('ChildrenController', function ($scope, $modal, allChildren) {
-    allChildren.success(function (response) {
+speelsysteemControllers.controller('ChildrenController', function ($scope, $location, children) {
+    children.all().success(function (response) {
         $scope.children = response;
     });
 
-    $scope.details = function (child) {
-        var modalInstance = $modal.open({
-            templateUrl: '/assets/app/templates/child/details.html',
-            controller: 'ChildDetailsController',
-            size: "lg",
-            scope: $scope,
-            resolve: {
-                child: function () {
-                    return child;
-                }
-            }
-        });
+    $scope.newChild = function () {
+        $location.path('/kinderen/nieuw');
     };
+
+    $scope.details = function (child) { $location.path('/kinderen/details/' + child.id); };
 });
 
-speelsysteemControllers.controller('ChildDetailsController', function ($scope, $modal, $modalInstance, child) {
-    $scope.child = child;
+speelsysteemControllers.controller('ChildDetailsController', function ($scope, $location, $routeParams, children) {
+    $scope.child = {};
 
-    $scope.ok = function () {
-        $modalInstance.close();
-    };
+    children.byId($routeParams.id).success(function(response) { $scope.child = response; });
 
-    $scope.modalWrapper = {
-        include: '/assets/app/templates/child/form.html',
-        title: 'Kind bewerken'
-    };
-
-    $scope.edit = function (child) {
-        var modalInstance = $modal.open({
-            templateUrl: '/assets/app/templates/misc/modalWrapper.html',
-            controller: 'ChildFormController',
-            size: "lg",
-            scope: $scope,
-            resolve: {
-                child: function () {
-                    return angular.copy(child);
-                }
-            }
-        });
-    };
+    $scope.edit = function (child) { $location.path('/kinderen/bewerken/' + child.id); };
 });
 
 speelsysteemControllers.controller('HomeController', function () {
@@ -130,8 +61,12 @@ speelsysteemControllers.controller('NavbarController', function () {
 
 });
 
-speelsysteemControllers.controller('ChildFormController', function ($scope, $modalInstance, child) {
-    $scope.child = child || {};
+speelsysteemControllers.controller('ChildFormController', function ($scope, $routeParams, $log, children) {
+    $scope.child = {};
+
+    if($routeParams.id) {
+        children.byId($routeParams.id).success(function(response) { $scope.child = response; });
+    }
 
     $scope.format = "dd-MM-yyyy";
 
@@ -143,14 +78,14 @@ speelsysteemControllers.controller('ChildFormController', function ($scope, $mod
     };
 
     $scope.saveChild = function () {
-        console.log($scope.child);
+        $log.debug('should now save child: ' + $scope.child.firstName);
     };
 });
 
-speelsysteemControllers.controller('ShiftDetailsController', function ($scope, $modal, $modalInstance, shift) {
-    $scope.shift = shift;
+speelsysteemControllers.controller('ShiftDetailsController', function ($scope, $routeParams, $location, shifts) {
+    shifts.byId($routeParams.shiftId).success(function(response) {
+        $scope.shift = response;
+    });
 
-    $scope.ok = function () {
-        $modalInstance.close()
-    };
+    $scope.childDetails = function(child){ $location.path('/kinderen/details/' + child.id) };
 });

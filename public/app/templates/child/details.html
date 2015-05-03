@@ -1,27 +1,18 @@
-<div class="modal-header">
-    <div class="row">
-        <div class="col-md-9">
-            <h3 class="modal-title">{{ child.firstName + ' ' + child.lastName }}</h3>
-        </div>
-        <div class="col-md-3">
-            <a class="btn btn-default" href="" ng-click="edit(child)">
-                <span class="glyphicon glyphicon-pencil"></span> Bewerken
-            </a>
-        </div>
-    </div>
-</div>
-<div class="modal-body">
-    <ul>
-        <li ng-show="child.birthDate">Geboren op {{ child.birthDate }}</li>
-        <li ng-hide="child.birthDate"><em>Geen geboortedatum opgegeven</em></li>
-        <li ng-show="child.street">{{ child.street + ', ' + child.city }}</li>
-        <li ng-hide="child.street"><em>Geen adres opgegeven</em></li>
-        <li ng-show="child.mobilePhone">GSM-nummer: {{ child.mobilePhone }}</li>
-        <li ng-hide="child.mobilePhone"><em>Geen GSM-nummer opgegeven</em></li>
-        <li ng-show="child.landline">Telefoonnummer: {{ child.landline }}</li>
-        <li ng-hide="child.landline"><em>Geen telefoonnummer opgegeven</em></li>
-    </ul>
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary" ng-click="ok()">OK</button>
-</div>
+<h3 class="modal-title">{{ child.firstName + ' ' + child.lastName }}</h3>
+
+<p>
+    <a class="btn btn-default" href="" ng-click="edit(child)">
+        <span class="glyphicon glyphicon-pencil"></span> Bewerken
+    </a>
+</p>
+
+<ul>
+    <li ng-show="child.birthDate">Geboren op {{ child.birthDate }}</li>
+    <li ng-hide="child.birthDate"><em>Geen geboortedatum opgegeven</em></li>
+    <li ng-show="child.street">{{ child.street + ', ' + child.city }}</li>
+    <li ng-hide="child.street"><em>Geen adres opgegeven</em></li>
+    <li ng-show="child.mobilePhone">GSM-nummer: {{ child.mobilePhone }}</li>
+    <li ng-hide="child.mobilePhone"><em>Geen GSM-nummer opgegeven</em></li>
+    <li ng-show="child.landline">Telefoonnummer: {{ child.landline }}</li>
+    <li ng-hide="child.landline"><em>Geen telefoonnummer opgegeven</em></li>
+</ul>

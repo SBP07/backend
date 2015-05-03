@@ -1,16 +1,11 @@
-<div class="modal-header">
-    <div class="row">
-        <div class="col-md-9">
-            <h3 class="modal-title">{{ animator.firstName + ' ' + animator.lastName }}</h3>
-        </div>
-        <div class="col-md-3">
-            <a class="btn btn-default" href="" ng-click="edit(anichildmator)">
-                <span class="glyphicon glyphicon-pencil"></span> Bewerken
-            </a>
-        </div>
-    </div>
-</div>
-<div class="modal-body">
+<h3>{{ animator.firstName + ' ' + animator.lastName }}</h3>
+<p>
+    <a class="btn btn-default" href="" ng-click="edit(animator)">
+        <span class="glyphicon glyphicon-pencil"></span> Bewerken
+    </a>
+</p>
+
+<div>
     <ul>
         <li ng-show="animator.birthDate">Geboren op {{ animator.birthDate }}</li>
         <li ng-show="animator.street">{{ animator.street + ', ' + animator.city }}</li>
@@ -31,7 +26,4 @@
         <li ng-hide="animator.email"><em>Geen emailadres opgegeven</em></li>
         <li ng-hide="animator.bankAccount"><em>Geen bankrekening opgegeven</em></li>
     </ul>
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary" ng-click="ok()">OK</button>
 </div>

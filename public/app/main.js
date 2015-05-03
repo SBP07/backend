@@ -13,9 +13,21 @@ app.config(function($routeProvider){
     }).when('/dagdelen', {
         templateUrl: 'assets/app/templates/shifts.html',
         controller: 'ShiftsController'
+    }).when('/dagdelen/details/:shiftId', {
+        templateUrl: 'assets/app/templates/shift/details.html',
+        controller: 'ShiftDetailsController'
     }).when('/kinderen/nieuw', {
         templateUrl: 'assets/app/templates/child/form.html',
         controller: 'ChildFormController'
+    }).when('/kinderen/bewerken/:id', {
+        templateUrl: 'assets/app/templates/child/form.html',
+        controller: 'ChildFormController'
+    }).when('/kinderen/details/:id', {
+        templateUrl: 'assets/app/templates/child/details.html',
+        controller: 'ChildDetailsController'
+    }).when('/animatoren/details/:id', {
+        templateUrl: 'assets/app/templates/animator/details.html',
+        controller: 'AnimatorDetailsController'
     }).otherwise({
         redirectTo: '/'
     });
