@@ -16,14 +16,14 @@
                 {{ shift.shiftType.mnemonic }}
             </td>
             <td>
-                <a href="" ng-click="details(shift)">{{ shift.date }}</a>
+                {{ shift.date }}
             </td>
             <td>{{ shift.place }}</td>
             <td>
                 {{ shift.numberOfChildren }}
             </td>
             <td>
-                <a ng-href="/dagdelen/delete/{{ shift.shiftId }}">Verwijderen</a>
+                <a ng-click="details(shift)">Details</a>
             </td>
         </tr>
         </tbody>

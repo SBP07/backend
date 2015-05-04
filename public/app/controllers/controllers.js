@@ -82,10 +82,36 @@ speelsysteemControllers.controller('ChildFormController', function ($scope, $rou
     };
 });
 
-speelsysteemControllers.controller('ShiftDetailsController', function ($scope, $routeParams, $location, shifts) {
+speelsysteemControllers.controller('ShiftDetailsController', function ($scope, $routeParams, $location, $modal, shifts) {
     shifts.byId($routeParams.shiftId).success(function(response) {
         $scope.shift = response;
     });
 
-    $scope.childDetails = function(child){ $location.path('/kinderen/details/' + child.id) };
+    $scope.childDetails = function (child) { $location.path('/kinderen/details/' + child.id) };
+
+    $scope.delete = function() {
+        var modalInstance = $modal.open({
+            templateUrl: '/assets/app/templates/shift/delete.html',
+            controller: 'DeleteShiftController',
+            scope: $scope
+        });
+    }
+});
+
+speelsysteemControllers.controller('DeleteShiftController', function ($scope, $modalInstance, $location, shifts) {
+    // $scope.shift through scope inheritance
+
+    $scope.reallyDelete = function() {
+        $scope.status = "Bezig met verwijderen...";
+        shifts.deleteById($scope.shift.shiftId).success(function(res) {
+            $location.path('/dagdelen');
+            $modalInstance.close();
+        }).error(function(err) {
+            $scope.status = "Kon dagdeel niet verwijderen. Probeer later opnieuw."
+        });
+    };
+
+    $scope.cancel = function() {
+        $modalInstance.dismiss();
+    };
 });

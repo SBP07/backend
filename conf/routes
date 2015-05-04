@@ -60,8 +60,9 @@ GET     /api/animator/all       controllers.ApiAnimators.allAnimators
 GET     /api/animator/:id       controllers.ApiAnimators.animatorById(id: Long)
 
 # Shifts
-GET     /api/shift/all          controllers.ApiShifts.allShifts
-GET     /api/shift/:id          controllers.ApiShifts.shiftById(id: Long)
+GET         /api/shift/all                   controllers.ApiShifts.allShifts
+GET         /api/shift/:id                   controllers.ApiShifts.shiftById(id: Long)
+DELETE      /api/shift/:id                   controllers.ApiShifts.delete(id: Long)
 
 GET     /angular                controllers.Angular.index
 

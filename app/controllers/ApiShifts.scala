@@ -22,4 +22,9 @@ object ApiShifts extends Controller {
   def allShifts = DBAction { implicit req =>
     Ok(Json.toJson(ShiftRepository.findAllWithTypeAndNumberOfPresences(req.dbSession)))
   }
+
+  def delete(id: Long) = DBAction { implicit req =>
+    ShiftRepository.delete(id)(req.dbSession)
+    Ok
+  }
 }

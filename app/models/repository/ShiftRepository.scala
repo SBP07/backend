@@ -53,6 +53,7 @@ object ShiftRepository {
     }
   }
   def delete(shift: Shift)(implicit s: Session): Int = shifts.filter(_.id === shift.id).delete
+  def delete(id: Long)(implicit s: Session): Int = shifts.filter(_.id === id).delete
 }
 
 private[models] class ShiftRepository(tag: Tag) extends Table[Shift](tag, "shift") {
