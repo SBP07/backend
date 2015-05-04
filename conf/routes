@@ -2,74 +2,74 @@
 ### Non-API routes
 
 # Home page
-GET     /                      controllers.Application.home
+GET           /                                controllers.Application.home
 
 # For continuous delivery
-GET     /heartbeat              controllers.Application.heartbeat
+GET           /heartbeat                       controllers.Application.heartbeat
 
 # Medical files
-GET     /medischefiche              controllers.MedicalFiles.form
-POST    /medischefiche              controllers.MedicalFiles.postForm
+GET           /medischefiche                   controllers.MedicalFiles.form
+POST          /medischefiche                   controllers.MedicalFiles.postForm
 
 # Presences
-GET     /aanwezigheden              controllers.Presences.presentToday
-POST    /aanwezigheden/update       controllers.Presences.saveUpdate
-GET     /aanwezigheden/update/:id   controllers.Presences.updateWithId(id: Long)
-GET     /aanwezigheden/nieuw        controllers.Presences.register
-GET     /aanwezigheden/nieuw/:id    controllers.Presences.registerWithId(id: Long)
-POST    /aanwezigheden/nieuw        controllers.Presences.savePresence
+GET           /aanwezigheden                   controllers.Presences.presentToday
+POST          /aanwezigheden/update            controllers.Presences.saveUpdate
+GET           /aanwezigheden/update/:id        controllers.Presences.updateWithId(id: Long)
+GET           /aanwezigheden/nieuw             controllers.Presences.register
+GET           /aanwezigheden/nieuw/:id         controllers.Presences.registerWithId(id: Long)
+POST          /aanwezigheden/nieuw             controllers.Presences.savePresence
 
 
 # Shifts
-GET     /dagdelen                 controllers.Shifts.list
-GET     /dagdelen/                controllers.Shifts.list
-GET     /dagdelen/lijst           controllers.Shifts.list
-GET     /dagdelen/nieuw           controllers.Shifts.newShift
-POST    /dagdelen/nieuw           controllers.Shifts.saveShift
-GET     /dagdelen/update/:date    controllers.Shifts.updateShift(date: String)
-GET     /dagdelen/details/:id     controllers.Shifts.detailsShifts(id: Long)
-GET     /dagdelen/delete/:id      controllers.Shifts.deleteShift(id: Long)
-POST    /dagdelen/delete          controllers.Shifts.reallyDeleteShift
+GET           /dagdelen                        controllers.Shifts.list
+GET           /dagdelen/                       controllers.Shifts.list
+GET           /dagdelen/lijst                  controllers.Shifts.list
+GET           /dagdelen/nieuw                  controllers.Shifts.newShift
+POST          /dagdelen/nieuw                  controllers.Shifts.saveShift
+GET           /dagdelen/update/:date           controllers.Shifts.updateShift(date: String)
+GET           /dagdelen/details/:id            controllers.Shifts.detailsShifts(id: Long)
+GET           /dagdelen/delete/:id             controllers.Shifts.deleteShift(id: Long)
+POST          /dagdelen/delete                 controllers.Shifts.reallyDeleteShift
 
 # Animators
-GET     /animator              controllers.Animators.list
-GET     /animator/             controllers.Animators.list
-GET     /animator/lijst        controllers.Animators.list
-GET     /animator/details/:id  controllers.Animators.details(id: Long)
-GET     /animator/nieuw        controllers.Animators.newAnimator
-POST    /animator/nieuw        controllers.Animators.saveAnimator
-GET     /animator/edit/:id     controllers.Animators.editAnimator(id: Long)
+GET           /animator                        controllers.Animators.list
+GET           /animator/                       controllers.Animators.list
+GET           /animator/lijst                  controllers.Animators.list
+GET           /animator/details/:id            controllers.Animators.details(id: Long)
+GET           /animator/nieuw                  controllers.Animators.newAnimator
+POST          /animator/nieuw                  controllers.Animators.saveAnimator
+GET           /animator/edit/:id               controllers.Animators.editAnimator(id: Long)
 
 # Children
-GET     /kind               controllers.Children.showList
-GET     /kind/              controllers.Children.showList
-GET     /kind/lijst         controllers.Children.showList
-GET     /kind/nieuw         controllers.Children.newChild
-POST    /kind/nieuw         controllers.Children.saveChild
-GET     /kind/edit/:id      controllers.Children.editChild(id: Long)
-GET     /kind/details/:id   controllers.Children.details(id: Long)
+GET           /kind                            controllers.Children.showList
+GET           /kind/                           controllers.Children.showList
+GET           /kind/lijst                      controllers.Children.showList
+GET           /kind/nieuw                      controllers.Children.newChild
+POST          /kind/nieuw                      controllers.Children.saveChild
+GET           /kind/edit/:id                   controllers.Children.editChild(id: Long)
+GET           /kind/details/:id                controllers.Children.details(id: Long)
 
 ### API
 
 # Children
-GET     /api/child/all       controllers.ApiChildren.allChildren
-GET     /api/child/:id       controllers.ApiChildren.childById(id: Long)
+GET           /api/child/all                   controllers.ApiChildren.allChildren
+GET           /api/child/:id                   controllers.ApiChildren.childById(id: Long)
 
 # Animators
-GET     /api/animator/all       controllers.ApiAnimators.allAnimators
-GET     /api/animator/:id       controllers.ApiAnimators.animatorById(id: Long)
+GET           /api/animator/all                controllers.ApiAnimators.allAnimators
+GET           /api/animator/:id                controllers.ApiAnimators.animatorById(id: Long)
 
 # Shifts
-GET         /api/shift/all                   controllers.ApiShifts.allShifts
-GET         /api/shift/:id                   controllers.ApiShifts.shiftById(id: Long)
-DELETE      /api/shift/:id                   controllers.ApiShifts.delete(id: Long)
+GET           /api/shift/all                   controllers.ApiShifts.allShifts
+GET           /api/shift/:id                   controllers.ApiShifts.shiftById(id: Long)
+DELETE        /api/shift/:id                   controllers.ApiShifts.delete(id: Long)
 
-GET     /angular                controllers.Angular.index
+GET           /angular                         controllers.Angular.index
 
 ### Assets
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public", file)
+GET           /assets/*file                    controllers.Assets.at(path="/public", file)
 
 # WebJar routing (for bootstrap, ...)
-GET		/webjars/*file				controllers.WebJarAssets.at(file)
+GET           /webjars/*file                   controllers.WebJarAssets.at(file)
