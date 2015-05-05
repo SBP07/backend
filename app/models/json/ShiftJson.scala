@@ -1,15 +1,14 @@
 package models.json
 
-import org.joda.time.LocalDate
 import models.{Child, Shift, ShiftType}
+import org.joda.time.LocalDate
+import play.api.libs.functional.syntax._
+import play.api.libs.json._
+import ChildJson.childWrites
 
 object ShiftJson {
 
-  import play.api.libs.functional.syntax._
-  import play.api.libs.json._
-  import models.Child.childWrites
-
-  val fun: Function1[Tuple3[ShiftType, Shift, Int], Option[Tuple5[Option[Long], LocalDate, String, ShiftType, Int]]] = {
+  val convertor: Tuple3[ShiftType, Shift, Int] => Option[(Option[Long], LocalDate, String, ShiftType, Int)] = {
     case (shiftType, shift, numberOfChildren) => Some(shift.id, shift.date, shift.place, shiftType, numberOfChildren)
   }
 
@@ -25,7 +24,7 @@ object ShiftJson {
       (JsPath \ "place").write[String] and
       (JsPath \ "shiftType").write[ShiftType] and
       (JsPath \ "numberOfChildren").write[Int]
-    )(unlift(fun))
+    )(unlift(convertor))
 
   implicit val shiftWrites: Writes[Shift] = (
     (JsPath \ "id").writeNullable[Long] and

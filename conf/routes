@@ -54,6 +54,7 @@ GET           /kind/details/:id                controllers.Children.details(id: 
 # Children
 GET           /api/child/all                   controllers.ApiChildren.allChildren
 GET           /api/child/:id                   controllers.ApiChildren.childById(id: Long)
+PUT           /api/child/:id                   controllers.ApiChildren.update(id: Long)
 
 # Animators
 GET           /api/animator/all                controllers.ApiAnimators.allAnimators

@@ -78,7 +78,19 @@ speelsysteemControllers.controller('ChildFormController', function ($scope, $rou
     };
 
     $scope.saveChild = function () {
-        $log.debug('should now save child: ' + $scope.child.firstName);
+        var child = $scope.child;
+        if(child.hasOwnProperty('id')) {
+            // existing child (because it has an id)
+            children.update(child)
+                .success(function(res) {
+                    $log.debug('updated child with id ' + child.id);
+                })
+                .error(function(res) {
+                    $log.debug('could not update child with id ' + child.id);
+                });
+        } else {
+            $log.debug('should now create new child child: ' + $scope.child.firstName);
+        }
     };
 });
 
