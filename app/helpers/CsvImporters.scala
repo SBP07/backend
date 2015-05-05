@@ -1,6 +1,7 @@
 package helpers
 
 import java.io.File
+import java.time.LocalDate
 
 import com.github.tototoshi.csv._
 import helpers.DateTime.fmt
@@ -22,7 +23,7 @@ object CsvImporters {
       val landline = map.get("telefoon")
       val birthDate = {
         try {
-          map.get("geboortedatum").map(fmt.parseLocalDate)
+          map.get("geboortedatum").map(LocalDate.parse(_, fmt))
         } catch {
           case e: IllegalArgumentException => None
         }
@@ -55,7 +56,7 @@ object CsvImporters {
       val city = map.get("gemeente")
       val birthDate = {
         try {
-          map.get("geboortedatum").map(fmt.parseLocalDate)
+          map.get("geboortedatum").map(LocalDate.parse(_, fmt))
         } catch {
           case e: IllegalArgumentException => None
         }
@@ -72,7 +73,7 @@ object CsvImporters {
       for {
         date <- {
           try {
-            map.get("dag").map(fmt.parseLocalDate)
+            map.get("dag").map(LocalDate.parse(_, fmt))
           } catch {
             case e: IllegalArgumentException => None
           }
@@ -97,7 +98,7 @@ object CsvImporters {
       for {
         date <- {
           try {
-            map.get("dag").map(fmt.parseLocalDate)
+            map.get("dag").map(LocalDate.parse(_, fmt))
           } catch {
             case e: IllegalArgumentException => None
           }

@@ -1,10 +1,12 @@
 package models.json
 
+import java.time.LocalDate
+
+import models.json.ChildJson.childWrites
+import models.json.LocalDateJson.defaultJavaLocalDateWrites
 import models.{Child, Shift, ShiftType}
-import org.joda.time.LocalDate
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
-import ChildJson.childWrites
 
 object ShiftJson {
 

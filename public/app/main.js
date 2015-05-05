@@ -1,6 +1,6 @@
 var app = angular.module('speelsysteemApp', ['ngRoute', 'speelsysteemControllers']);
 
-app.config(function($routeProvider){
+app.config(function ($routeProvider) {
     $routeProvider.when('/', {
         templateUrl: 'assets/app/templates/home.html',
         controller: 'HomeController'

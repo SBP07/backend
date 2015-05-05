@@ -1,37 +1,48 @@
 <form class="form-horizontal" name="newChildForm" ng-submit="saveChild()">
 
     <fieldset>
-        <div class="form-group" ng-class="{ 'has-error': newChildForm.firstName.$invalid && newChildForm.firstName.$dirty }">
+        <div class="form-group"
+             ng-class="{ 'has-error': newChildForm.firstName.$invalid && newChildForm.firstName.$dirty }">
             <label for="firstName" class="col-sm-3 control-label">Voornaam</label>
+
             <div class="col-sm-9">
-                <input type="text" id="firstName" name="firstName" class="form-control" required ng-model="child.firstName" ng-minlength="3"/>
+                <input type="text" id="firstName" name="firstName" class="form-control" required
+                       ng-model="child.firstName" ng-minlength="3"/>
 
                 <span class="help-block" ng-show="newChildForm.firstName.$error.minlength">Naam moet minstens 3 karakters bevatten</span>
                 <span class="help-block" ng-show="newChildForm.firstName.$error.required">Voornaam is verplicht</span>
             </div>
         </div>
 
-        <div class="form-group" ng-class="{ 'has-error': newChildForm.lastName.$invalid && newChildForm.lastName.$dirty }">
+        <div class="form-group"
+             ng-class="{ 'has-error': newChildForm.lastName.$invalid && newChildForm.lastName.$dirty }">
             <label for="lastName" class="col-sm-3 control-label">Achternaam</label>
+
             <div class="col-sm-9">
-                <input type="text" id="lastName" name="lastName" class="form-control" required ng-model="child.lastName" ng-minlength="3"/>
+                <input type="text" id="lastName" name="lastName" class="form-control" required ng-model="child.lastName"
+                       ng-minlength="3"/>
 
                 <span class="help-block" ng-show="newChildForm.lastName.$error.minlength">Naam moet minstens 3 karakters bevatten</span>
                 <span class="help-block" ng-show="newChildForm.lastName.$error.required">Achternaam is verplicht</span>
             </div>
         </div>
 
-        <div class="form-group" ng-class="{ 'has-error': newChildForm.mobilePhone.$invalid && newChildForm.mobilePhone.$dirty }">
+        <div class="form-group"
+             ng-class="{ 'has-error': newChildForm.mobilePhone.$invalid && newChildForm.mobilePhone.$dirty }">
             <label for="mobilePhone" class="col-sm-3 control-label">GSM-nummer</label>
+
             <div class="col-sm-9">
-                <input type="text" id="mobilePhone" name="mobilePhone" class="form-control" ng-model="child.mobilePhone"/>
+                <input type="text" id="mobilePhone" name="mobilePhone" class="form-control"
+                       ng-model="child.mobilePhone"/>
 
                 <span class="help-block"></span>
             </div>
         </div>
 
-        <div class="form-group" ng-class="{ 'has-error': newChildForm.landline.$invalid && newChildForm.landline.$dirty }">
+        <div class="form-group"
+             ng-class="{ 'has-error': newChildForm.landline.$invalid && newChildForm.landline.$dirty }">
             <label for="landline" class="col-sm-3 control-label">Thuistelefoon</label>
+
             <div class="col-sm-9">
                 <input type="text" id="landline" name="landline" class="form-control" ng-model="child.landline"/>
 
@@ -39,13 +50,18 @@
             </div>
         </div>
 
-        <div class="form-group" ng-class="{ 'has-error': newChildForm.birthDate.$invalid && newChildForm.birthDate.$dirty }">
+        <div class="form-group"
+             ng-class="{ 'has-error': newChildForm.birthDate.$invalid && newChildForm.birthDate.$dirty }">
             <label for="birthDate" class="col-sm-3 control-label">Geboortedatum</label>
+
             <div class="col-sm-9">
                 <p class="input-group">
-                    <input id="birthDate" name="birthDate" type="text" class="form-control" datepicker-popup="{{format}}" ng-model="child.birthDate" is-open="opened" close-text="Close"/>
+                    <input id="birthDate" name="birthDate" type="text" class="form-control"
+                           datepicker-popup="{{format}}" ng-model="child.birthDate" is-open="opened"
+                           close-text="Close"/>
                     <span class="input-group-btn">
-                        <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                        <button type="button" class="btn btn-default" ng-click="open($event)"><i
+                                class="glyphicon glyphicon-calendar"></i></button>
                     </span>
                 </p>
 
@@ -55,6 +71,7 @@
 
         <div class="form-group" ng-class="{ 'has-error': newChildForm.street.$invalid && newChildForm.street.$dirty }">
             <label for="street" class="col-sm-3 control-label">Straat en nummer</label>
+
             <div class="col-sm-9">
                 <input type="text" id="street" name="street" class="form-control" ng-model="child.street"/>
 
@@ -64,6 +81,7 @@
 
         <div class="form-group" ng-class="{ 'has-error': newChildForm.city.$invalid && newChildForm.city.$dirty }">
             <label for="city" class="col-sm-3 control-label">Gemeente</label>
+
             <div class="col-sm-9">
                 <input type="text" id="city" name="city" class="form-control" ng-model="child.city"/>
 

@@ -5,7 +5,7 @@ import play.api.test.Helpers._
 import play.api.test._
 
 @RunWith(classOf[JUnitRunner])
-class Children extends Specification{
+class Children extends Specification {
   "have children inserted by the Global class" in new WithBrowser(webDriver = WebDriverFactory(HTMLUNIT)) {
     browser.goTo("/kind/lijst")
 
@@ -15,7 +15,9 @@ class Children extends Specification{
   }
 
   "show the new child form" in new WithBrowser(webDriver = WebDriverFactory(HTMLUNIT)) {
+
     import browser._
+
     goTo("/kind/lijst")
     click("button")
 
@@ -23,7 +25,9 @@ class Children extends Specification{
   }
 
   "show errors when the form isn't correct" in new WithBrowser(webDriver = WebDriverFactory(HTMLUNIT)) {
+
     import browser._
+
     goTo("/kind/lijst")
     click("button")
 

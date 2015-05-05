@@ -3,15 +3,19 @@
 </div>
 <div class="modal-body">
     <p>
-        Ben je zeker dat je dit dagdeel wil verwijderen? Deze functie is enkel bedoeld voor dagdelen die verkeerd zijn aangemaakt.
+        Ben je zeker dat je dit dagdeel wil verwijderen? Deze functie is enkel bedoeld voor dagdelen die verkeerd zijn
+        aangemaakt.
     </p>
+
     <p>
         Het dagdeel in kwestie is <strong>{{ shift.date }}</strong>, <strong>{{ shift.shiftType.description }}</strong>.
     </p>
+
     <p ng-hide="shift.presentChildren.length == 0">
         Er zijn <strong>{{ shift.presentChildren.length }}</strong> kinderen ingeschreven voor dit dagdeel.
         Die aanwezigheden worden <strong>ook verwijderd</strong>. Dit is waarschijnlijk niet wat je wil.
     </p>
+
     <p ng-show="status">
         <em>{{ status }}</em>
     </p>

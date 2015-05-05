@@ -1,11 +1,9 @@
-import models.repository.{ShiftTypeRepository, ShiftRepository}
+import models.repository.{ShiftRepository, ShiftTypeRepository}
+import org.junit.runner._
 import org.specs2.mutable._
 import org.specs2.runner._
-import org.junit.runner._
 import play.api.db.slick.DB
-
 import play.api.test._
-import play.api.test.Helpers._
 
 @RunWith(classOf[JUnitRunner])
 class Activities extends Specification {
