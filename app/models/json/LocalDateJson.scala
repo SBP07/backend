@@ -31,7 +31,7 @@ object LocalDateJson {
   }
 
   implicit object defaultJavaLocalDateWrites extends Writes[java.time.LocalDate] {
-    def writes(d: java.time.LocalDate): JsValue = JsString(d.toString)
+    def writes(d: java.time.LocalDate): JsValue = JsString(d.format(fmt))
   }
 
 

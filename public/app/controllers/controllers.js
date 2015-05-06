@@ -55,7 +55,7 @@ speelsysteemControllers.controller('ChildrenController', function ($scope, $loca
 speelsysteemControllers.controller('ChildDetailsController', function ($scope, $location, $routeParams, children) {
     $scope.child = {};
 
-    children.byId($routeParams.id).success(function (response) {
+    children.byId($routeParams.id).then(function (response) {
         $scope.child = response;
     });
 
@@ -103,8 +103,8 @@ speelsysteemControllers.controller('ChildFormController', function ($scope, $rou
     $scope.child = {};
 
     if ($routeParams.id) {
-        children.byId($routeParams.id).success(function (response) {
-            $scope.child = response;
+        children.byId($routeParams.id).then(function (child) {
+            $scope.child = child;
         });
     }
 
@@ -119,13 +119,12 @@ speelsysteemControllers.controller('ChildFormController', function ($scope, $rou
 
     $scope.saveChild = function () {
         var child = $scope.child;
+        $log.debug(child.birthDate);
         if (child.hasOwnProperty('id')) {
             // existing child (because it has an id)
-            children.update(child)
-                .success(function (res) {
+            children.update(child).then(function (res) {
                     $log.debug('updated child with id ' + child.id);
-                })
-                .error(function (res) {
+                }, function (res) {
                     $log.debug('could not update child with id ' + child.id);
                 });
         } else {
