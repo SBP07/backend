@@ -1,9 +1,7 @@
 import helpers.CsvImporters
-import org.joda.time.LocalDate
-import play.api._
-
 import models._
-
+import models.repository._
+import play.api._
 import play.api.db.slick.Config.driver.simple.Session
 
 
@@ -55,5 +53,6 @@ object Global extends GlobalSettings {
       CsvImporters.children("conf/initial_data/children.csv").foreach(ChildRepository.insert)
     }
   }
+
   // scalastyle:on
 }

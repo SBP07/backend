@@ -4,8 +4,10 @@ import play.api.mvc._
 
 object Application extends Controller {
   def home: Action[AnyContent] = Action { implicit req =>
-    Ok(views.html.application.home.render(req.flash))
+    Ok(views.html.main.render)
   }
 
-  def heartbeat: Action[AnyContent] = Action { Ok("online") }
+  def heartbeat: Action[AnyContent] = Action {
+    Ok("online")
+  }
 }

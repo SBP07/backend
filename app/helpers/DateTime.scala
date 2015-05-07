@@ -1,7 +1,7 @@
 package helpers
 
-import org.joda.time.format.{DateTimeFormat, DateTimeFormatter}
+import java.time.format.DateTimeFormatter
 
 object DateTime {
-  val fmt: DateTimeFormatter = DateTimeFormat.forPattern("dd-MM-yyyy")
+  val fmt: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 }

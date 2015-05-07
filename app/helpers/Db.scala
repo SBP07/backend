@@ -1,9 +1,9 @@
 package helpers
 
 import java.sql.{Date => Sqldate, Timestamp}
+import java.time.LocalDate
 import java.util.Date
-import org.joda.time.DateTimeZone
-import org.joda.time.LocalDate
+
 import play.api.db.slick.Config.driver.simple._
 
 object Db {
@@ -12,9 +12,9 @@ object Db {
     d => new Date(d.getTime)
   )
 
-  implicit val jodaDatetimeToSqldateMapper = MappedColumnType.base[LocalDate, Sqldate](
-    d => new Sqldate(d.toDate().getTime()),
-    d => new LocalDate(d.getTime())
+  implicit val localdateToSqldateMapper = MappedColumnType.base[LocalDate, Sqldate](
+    d => Sqldate.valueOf(d),
+    d => d.toLocalDate
   )
 
 }
