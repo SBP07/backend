@@ -8,7 +8,7 @@ import play.api.db.slick.Config.driver.simple._
 
 import scala.slick.lifted.ProvenShape
 
-private[models] class ChildRepository(tag: Tag) extends Table[Child](tag, "child") {
+private[models] class ChildTable(tag: Tag) extends Table[Child](tag, "child") {
 
   def * : ProvenShape[Child] = (id.?, firstName, lastName, mobilePhone.?, landline.?, street.?,
     city.?, birthDate.?, medicalRecordChecked.?) <>((Child.apply _).tupled, Child.unapply)
@@ -36,8 +36,8 @@ private[models] class ChildRepository(tag: Tag) extends Table[Child](tag, "child
   }
 }
 
-object ChildRepository {
-  val children = TableQuery[ChildRepository]
+class ChildRepository {
+  val children = TableQuery[ChildTable]
 
   def findById(id: Long)(implicit s: Session): Option[Child] = children.filter(_.id === id).firstOption
 

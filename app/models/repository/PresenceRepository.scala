@@ -6,12 +6,12 @@ import play.api.db.slick.Config.driver.simple._
 import scala.slick.lifted.{ForeignKeyQuery, ProvenShape}
 
 private[models] class ChildrenToShifts(tag: Tag) extends Table[ChildPresence](tag, "child_to_shift") {
-  private[models] val children = TableQuery[ChildRepository]
+  private[models] val children = TableQuery[ChildTable]
   private[models] val shifts = TableQuery[ShiftRepository]
 
   def * : ProvenShape[ChildPresence] = (childId, shiftId) <>(ChildPresence.tupled, ChildPresence.unapply)
 
-  def childFK: ForeignKeyQuery[ChildRepository, Child] = foreignKey("child_fk", childId, children)(_.id)
+  def childFK: ForeignKeyQuery[ChildTable, Child] = foreignKey("child_fk", childId, children)(_.id)
 
   private[models] def childId = column[Long]("child_id")
 
@@ -24,7 +24,7 @@ private[models] class ChildrenToShifts(tag: Tag) extends Table[ChildPresence](ta
 }
 
 object ChildPresenceRepository {
-  private val children = TableQuery[ChildRepository]
+  private val children = TableQuery[ChildTable]
   private val shifts = TableQuery[ShiftRepository]
   private val presences = TableQuery[ChildrenToShifts]
 

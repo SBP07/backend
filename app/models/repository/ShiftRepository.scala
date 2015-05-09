@@ -57,11 +57,11 @@ private[models] class ShiftRepository(tag: Tag) extends Table[Shift](tag, "shift
 
   private[models] def shiftId = column[Long]("shift_type", O.NotNull)
 
-  def childrenJoin: Query[ChildRepository, ChildRepository#TableElementType, Seq] = {
+  def childrenJoin: Query[ChildTable, ChildTable#TableElementType, Seq] = {
     TableQuery[ChildrenToShifts].filter(_.shiftId === id).flatMap(_.childFK)
   }
 
-  def children: Query[ChildRepository, Child, Seq] = {
+  def children: Query[ChildTable, Child, Seq] = {
     TableQuery[ChildrenToShifts].filter(_.shiftId === id).flatMap(_.childFK)
   }
 
