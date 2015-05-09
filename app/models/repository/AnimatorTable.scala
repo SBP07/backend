@@ -40,7 +40,7 @@ private[models] class AnimatorTable(tag: Tag) extends Table[Animator](tag, "anim
   private[models] def birthDate = column[LocalDate]("birthdate", O.Nullable)
 }
 
-object AnimatorTable {
+class AnimatorRepository {
   val animators = TableQuery[AnimatorTable]
 
   def findById(id: Long)(implicit s: Session): Option[Animator] = animators.filter(_.id === id).firstOption
