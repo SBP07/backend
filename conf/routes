@@ -7,13 +7,13 @@ GET           /heartbeat               controllers.Application.heartbeat
 ### API
 
 # Children
-GET           /api/child/all           controllers.ApiChildren.allChildren
-GET           /api/child/:id           controllers.ApiChildren.childById(id: Long)
-PUT           /api/child/:id           controllers.ApiChildren.update(id: Long)
+GET           /api/child/all           @controllers.ApiChildren.allChildren
+GET           /api/child/:id           @controllers.ApiChildren.childById(id: Long)
+PUT           /api/child/:id           @controllers.ApiChildren.update(id: Long)
 
 # Animators
-GET           /api/animator/all        controllers.ApiAnimators.allAnimators
-GET           /api/animator/:id        controllers.ApiAnimators.animatorById(id: Long)
+GET           /api/animator/all        @controllers.ApiAnimators.allAnimators
+GET           /api/animator/:id        @controllers.ApiAnimators.animatorById(id: Long)
 
 # Shifts
 GET           /api/shift/all           controllers.ApiShifts.allShifts
