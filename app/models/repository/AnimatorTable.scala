@@ -9,7 +9,7 @@ import play.api.db.slick.Config.driver.simple._
 
 import scala.slick.lifted.{ProvenShape, TableQuery}
 
-private[models] class AnimatorRepository(tag: Tag) extends Table[Animator](tag, "animator") {
+private[models] class AnimatorTable(tag: Tag) extends Table[Animator](tag, "animator") {
 
   def * : ProvenShape[Animator] = (id.?, firstName, lastName, mobilePhone.?, landline.?, email.?,
     street.?, city.?, bankAccount.?, yearStartedVolunteering.?, isPartOfCore, birthDate.?) <>
@@ -40,8 +40,8 @@ private[models] class AnimatorRepository(tag: Tag) extends Table[Animator](tag, 
   private[models] def birthDate = column[LocalDate]("birthdate", O.Nullable)
 }
 
-object AnimatorRepository {
-  val animators = TableQuery[AnimatorRepository]
+object AnimatorTable {
+  val animators = TableQuery[AnimatorTable]
 
   def findById(id: Long)(implicit s: Session): Option[Animator] = animators.filter(_.id === id).firstOption
 

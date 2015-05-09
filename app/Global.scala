@@ -21,15 +21,15 @@ object Global extends GlobalSettings {
 
   private def insertChildPresences(implicit s: Session) {
     if (ChildPresenceRepository.count == 0) {
-      CsvImporters.childPresences("conf/initial_data/child_presences.csv").foreach(ChildPresenceRepository.register)
+      CsvImporters.childPresences("conf/initial_data/child_presences.csv", childRepository).foreach(ChildPresenceRepository.register)
     }
   }
 
   private def insertAnimators(implicit s: Session) {
-    if (AnimatorRepository.count == 0) {
+    if (animatorRepository.count == 0) {
       helpers.CsvImporters
         .animators("conf/initial_data/animators.csv")
-        .foreach(AnimatorRepository.insert)
+        .foreach(animatorRepository.insert)
     }
   }
 
@@ -49,8 +49,8 @@ object Global extends GlobalSettings {
   }
 
   private def insertChildren(implicit s: Session) {
-    if (ChildRepository.count == 0) {
-      CsvImporters.children("conf/initial_data/children.csv").foreach(ChildRepository.insert)
+    if (childRepository.count == 0) {
+      CsvImporters.children("conf/initial_data/children.csv").foreach(childRepository.insert)
     }
   }
 

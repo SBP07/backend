@@ -7,17 +7,17 @@ import play.api.db.slick.DBAction
 import play.api.libs.json._
 import play.api.mvc._
 
-object ApiChildren extends Controller {
+class ApiChildren(childRepository: ChildRepository) extends Controller {
 
   def allChildren = DBAction { implicit req =>
-    val json = Json.toJson(ChildRepository.findAll(req.dbSession))
+    val json = Json.toJson(childRepository.findAll(req.dbSession))
     Ok(json)
   }
 
   def childById(id: Long) = DBAction { implicit req =>
-    ChildRepository.findById(id)(req.dbSession).map { child =>
+    childRepository.findById(id)(req.dbSession).fold(BadRequest("Id not found")) { child =>
       Ok(Json.toJson(child))
-    }.getOrElse(BadRequest("Id not found"))
+    }
   }
 
   def update(id: Long) = DBAction(parse.json) { implicit req =>
@@ -27,7 +27,7 @@ object ApiChildren extends Controller {
         BadRequest(Json.obj("status" -> "KO", "message" -> JsError.toFlatJson(errors)))
       },
       child => {
-        ChildRepository.update(child)(req.dbSession)
+        childRepository.update(child)(req.dbSession)
         Ok(Json.obj("status" -> "OK", "message" -> ("Child '" + child.firstName + "' saved.")))
       }
     )
