@@ -3,7 +3,7 @@ import models._
 import models.repository._
 import play.api._
 import play.api.db.slick.Config.driver.simple.Session
-import com.softwaremill.macwire.{InstanceLookup, Macwire}
+import com.softwaremill.macwire.Macwire
 
 
 object Global extends GlobalSettings with Macwire {
@@ -12,7 +12,7 @@ object Global extends GlobalSettings with Macwire {
   override def getControllerInstance[A](controllerClass: Class[A]) = wired.lookupSingleOrThrow(controllerClass)
 
   val childRepository = wire[ChildRepository]
-  val animatorRepository = wire[AnimatorRepository]
+  val animatorRepository = wire[SlickAnimatorRepository]
 
   // scalastyle:off
   override def onStart(app: Application) {

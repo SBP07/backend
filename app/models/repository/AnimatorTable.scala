@@ -40,18 +40,18 @@ private[models] class AnimatorTable(tag: Tag) extends Table[Animator](tag, "anim
   private[models] def birthDate = column[LocalDate]("birthdate", O.Nullable)
 }
 
-class AnimatorRepository {
+class SlickAnimatorRepository extends AnimatorRepository {
   val animators = TableQuery[AnimatorTable]
 
-  def findById(id: Long)(implicit s: Session): Option[Animator] = animators.filter(_.id === id).firstOption
+  override def findById(id: Long)(implicit s: Session): Option[Animator] = animators.filter(_.id === id).firstOption
 
-  def findAll(implicit s: Session): List[Animator] = animators.list
+  override def findAll(implicit s: Session): List[Animator] = animators.list
 
-  def insert(animator: Animator)(implicit s: Session): Unit = animators.insert(animator)
+  override def insert(animator: Animator)(implicit s: Session): Unit = animators.insert(animator)
 
-  def count(implicit s: Session): Int = animators.length.run
+  override def count(implicit s: Session): Int = animators.length.run
 
-  def update(animator: Animator)(implicit s: Session): Unit = {
+  override def update(animator: Animator)(implicit s: Session): Unit = {
     animator.id match {
       case Some(id) => animators.filter(_.id === id).update(animator)
       case _ =>
