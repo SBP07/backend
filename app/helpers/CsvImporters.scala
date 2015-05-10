@@ -2,14 +2,16 @@ package helpers
 
 import java.io.File
 import java.time.LocalDate
+import java.time.format.{DateTimeFormatter, DateTimeParseException}
 
 import com.github.tototoshi.csv._
-import helpers.DateTime.fmt
 import models._
 import models.repository._
 import play.api.db.slick.Config.driver.simple.Session
 
 object CsvImporters {
+  val fmt: DateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+
   def animators(filename: String): List[Animator] = {
     val reader = CSVReader.open(new File(filename))
     val all: List[Map[String, String]] = reader.allWithHeaders()
@@ -25,7 +27,7 @@ object CsvImporters {
         try {
           map.get("geboortedatum").map(LocalDate.parse(_, fmt))
         } catch {
-          case e: IllegalArgumentException => None
+          case e: DateTimeParseException => None
         }
       }
       val email = map.get("email")
@@ -58,7 +60,7 @@ object CsvImporters {
         try {
           map.get("geboortedatum").map(LocalDate.parse(_, fmt))
         } catch {
-          case e: IllegalArgumentException => None
+          case e: DateTimeParseException => None
         }
       }
 
@@ -75,7 +77,7 @@ object CsvImporters {
           try {
             map.get("dag").map(LocalDate.parse(_, fmt))
           } catch {
-            case e: IllegalArgumentException => None
+            case e: DateTimeParseException => None
           }
         }
 
@@ -100,7 +102,7 @@ object CsvImporters {
           try {
             map.get("dag").map(LocalDate.parse(_, fmt))
           } catch {
-            case e: IllegalArgumentException => None
+            case e: DateTimeParseException => None
           }
         }
 
