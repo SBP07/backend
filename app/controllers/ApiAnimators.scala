@@ -3,7 +3,7 @@ package controllers
 import models.json.AnimatorJson.animatorWrites
 import models.repository.{AnimatorRepository}
 import play.api.db.slick.DBAction
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 import play.api.mvc._
 
 class ApiAnimators(animatorRepo: AnimatorRepository) extends Controller {

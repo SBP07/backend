@@ -4,6 +4,7 @@ import java.time.LocalDate
 
 import models.Animator
 import models.json.LocalDateJson.defaultJavaLocalDateWrites
+import models.json.LocalDateJson.defaultJavaLocalDateReads
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
@@ -28,4 +29,24 @@ object AnimatorJson {
       (JsPath \ "birthDate").writeNullable[LocalDate]
 
     )(unlift(Animator.unapply))
+
+  implicit val animatorReads: Reads[Animator] = (
+    (JsPath \ "id").readNullable[Long] and
+      (JsPath \ "firstName").read[String] and
+      (JsPath \ "lastName").read[String] and
+
+      (JsPath \ "mobilePhone").readNullable[String] and
+      (JsPath \ "landline").readNullable[String] and
+      (JsPath \ "email").readNullable[String] and
+
+      (JsPath \ "street").readNullable[String] and
+      (JsPath \ "city").readNullable[String] and
+
+      (JsPath \ "bankAccount").readNullable[String] and
+
+      (JsPath \ "yearStartedVolunteering").readNullable[Int] and
+      (JsPath \ "isPartOfCore").read[Boolean] and
+      (JsPath \ "birthDate").readNullable[LocalDate]
+
+    )(Animator.apply _)
 }
