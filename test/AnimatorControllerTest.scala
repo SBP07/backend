@@ -4,6 +4,7 @@ import controllers.ApiAnimators
 import models.Animator
 import models.repository.AnimatorRepository
 import org.junit.runner._
+import org.mockito.Matchers
 import org.specs2.mock._
 import org.specs2.runner._
 import play.api.test._
@@ -18,7 +19,7 @@ class AnimatorControllerTest extends PlaySpecification with Mockito {
   "Requesting all animators" should {
     "Return a correct response" in new WithApplication {
       val mockedRepo = mock[AnimatorRepository]
-      mockedRepo.findAll(org.mockito.Matchers.any()) returns List(exampleAnimator)
+      mockedRepo.findAll(Matchers.any()) returns List(exampleAnimator)
 
       val animatorController = new ApiAnimators(mockedRepo)
 
@@ -32,6 +33,46 @@ class AnimatorControllerTest extends PlaySpecification with Mockito {
       val validated = contentAsJson(result).validate[Seq[Animator]]
       validated.isSuccess must beTrue
       validated.get must be equalTo Seq(exampleAnimator)
+    }
+  }
+
+  "Requesting an existing animator by id" should {
+    "Return a correct JSON response" in new WithApplication() {
+      val mockedRepo = mock[AnimatorRepository]
+      mockedRepo.findById(Matchers.eq(5L))(Matchers.any()) returns Some(exampleAnimator)
+
+      val animatorController = new ApiAnimators(mockedRepo)
+
+      val result = animatorController.animatorById(5).apply(FakeRequest())
+
+      status(result) must be equalTo OK
+      contentType(result).map { res => res must be equalTo "application/json" }
+
+      import models.json.AnimatorJson.animatorReads
+
+      val validated = contentAsJson(result).validate[Animator]
+      validated.isSuccess must beTrue
+      validated.get must be equalTo exampleAnimator
+    }
+  }
+
+  "Requesting a non-existing animator by id" should {
+    "Return a HTTP 404 with JSON response" in new WithApplication() {
+      val mockedRepo = mock[AnimatorRepository]
+      mockedRepo.findById(Matchers.eq(5L))(Matchers.any()) returns None
+
+      val animatorController = new ApiAnimators(mockedRepo)
+
+      val result = animatorController.animatorById(5).apply(FakeRequest())
+
+      status(result) must be equalTo NOT_FOUND
+      contentType(result).map { res => res must be equalTo "application/json" }
+
+      import helpers.JsonHelpers.JsonError
+
+      val validated = contentAsJson(result).validate[JsonError]
+      validated.isSuccess must beTrue
+      validated.get must be equalTo JsonError("Not Found", "No item found with id '5'.")
     }
   }
 }
