@@ -6,29 +6,32 @@ import models.repository.ChildRepository
 import play.api.db.slick.DBAction
 import play.api.libs.json._
 import play.api.mvc._
+import helpers.JsonHelpers.{notFound, badRequest, success}
 
 class ApiChildren(childRepository: ChildRepository) extends Controller {
 
-  def allChildren = DBAction { implicit req =>
+  def allChildren: Action[AnyContent] = DBAction { implicit req =>
     val json = Json.toJson(childRepository.findAll(req.dbSession))
     Ok(json)
   }
 
-  def childById(id: Long) = DBAction { implicit req =>
-    childRepository.findById(id)(req.dbSession).fold(BadRequest("Id not found")) { child =>
+  def childById(id: Long): Action[AnyContent] = DBAction { implicit req =>
+    childRepository.findById(id)(req.dbSession).fold(
+      NotFound(notFound(JsString(s"No child found with id '$id'.")))
+    ) { child =>
       Ok(Json.toJson(child))
     }
   }
 
-  def update(id: Long) = DBAction(parse.json) { implicit req =>
+  def update(id: Long): Action[JsValue] = DBAction(parse.json) { implicit req =>
     val childResult = req.body.validate[Child]
     childResult.fold(
       errors => {
-        BadRequest(Json.obj("status" -> "KO", "message" -> JsError.toFlatJson(errors)))
+        BadRequest(badRequest(JsError.toFlatJson(errors)))
       },
       child => {
         childRepository.update(child)(req.dbSession)
-        Ok(Json.obj("status" -> "OK", "message" -> ("Child '" + child.firstName + "' saved.")))
+        Ok(success(JsString("Child '${child.firstName} ${child.lastName}' updated.")))
       }
     )
   }

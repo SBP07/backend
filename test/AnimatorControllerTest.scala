@@ -7,6 +7,7 @@ import org.junit.runner._
 import org.mockito.Matchers
 import org.specs2.mock._
 import org.specs2.runner._
+import play.api.libs.json.JsString
 import play.api.test._
 
 @RunWith(classOf[JUnitRunner])
@@ -68,11 +69,11 @@ class AnimatorControllerTest extends PlaySpecification with Mockito {
       status(result) must be equalTo NOT_FOUND
       contentType(result).map { res => res must be equalTo "application/json" }
 
-      import helpers.JsonHelpers.JsonError
+      import helpers.JsonHelpers.JsonStatus
 
-      val validated = contentAsJson(result).validate[JsonError]
+      val validated = contentAsJson(result).validate[JsonStatus]
       validated.isSuccess must beTrue
-      validated.get must be equalTo JsonError("Not Found", "No item found with id '5'.")
+      validated.get must be equalTo JsonStatus("Not Found", JsString("No item found with id '5'."))
     }
   }
 }
