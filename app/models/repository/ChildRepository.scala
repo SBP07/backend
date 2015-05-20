@@ -31,7 +31,7 @@ private[models] class ChildTable(tag: Tag) extends Table[Child](tag, "child") {
 
   private[models] def medicalRecordChecked = column[LocalDate]("medical_file_checked", O.Nullable)
 
-  def shifts: Query[ShiftRepository, Shift, Seq] = {
+  def shifts: Query[ShiftTable, Shift, Seq] = {
     TableQuery[ChildrenToShifts].filter(_.childId === id).flatMap(_.shiftFK)
   }
 }

@@ -92,7 +92,8 @@ object CsvImporters {
 
   }
 
-  def childPresences(filename: String, childRepo: ChildRepository)(implicit s: Session): List[ChildPresence] = {
+  def childPresences(filename: String, childRepo: ChildRepository,
+                     shiftRepository: ShiftRepository)(implicit s: Session): List[ChildPresence] = {
 
     val reader = CSVReader.open(new File(filename))
     val all: List[Map[String, String]] = reader.allWithHeaders()
@@ -114,7 +115,7 @@ object CsvImporters {
         childId <- child.id
 
         shiftType <- ShiftTypeRepository.findByMnemonic(shiftMnemonic)
-        shift <- ShiftRepository.findByDateAndType(date, shiftType)
+        shift <- shiftRepository.findByDateAndType(date, shiftType)
         shiftId <- shift.id
 
       } yield {

@@ -2,7 +2,7 @@ package controllers
 
 import play.api.mvc._
 
-object Application extends Controller {
+class Main extends Controller {
   def home: Action[AnyContent] = Action { implicit req =>
     Ok(views.html.main.render)
   }

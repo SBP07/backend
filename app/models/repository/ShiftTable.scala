@@ -8,9 +8,9 @@ import play.api.db.slick.Config.driver.simple._
 
 import scala.slick.lifted.{ForeignKeyQuery, ProvenShape}
 
-object ShiftRepository {
+class ShiftRepository {
 
-  val shifts = TableQuery[ShiftRepository]
+  val shifts = TableQuery[ShiftTable]
 
   def insert(shift: Shift)(implicit s: Session): Unit = shifts.insert(shift)
 
@@ -39,7 +39,7 @@ object ShiftRepository {
   def delete(id: Long)(implicit s: Session): Int = shifts.filter(_.id === id).delete
 }
 
-private[models] class ShiftRepository(tag: Tag) extends Table[Shift](tag, "shift") {
+private[models] class ShiftTable(tag: Tag) extends Table[Shift](tag, "shift") {
 
   def * : ProvenShape[Shift] = (id.?, date, place, shiftId) <>((Shift.apply _).tupled, Shift.unapply)
 

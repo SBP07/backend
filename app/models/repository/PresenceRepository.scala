@@ -7,7 +7,7 @@ import scala.slick.lifted.{ForeignKeyQuery, ProvenShape}
 
 private[models] class ChildrenToShifts(tag: Tag) extends Table[ChildPresence](tag, "child_to_shift") {
   private[models] val children = TableQuery[ChildTable]
-  private[models] val shifts = TableQuery[ShiftRepository]
+  private[models] val shifts = TableQuery[ShiftTable]
 
   def * : ProvenShape[ChildPresence] = (childId, shiftId) <>(ChildPresence.tupled, ChildPresence.unapply)
 
@@ -15,7 +15,7 @@ private[models] class ChildrenToShifts(tag: Tag) extends Table[ChildPresence](ta
 
   private[models] def childId = column[Long]("child_id")
 
-  def shiftFK: ForeignKeyQuery[ShiftRepository, Shift] = foreignKey("shift_fk",
+  def shiftFK: ForeignKeyQuery[ShiftTable, Shift] = foreignKey("shift_fk",
     shiftId, shifts)(_.id, onDelete = ForeignKeyAction.Cascade)
 
   private[models] def pk = primaryKey("child_to_shift_pk", (childId, shiftId))
@@ -25,7 +25,7 @@ private[models] class ChildrenToShifts(tag: Tag) extends Table[ChildPresence](ta
 
 object ChildPresenceRepository {
   private val children = TableQuery[ChildTable]
-  private val shifts = TableQuery[ShiftRepository]
+  private val shifts = TableQuery[ShiftTable]
   private val presences = TableQuery[ChildrenToShifts]
 
   def findAllForChild(id: Long)(implicit s: Session): Seq[(Shift, ShiftType)] = (for {

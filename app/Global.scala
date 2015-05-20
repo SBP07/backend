@@ -9,10 +9,11 @@ import com.softwaremill.macwire.Macwire
 object Global extends GlobalSettings with Macwire {
 
   val wired = wiredInModule(Application)
-  override def getControllerInstance[A](controllerClass: Class[A]) = wired.lookupSingleOrThrow(controllerClass)
+  override def getControllerInstance[A](controllerClass: Class[A]): A = wired.lookupSingleOrThrow(controllerClass)
 
   val childRepository = wire[ChildRepository]
   val animatorRepository = wire[SlickAnimatorRepository]
+  val shiftRepository = wire[ShiftRepository]
 
   // scalastyle:off
   override def onStart(app: Application) {
@@ -29,7 +30,8 @@ object Global extends GlobalSettings with Macwire {
 
   private def insertChildPresences(implicit s: Session) {
     if (ChildPresenceRepository.count == 0) {
-      CsvImporters.childPresences("conf/initial_data/child_presences.csv", childRepository).foreach(ChildPresenceRepository.register)
+      CsvImporters.childPresences("conf/initial_data/child_presences.csv", childRepository, shiftRepository)
+        .foreach(ChildPresenceRepository.register)
     }
   }
 
@@ -42,8 +44,8 @@ object Global extends GlobalSettings with Macwire {
   }
 
   def insertShifts(implicit s: Session) {
-    if (ShiftRepository.count == 0) {
-      CsvImporters.shifts("conf/initial_data/shifts.csv").foreach(ShiftRepository.insert)
+    if (shiftRepository.count == 0) {
+      CsvImporters.shifts("conf/initial_data/shifts.csv").foreach(shiftRepository.insert)
     }
   }
 

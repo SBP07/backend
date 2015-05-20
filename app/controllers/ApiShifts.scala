@@ -6,9 +6,9 @@ import play.api.db.slick.DBAction
 import play.api.libs.json._
 import play.api.mvc._
 
-object ApiShifts extends Controller {
+class ApiShifts(shiftRepository: ShiftRepository) extends Controller {
   def shiftById(id: Long): Action[AnyContent] = DBAction { implicit req =>
-    val presences = ShiftRepository.findByIdWithTypeAndNumberOfPresences(id)(req.dbSession)
+    val presences = shiftRepository.findByIdWithTypeAndNumberOfPresences(id)(req.dbSession)
     (for {
       shift <- presences.map(_._1)
       shiftType <- presences.map(_._2)
@@ -19,12 +19,11 @@ object ApiShifts extends Controller {
       }).getOrElse(BadRequest("Dagdeel niet gevonden"))
   }
 
-  def allShifts = DBAction { implicit req =>
-    Ok(Json.toJson(ShiftRepository.findAllWithTypeAndNumberOfPresences(req.dbSession)))
+  def allShifts: Action[AnyContent] = DBAction { implicit req =>
+    Ok(Json.toJson(shiftRepository.findAllWithTypeAndNumberOfPresences(req.dbSession)))
   }
 
-  def delete(id: Long) = DBAction { implicit req =>
-    ShiftRepository.delete(id)(req.dbSession)
-    Ok
+  def delete(id: Long): Action[AnyContent] = DBAction { implicit req =>
+    if (shiftRepository.delete(id)(req.dbSession) > 0) Ok else NotFound
   }
 }

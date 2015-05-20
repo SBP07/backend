@@ -1,8 +1,8 @@
 # Home page
-GET           /                        controllers.Application.home
+GET           /                        @controllers.Main.home
 
 # For continuous delivery
-GET           /heartbeat               controllers.Application.heartbeat
+GET           /heartbeat               @controllers.Main.heartbeat
 
 ### API
 
@@ -16,9 +16,9 @@ GET           /api/animator/all        @controllers.ApiAnimators.allAnimators
 GET           /api/animator/:id        @controllers.ApiAnimators.animatorById(id: Long)
 
 # Shifts
-GET           /api/shift/all           controllers.ApiShifts.allShifts
-GET           /api/shift/:id           controllers.ApiShifts.shiftById(id: Long)
-DELETE        /api/shift/:id           controllers.ApiShifts.delete(id: Long)
+GET           /api/shift/all           @controllers.ApiShifts.allShifts
+GET           /api/shift/:id           @controllers.ApiShifts.shiftById(id: Long)
+DELETE        /api/shift/:id           @controllers.ApiShifts.delete(id: Long)
 
 
 ### Assets
