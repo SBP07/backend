@@ -29,7 +29,7 @@ This is the system that will power Speelplein De Speelberg. Since it's created f
 - [ ] Een animator moet een fiscale fiche kunnen maken voor een kind, waarop staat wanneer het kind aanwezig was en hoeveel het betaald heeft in totaal
 - [x] Een animator moet kunnen aanpassen op welke dagdelen een kind aanwezig was
 - [ ] Een animator moet een kind kunnen verwijderen
-- 
+ 
 ### Aanwezigheden animatoren
 
 - [ ] De verantwoordelijke van de dag moet animatoren kunnen opgeven als aanwezig voor een dagdeel
@@ -54,4 +54,32 @@ This is the system that will power Speelplein De Speelberg. Since it's created f
 - `~run` to watch source files and recompile on changes
 - Default address and port during development are http://localhost:9000
 - Postgres is used as the database in production, and H2 locally for development
+
+### git pre-commit hook
+
+Here's what I use at the moment as a pre-commit hook:
+
+    #!/bin/zsh
+    
+    echo "[pre-commit] Checking for style errors..."
+    
+    out=$(sbt scalastyle)
+    
+    echo $out | grep -q "Found 0 errors"
+    has_no_errors=$?
+    
+    echo $out | grep -q "Found 0 warnings"
+    has_no_warnings=$?
+    
+    echo $out | grep -q "Found 0 infos"
+    has_no_infos=$?
+    
+    if [ $has_no_errors -eq 0 -a $has_no_warnings -eq 0 -a $has_no_infos -eq 0 ]; then
+      echo "No style errors, warnings or infos found"
+      exit 0
+    else
+      echo "Style errors, warnings or infos found"
+      exit 1
+    fi
+
 
