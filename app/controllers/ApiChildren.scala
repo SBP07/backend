@@ -1,12 +1,12 @@
 package controllers
 
+import helpers.JsonHelpers.{notFound, success}
 import models.Child
 import models.json.ChildJson._
 import models.repository.ChildRepository
 import play.api.db.slick.DBAction
 import play.api.libs.json._
 import play.api.mvc._
-import helpers.JsonHelpers.{notFound, badRequest, success}
 
 class ApiChildren(childRepository: ChildRepository) extends Controller {
 
@@ -23,16 +23,12 @@ class ApiChildren(childRepository: ChildRepository) extends Controller {
     }
   }
 
-  def update(id: Long): Action[JsValue] = DBAction(parse.json) { implicit req =>
-    val childResult = req.body.validate[Child]
-    childResult.fold(
-      errors => {
-        BadRequest(badRequest(JsError.toFlatJson(errors)))
-      },
-      child => {
-        childRepository.update(child)(req.dbSession)
-        Ok(success(JsString("Child '${child.firstName} ${child.lastName}' updated.")))
-      }
-    )
+  def update(id: Long): Action[Child] = DBAction(parse.json(childReads)) { implicit req =>
+    childRepository.update(req.body)(req.dbSession)
+    Ok(success(JsString("Child '${child.firstName} ${child.lastName}' updated.")))
+  }
+
+  def newChild: Action[JsValue] = DBAction(parse.json) { implicit req =>
+    Ok
   }
 }
