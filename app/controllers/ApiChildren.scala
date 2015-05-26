@@ -28,7 +28,9 @@ class ApiChildren(childRepository: ChildRepository) extends Controller {
     Ok(success(JsString("Child '${child.firstName} ${child.lastName}' updated.")))
   }
 
-  def newChild: Action[JsValue] = DBAction(parse.json) { implicit req =>
-    Ok
+  def newChild: Action[Child] = DBAction(parse.json(childReads)) { implicit req =>
+    implicit val session = req.dbSession
+    childRepository.insert(req.body)
+    Created
   }
 }
