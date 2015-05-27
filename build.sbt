@@ -6,6 +6,17 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
 scalaVersion := "2.11.6"
 
+// Resolvers
+
+resolvers += "Typesafe repository" at "http://repo.typesafe.com/typesafe/releases/"
+
+resolvers += "sonatype-releases" at "https://oss.sonatype.org/content/repositories/releases/"
+
+resolvers += "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases/"
+
+resolvers += "Typesafe Snapshots" at "http://repo.typesafe.com/typesafe/snapshots/"
+
+resolvers += Classpaths.sbtPluginReleases
 
 libraryDependencies ++= Seq(
   jdbc,
