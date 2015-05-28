@@ -1,8 +1,9 @@
 package models.repository
-
 import models.Animator
 import play.api.db.slick.Config.driver.simple._
+import com.google.inject.ImplementedBy
 
+@ImplementedBy(classOf[SlickAnimatorRepository])
 trait AnimatorRepository {
   def findById(id: Long)(implicit s: Session): Option[Animator]
   def findAll(implicit s: Session): List[Animator]

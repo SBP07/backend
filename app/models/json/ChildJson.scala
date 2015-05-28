@@ -3,7 +3,6 @@ package models.json
 import java.time.LocalDate
 
 import models.Child
-import models.json.LocalDateJson.{defaultJavaLocalDateReads, defaultJavaLocalDateWrites}
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
 import play.api.libs.json._

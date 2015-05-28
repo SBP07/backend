@@ -7,7 +7,7 @@ import helpers.Db.localdateToSqldateMapper
 import models.Animator
 import play.api.db.slick.Config.driver.simple._
 
-import scala.slick.lifted.{ProvenShape, TableQuery}
+import slick.lifted.{ProvenShape, TableQuery}
 
 private[models] class AnimatorTable(tag: Tag) extends Table[Animator](tag, "animator") {
 

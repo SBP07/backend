@@ -6,8 +6,9 @@ import models.repository.AnimatorRepository
 import play.api.db.slick.DBAction
 import play.api.libs.json.{JsString, Json}
 import play.api.mvc._
+import javax.inject._
 
-class ApiAnimators(animatorRepo: AnimatorRepository) extends Controller {
+class ApiAnimators @Inject() (animatorRepo: AnimatorRepository) extends Controller {
   def allAnimators: Action[AnyContent] = DBAction { implicit req =>
     Ok(Json.toJson(animatorRepo.findAll(req.dbSession)))
   }

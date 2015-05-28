@@ -10,6 +10,7 @@ GET           /heartbeat               @controllers.Main.heartbeat
 GET           /api/child/all           @controllers.ApiChildren.allChildren
 GET           /api/child/:id           @controllers.ApiChildren.childById(id: Long)
 PUT           /api/child/:id           @controllers.ApiChildren.update(id: Long)
+POST          /api/child               @controllers.ApiChildren.newChild
 
 # Animators
 GET           /api/animator/all        @controllers.ApiAnimators.allAnimators

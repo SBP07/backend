@@ -5,8 +5,9 @@ import models.repository.{ChildPresenceRepository, ShiftRepository}
 import play.api.db.slick.DBAction
 import play.api.libs.json._
 import play.api.mvc._
+import javax.inject._
 
-class ApiShifts(shiftRepository: ShiftRepository) extends Controller {
+class ApiShifts @Inject() (shiftRepository: ShiftRepository) extends Controller {
   def shiftById(id: Long): Action[AnyContent] = DBAction { implicit req =>
     val presences = shiftRepository.findByIdWithTypeAndNumberOfPresences(id)(req.dbSession)
     (for {

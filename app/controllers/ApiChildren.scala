@@ -7,8 +7,9 @@ import models.repository.ChildRepository
 import play.api.db.slick.DBAction
 import play.api.libs.json._
 import play.api.mvc._
+import javax.inject._
 
-class ApiChildren(childRepository: ChildRepository) extends Controller {
+class ApiChildren @Inject() (childRepository: ChildRepository) extends Controller {
 
   def allChildren: Action[AnyContent] = DBAction { implicit req =>
     val json = Json.toJson(childRepository.findAll(req.dbSession))

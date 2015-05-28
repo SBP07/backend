@@ -3,8 +3,6 @@ package models.json
 import java.time.LocalDate
 
 import models.Animator
-import models.json.LocalDateJson.defaultJavaLocalDateWrites
-import models.json.LocalDateJson.defaultJavaLocalDateReads
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 

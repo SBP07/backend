@@ -98,7 +98,10 @@ class ChildrenControllerTest extends PlaySpecification with Mockito {
       val childController = new ApiChildren(mockedRepo)
 
       val json = Json.toJson(exampleChild)
-      val result = childController.update(5).apply(FakeRequest().withJsonBody(json)).run
+      val result = childController.update(5).apply(FakeRequest().withJsonBody(json).withHeaders(HeaderNames.CONTENT_TYPE -> "application/json")).run
+
+      play.Logger.debug(json.toString)
+      play.Logger.debug(contentAsString(result))
 
       status(result) must be equalTo OK
       contentType(result).map { res => res must be equalTo "application/json" }
@@ -137,8 +140,8 @@ class ChildrenControllerTest extends PlaySpecification with Mockito {
       val json = Json.toJson(exampleChild)
       val result = childController.newChild.apply(FakeRequest().withJsonBody(json).withHeaders(HeaderNames.CONTENT_TYPE -> "application/json")).run
 
-      play.Logger.debug(json.toString)
-      play.Logger.debug(contentAsString(result))
+//      play.Logger.debug(json.toString)
+//      play.Logger.debug(contentAsString(result))
 
       status(result) must be equalTo CREATED
 
