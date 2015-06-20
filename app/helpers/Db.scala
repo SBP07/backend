@@ -4,7 +4,7 @@ import java.sql.{Date => Sqldate, Timestamp}
 import java.time.LocalDate
 import java.util.Date
 
-import play.api.db.slick.Config.driver.simple._
+import slick.driver.H2Driver.api._
 
 object Db {
   implicit val dateToTimestampMapper = MappedColumnType.base[Date, Timestamp](

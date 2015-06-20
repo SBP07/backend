@@ -2,7 +2,7 @@ import java.time.LocalDate
 
 import controllers.ApiAnimators
 import models.Animator
-import models.repository.AnimatorRepository
+import models.dao.AnimatorRepository
 import org.junit.runner._
 import org.mockito.Matchers
 import org.specs2.mock._

@@ -1,7 +1,7 @@
 import java.time.LocalDate
 
 import controllers.ApiShifts
-import models.repository.ShiftRepository
+import models.dao.ShiftRepository
 import models.{Child, Shift, ShiftType}
 import models.json.ShiftJson._
 import org.junit.runner._

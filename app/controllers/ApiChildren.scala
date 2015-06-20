@@ -1,37 +1,23 @@
 package controllers
 
-import helpers.JsonHelpers.{notFound, success}
+import models.dao.ChildDao
+import play.api.mvc.Action
+
+import javax.inject.Inject
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
+
 import models.Child
 import models.json.ChildJson._
-import models.repository.ChildRepository
-import play.api.db.slick.DBAction
-import play.api.libs.json._
-import play.api.mvc._
-import javax.inject._
 
-class ApiChildren @Inject() (childRepository: ChildRepository) extends Controller {
+class ApiChildren @Inject() (childDao: ChildDao) extends GenericApiController[Child] {
+  override val dao = childDao
+  override val jsonWrites = childWrites
 
-  def allChildren: Action[AnyContent] = DBAction { implicit req =>
-    val json = Json.toJson(childRepository.findAll(req.dbSession))
-    Ok(json)
+  def update(id: Long): Action[Child] = Action.async(parse.json(childReads)) { req =>
+    childDao.update(req.body).map(numUpdated => if(numUpdated == 0) BadRequest else Ok)
   }
 
-  def childById(id: Long): Action[AnyContent] = DBAction { implicit req =>
-    childRepository.findById(id)(req.dbSession).fold(
-      NotFound(notFound(JsString(s"No child found with id '$id'.")))
-    ) { child =>
-      Ok(Json.toJson(child))
-    }
-  }
-
-  def update(id: Long): Action[Child] = DBAction(parse.json(childReads)) { implicit req =>
-    childRepository.update(req.body)(req.dbSession)
-    Ok(success(JsString("Child '${child.firstName} ${child.lastName}' updated.")))
-  }
-
-  def newChild: Action[Child] = DBAction(parse.json(childReads)) { implicit req =>
-    implicit val session = req.dbSession
-    childRepository.insert(req.body)
-    Created
+  def newChild: Action[Child] = Action.async(parse.json(childReads)) { implicit req =>
+    childDao.insert(req.body).map(numCreated => Created)
   }
 }

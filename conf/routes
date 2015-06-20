@@ -1,31 +1,28 @@
 # Home page
-GET           /                        @controllers.Main.home
+GET        /                        controllers.Main.home
 
 # For continuous delivery
-GET           /heartbeat               @controllers.Main.heartbeat
+GET        /heartbeat               controllers.Main.heartbeat
 
 ### API
 
 # Children
-GET           /api/child/all           @controllers.ApiChildren.allChildren
-GET           /api/child/:id           @controllers.ApiChildren.childById(id: Long)
+GET           /api/child/all           @controllers.ApiChildren.all
+GET           /api/child/:id           @controllers.ApiChildren.byId(id: Long)
 PUT           /api/child/:id           @controllers.ApiChildren.update(id: Long)
 POST          /api/child               @controllers.ApiChildren.newChild
 
 # Animators
-GET           /api/animator/all        @controllers.ApiAnimators.allAnimators
-GET           /api/animator/:id        @controllers.ApiAnimators.animatorById(id: Long)
+GET        /api/animator/all        controllers.ApiAnimators.all
+GET        /api/animator/:id        controllers.ApiAnimators.byId(id: Long)
 
 # Shifts
-GET           /api/shift/all           @controllers.ApiShifts.allShifts
-GET           /api/shift/:id           @controllers.ApiShifts.shiftById(id: Long)
-DELETE        /api/shift/:id           @controllers.ApiShifts.delete(id: Long)
+GET           /api/shift/all           @controllers.ApiShifts.all
+GET           /api/shift/:id           @controllers.ApiShifts.byId(id: Long)
+#DELETE        /api/shift/:id           @controllers.ApiShifts.delete(id: Long)
 
 
 ### Assets
 
 # Map static resources from the /public folder to the /assets URL path
-GET           /assets/*file            controllers.Assets.at(path="/public", file)
-
-# WebJar routing (for bootstrap, ...)
-GET           /webjars/*file           controllers.WebJarAssets.at(file)
+GET        /assets/*file            controllers.Assets.at(path="/public", file)

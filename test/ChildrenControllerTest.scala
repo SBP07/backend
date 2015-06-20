@@ -4,7 +4,7 @@ import controllers.ApiChildren
 import helpers.JsonHelpers.JsonStatus
 import models.Child
 import models.json.ChildJson._
-import models.repository.ChildRepository
+import models.table.ChildRepository
 import org.junit.runner._
 import org.mockito.Matchers
 import org.mockito.Mockito.doNothing
