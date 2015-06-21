@@ -25,7 +25,9 @@ GET         /api/shift/:id           controllers.ApiShifts.byId(id: Long)
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file            controllers.Assets.at(path="/public", file)
+GET         /app/assets/*file            controllers.Assets.at(path="/public", file)
 
 GET         /                        controllers.Main.home
-GET         /*path                   controllers.Main.any(path)
+GET         /app                     controllers.Main.home
+GET         /app/*path               controllers.Main.any(path)
 

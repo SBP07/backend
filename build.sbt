@@ -31,23 +31,21 @@ libraryDependencies ++= Seq(
   ws,
   specs2 % Test,
 
-//  "com.typesafe.play" %% "play-slick-evolutions" % "1.0.0"
-
+  // persistence
   "com.typesafe.slick" %% "slick" % "3.0.0",
   "com.typesafe.play" %% "play-slick" % "1.0.0",
   "com.typesafe.play" %% "play-slick-evolutions" % "1.0.0",
   "com.h2database" % "h2" % "1.3.175",
-  "mysql" % "mysql-connector-java" % "5.1.21",
   "postgresql" % "postgresql" % "9.1-901.jdbc4",
 
-  "com.github.tototoshi" %% "scala-csv" % "1.2.1",
-
+  // WebJars
   "org.webjars" %% "webjars-play" % "2.4.0-1",
+
   "org.webjars.bower" % "angular-bootstrap" % "0.12.1",
   "org.webjars.bower" % "angular" % "1.3.15",
-  "org.webjars.bower" % "angular-route" % "1.3.15",
-  "org.webjars.bower" % "xdate" % "0.8.1",
-  "org.webjars" % "bootstrap" % "3.1.1-2"
+  "org.webjars.bower" % "angular-ui-router" % "0.2.15",
+  "org.webjars.bower" % "angular-material" % "0.8.3",
+  "org.webjars.bower" % "angular-material-icons" % "0.4.0"
 )
 
 routesGenerator := InjectedRoutesGenerator
