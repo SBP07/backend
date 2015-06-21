@@ -8,16 +8,23 @@
             },
             byId: function (id) {
                 return $http.get('/api/child/' + id)
-                        .then(function(child) {
-                            child.data.birthDate = new XDate(child.data.birthDate).toDate();
-                            return child.data;
-                        });
+                    .then(function (child) {
+                        child.data.birthDate = new XDate(child.data.birthDate).toDate();
+                        return child.data;
+                    });
             },
             update: function (child) {
-                child.birthDate = new XDate(child.birthDate).toString("yyyy-MM-dd");
-                return $http.put('/api/child/' + child.id, child);
+                if (child.birthDate != undefined) {
+                    child.birthDate = new XDate(child.birthDate).toString("yyyy-MM-dd");
+                }
+                return $http.put('/api/child', child);
+            },
+            create: function (child) {
+                return $http.post('/api/child', child);
             }
         }
-    });
+    })
+    ;
 
-})();
+})
+();

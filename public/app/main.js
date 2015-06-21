@@ -1,6 +1,6 @@
 var app = angular.module('speelsysteemApp', ['ngRoute', 'speelsysteemControllers']);
 
-app.config(function ($routeProvider) {
+app.config(function ($routeProvider, $locationProvider) {
     $routeProvider.when('/', {
         templateUrl: 'assets/app/templates/home.html',
         controller: 'HomeController'
@@ -31,4 +31,10 @@ app.config(function ($routeProvider) {
     }).otherwise({
         redirectTo: '/'
     });
+
+    $locationProvider.html5Mode({
+        enabled: true,
+        requireBase: false
+    });
+
 });
