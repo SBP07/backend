@@ -2,20 +2,20 @@ package models.dao
 
 import javax.inject.Inject
 
-import models.Animator
+import _root_.models.Animator
+import _root_.models.table.AnimatorTable
 import com.google.inject.ImplementedBy
-import models.table.AnimatorTable
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfig}
 import slick.driver.JdbcProfile
 
 import scala.concurrent.ExecutionContext.Implicits.global
-
 import scala.concurrent.Future
 
 @ImplementedBy(classOf[SlickAnimatorDao])
 trait AnimatorDao extends GenericDao[Animator]
 
 class SlickAnimatorDao @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends AnimatorDao with HasDatabaseConfig[JdbcProfile] {
+
   import driver.api._
 
   val dbConfig = dbConfigProvider.get[JdbcProfile]
