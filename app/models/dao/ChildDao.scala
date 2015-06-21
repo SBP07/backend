@@ -2,9 +2,9 @@ package models.dao
 
 import javax.inject.Inject
 
-import _root_.models.Child
+import models.Child
 import com.google.inject.ImplementedBy
-import _root_.models.table.ChildTable
+import models.table.ChildTable
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfig}
 import slick.driver.JdbcProfile
 

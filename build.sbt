@@ -6,7 +6,7 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
 scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature")
 
-scalaVersion := "2.11.6"
+//scalaVersion := "2.11.6"
 
 // Resolvers
 

@@ -2,9 +2,9 @@ package models.dao
 
 import javax.inject.Inject
 
-import _root_.models.Shift
+import models.Shift
 import com.google.inject.ImplementedBy
-import _root_.models.table.ShiftTable
+import models.table.ShiftTable
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfig}
 import slick.driver.JdbcProfile
 
