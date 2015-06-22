@@ -1,9 +1,3 @@
-body {
-    padding-top: 70px; /* for navbar */
-}
-
-[ng-click],
-[data-ng-click],
-[x-ng-click] {
-    cursor: pointer;
+.people-list {
+    min-width: 500px;
 }

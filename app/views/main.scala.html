@@ -1,21 +1,43 @@
 @()
 
 <!DOCTYPE html>
-<html lang="nl" ng-app="speelsysteemApp">
+<html lang="nl">
     <head>
-        <base href="/app/">
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>speelsysteem</title>
 
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic">
+        @*<link href="http://cdn.rawgit.com/angular/bower-material/v0.10.0/angular-material.css" rel="stylesheet">*@
+        <link href="@routes.WebJarAssets.at(WebJarAssets.locate("angular-material.css"))" rel="stylesheet">
         <link href="@routes.Assets.at("stylesheets/main.css")" rel="stylesheet">
+        <meta name="viewport" content="initial-scale=1" />
 
-        <script src="@routes.Assets.at("lib/angular/angular.js")"></script>
-        <script src="@routes.Assets.at("lib/angular-route/angular-route.js")"></script>
+        <script data-main="@routes.Assets.at("scripts/main.js")" src="@routes.Assets.at("lib/requirejs/require.js")"></script>
 
     </head>
-    <body>
-        <div class="container" ng-view ng-cloak></div>
+    <body ng-controller="MainCtrl">
+        <div layout="column" layout-fill>
+            <section layout="row" flex>
+                <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="true" @*md-is-locked-open="$mdMedia('gt-md')"*@>
+                    <md-toolbar class="md-theme-indigo">
+                        <h1 class="md-toolbar-tools" ui-sref="home">speelsysteem</h1>
+                    </md-toolbar>
+                    <md-content layout-padding @*ng-controller="LeftCtrl"*@>
+                        <ul>
+                            <li ui-sref="home">Home</li>
+                            <li ui-sref="child">Kinderen</li>
+                            <li ui-sref="child.new">Nieuw kind</li>
+                            <li ui-sref="child">Kinderen</li>
+                        </ul>
+                    </md-content>
+                </md-sidenav>
+                <md-content layout="row" flex layout-padding ui-view>
+                    <!-- main content -->
+                </md-content>
+            </section>
+        </div>
+
     </body>
 </html>

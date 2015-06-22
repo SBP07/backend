@@ -42,10 +42,17 @@ libraryDependencies ++= Seq(
   "org.webjars" %% "webjars-play" % "2.4.0-1",
 
   "org.webjars.bower" % "angular-bootstrap" % "0.12.1",
-  "org.webjars.bower" % "angular" % "1.3.15",
+  "org.webjars.bower" % "angular" % "1.4.1",
   "org.webjars.bower" % "angular-ui-router" % "0.2.15",
-  "org.webjars.bower" % "angular-material" % "0.8.3",
-  "org.webjars.bower" % "angular-material-icons" % "0.4.0"
+  "org.webjars.npm" % "angular-material" % "0.10.0",
+  "org.webjars.bower" % "angular-material-icons" % "0.5.0",
+  "org.webjars.bower" % "angular-resource" % "1.4.0",
+  "org.webjars.bower" % "angular-animate" % "1.4.0",
+  "org.webjars.bower" % "angular-aria" % "1.4.0",
+  "org.webjars.bower" % "angular-messages" % "1.4.0",
+
+  "org.webjars.bower" % "requirejs" % "2.1.18"
+
 )
 
 routesGenerator := InjectedRoutesGenerator

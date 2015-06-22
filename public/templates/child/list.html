@@ -1,0 +1,27 @@
+<md-content class="people-list">
+    <md-input-container>
+        <label>Filter</label>
+        <input ng-model="childFilter">
+    </md-input-container>
+    <md-list>
+        <md-subheader class="md-no-sticky">Alle kinderen</md-subheader>
+        <md-list-item class="md-3-line" ng-repeat="child in children | filter:childFilter">
+            <ng-md-icon icon="account_child" size="64"></ng-md-icon>
+            <div class="md-list-item-text">
+                <h3><a ui-sref="child.details({id: child.id})">{{ child.firstName }}</a></h3>
+                <h4>{{ child.lastName }}</h4>
+
+                <p>{{ child.city }}</p>
+            </div>
+        </md-list-item>
+    </md-list>
+
+</md-content>
+
+<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="right" md-is-locked-open="true">
+    <md-toolbar class="md-theme-light">
+        <h1 class="md-toolbar-tools">Details</h1>
+    </md-toolbar>
+    <md-content layout-padding ui-view>
+    </md-content>
+</md-sidenav>
