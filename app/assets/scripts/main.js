@@ -44,7 +44,7 @@ requirejs.config({
 require(['angular', './controllers', './filters', './services', 'angular-ui-router', 'angular-material', 'angular-resource', 'angular-material-icons'],
     function (angular, controllers) {
 
-        angular.module('speelApp', [/*'speelApp.filters',*/ 'speelApp.services', 'ui.router', 'ngResource', 'ngMaterial', 'ngMdIcons', 'ngMessages'])
+        angular.module('speelApp', ['speelApp.filters', 'speelApp.services', 'ui.router', 'ngResource', 'ngMaterial', 'ngMdIcons', 'ngMessages'])
             .config(function ($stateProvider, $urlRouterProvider) {
                 $urlRouterProvider.otherwise('/');
 

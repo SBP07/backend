@@ -1,11 +1,11 @@
 <md-content class="people-list">
     <md-input-container>
         <label>Filter</label>
-        <input ng-model="childFilter">
+        <input ng-model="childFilterArg">
     </md-input-container>
     <md-list>
         <md-subheader class="md-no-sticky">Alle kinderen</md-subheader>
-        <md-list-item class="md-3-line" ng-repeat="child in children | filter:childFilter">
+        <md-list-item class="md-3-line" ng-repeat="child in children | personFilter:childFilterArg">
             <ng-md-icon icon="account_child" size="64"></ng-md-icon>
             <div class="md-list-item-text">
                 <h3><a ui-sref="child.details({id: child.id})">{{ child.firstName }}</a></h3>
