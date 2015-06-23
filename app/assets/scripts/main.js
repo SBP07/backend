@@ -44,80 +44,37 @@ requirejs.config({
 require(['angular', './controllers', './filters', './services', 'angular-ui-router', 'angular-material', 'angular-resource', 'angular-material-icons'],
     function (angular, controllers) {
 
-        // Declare app level module which depends on filters, and services
-
-        angular.module('speelApp', [/*'myApp.filters',*/ 'speelApp.services', 'ui.router', 'ngResource', 'ngMaterial', 'ngMdIcons', 'ngMessages'])
-            .controller('MainCtrl', ['$scope', '$mdToast', 'Child', function ($scope, $mdToast, Child) {
-                $scope.children = Child.query();
-                //Child.save({ firstName: 'Thomas', lastName: 'Toye', city: 'Beverly' });
-                //Child.save({ firstName: 'Robbe', lastName: 'Toye', city: 'Beverly' });
-                //Child.save({ firstName: 'Sander', lastName: 'Verkaemer', city: 'Beverly' });
-                //Child.save({ firstName: 'Marva', lastName: 'De Kip', city: 'Tomberg 21A' });
-
-                //$mdToast.show($mdToast.simple().content("test"));
-
-                //Child.save($scope.child);
-            }])
-            .controller('ChildDetailsCtrl', ['$scope', '$stateParams', '$mdToast', 'Child', function ($scope, $stateParams, $mdToast, Child) {
-                $scope.actionName = "Opslaan";
-
-                $scope.save = function () {
-                    Child.update($scope.selectedChild, function () {
-                        $mdToast.show($mdToast.simple().content("Kind opgeslagen"));
-                    }, function () {
-                        $mdToast.show($mdToast.simple().content("Kon kind niet opslaan"));
-                    });
-                };
-                $scope.selectedChild = Child.get({id: $stateParams.id});
-            }])
-            .controller('ChildListCtrl', function ($scope, Child) {
-                $scope.children = Child.query();
-            })
-            .controller('NewChildCtrl', function ($scope, $mdToast, $state, Child) {
-                $scope.actionName = "Aanmaken";
-                $scope.selectedChild = {};
-                $scope.save = function () {
-                    Child.save($scope.selectedChild, function () {
-                        $mdToast.show($mdToast.simple().content("Kind aangemaakt"));
-                        $state.go('child.details(' + $scope.selectedChild.id + ')');
-                    }, function () {
-                        $mdToast.show($mdToast.simple().content("Kon kind niet aanmaken"));
-                    });
-                };
-            })
-            .controller('HomeCtrl', function ($scope) {
-
-            })
-            .config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
+        angular.module('speelApp', [/*'speelApp.filters',*/ 'speelApp.services', 'ui.router', 'ngResource', 'ngMaterial', 'ngMdIcons', 'ngMessages'])
+            .config(function ($stateProvider, $urlRouterProvider) {
                 $urlRouterProvider.otherwise('/');
 
                 $stateProvider
                     .state('home', {
                         url: '/',
                         templateUrl: '/assets/templates/home.html',
-                        controller: 'HomeCtrl'
+                        controller: controllers.HomeCtrl
                     })
                     .state('child', {
                         url: '/kind',
                         templateUrl: '/assets/templates/child/list.html',
-                        controller: 'ChildListCtrl'
+                        controller: controllers.ChildListCtrl
                     })
                     .state('child.details', {
                         url: '/details/:id',
                         templateUrl: '/assets/templates/child/details.html',
-                        controller: 'ChildDetailsCtrl'
+                        controller: controllers.ChildDetailsCtrl
                     })
                     .state('child.edit', {
                         url: '/bewerken/:id',
                         templateUrl: '/assets/templates/child/form.html',
-                        controller: 'ChildDetailsCtrl'
+                        controller: controllers.ChildDetailsCtrl
                     })
                     .state('child.new', {
                         url: '/nieuw',
                         templateUrl: '/assets/templates/child/form.html',
-                        controller: 'NewChildCtrl'
+                        controller: controllers.NewChildCtrl
                     });
-            }]);
+            });
 
         angular.bootstrap(document, ['speelApp']);
 

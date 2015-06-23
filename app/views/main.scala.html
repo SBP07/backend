@@ -17,14 +17,14 @@
         <script data-main="@routes.Assets.at("scripts/main.js")" src="@routes.Assets.at("lib/requirejs/require.js")"></script>
 
     </head>
-    <body ng-controller="MainCtrl">
+    <body>
         <div layout="column" layout-fill>
             <section layout="row" flex>
-                <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="true" @*md-is-locked-open="$mdMedia('gt-md')"*@>
+                <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="true">
                     <md-toolbar class="md-theme-indigo">
                         <h1 class="md-toolbar-tools" ui-sref="home">speelsysteem</h1>
                     </md-toolbar>
-                    <md-content layout-padding @*ng-controller="LeftCtrl"*@>
+                    <md-content layout-padding>
                         <ul>
                             <li ui-sref="home">Home</li>
                             <li ui-sref="child">Kinderen</li>

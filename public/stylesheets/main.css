@@ -1,3 +1,24 @@
+/*[ng-click],
+[data-ng-click],
+[x-ng-click] {
+    cursor: pointer;
+}*/
+
+/*@font-face {*/
+  /*font-family: 'Material Icons';*/
+  /*font-style: normal;*/
+  /*font-weight: 400;*/
+  /*src: url(https://example.com/MaterialIcons-Regular.eot); /!* For IE6-8 *!/*/
+  /*src: local('Material Icons'),*/
+       /*local('MaterialIcons-Regular'),*/
+       /*url(https://example.com/MaterialIcons-Regular.woff2) format('woff2'),*/
+       /*url(https://example.com/MaterialIcons-Regular.woff) format('woff'),*/
+       /*url(https://example.com/MaterialIcons-Regular.ttf) format('truetype');*/
+/*}*/
+
+/*.ng-scope { height: 100%; }*/
+/*.full-height { height: 100%; }*/
+
 .people-list {
     min-width: 500px;
 }
