@@ -8,6 +8,13 @@ define(['angular'], function (angular) {
                     method: 'PUT'
                 }
             });
+        })
+        .factory('Volunteer', function ($resource) {
+            return $resource('/api/animator/:id', null, {
+                'update': {
+                    method: 'PUT'
+                }
+            });
         });
 
 });

@@ -1,17 +1,18 @@
 <md-content class="people-list">
     <md-input-container>
         <label>Filter</label>
-        <input ng-model="childFilterArg">
+        <input ng-model="volunteerFilterArg">
     </md-input-container>
-    <md-list>
-        <md-subheader class="md-no-sticky">Alle kinderen</md-subheader>
-        <md-list-item class="md-3-line" ng-repeat="child in children | personFilter:childFilterArg">
-            <ng-md-icon icon="account_child" size="64"></ng-md-icon>
-            <div class="md-list-item-text">
-                <h3><a ui-sref="child.details({id: child.id})">{{ child.firstName }}</a></h3>
-                <h4>{{ child.lastName }}</h4>
 
-                <p>{{ child.city }}</p>
+    <md-list>
+        <md-subheader class="md-no-sticky">Alle animatoren</md-subheader>
+        <md-list-item class="md-3-line" ng-repeat="volunteer in volunteers | personFilter:volunteerFilterArg">
+            <ng-md-icon icon="account_circle" size="64"></ng-md-icon>
+            <div class="md-list-item-text">
+                <h3><a ui-sref="volunteer.details({id: volunteer.id})">{{ volunteer.firstName }}</a></h3>
+                <h4>{{ volunteer.lastName }}</h4>
+
+                <p>{{ volunteer.city }}</p>
             </div>
         </md-list-item>
     </md-list>
@@ -31,6 +32,7 @@
             <md-button class="md-icon-button" aria-label="New volunteer" ng-click="create()">
                 <ng-md-icon icon="add">
             </md-button>
+
         </div>
     </md-toolbar>
     <md-content layout-padding ui-view>

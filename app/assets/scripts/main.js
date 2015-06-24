@@ -44,7 +44,7 @@ requirejs.config({
 require(['angular', './controllers', './filters', './services', 'angular-ui-router', 'angular-material', 'angular-resource', 'angular-material-icons'],
     function (angular, controllers) {
 
-        angular.module('speelApp', ['speelApp.filters', 'speelApp.services', 'ui.router', 'ngResource', 'ngMaterial', 'ngMdIcons', 'ngMessages'])
+        angular.module('speelApp', ['speelApp.filters', 'speelApp.services', 'ui.router', 'ngResource', 'ngMaterial', 'ngMdIcons', 'ngMessages', 'ngAnimate'])
             .config(function ($stateProvider, $urlRouterProvider) {
                 $urlRouterProvider.otherwise('/');
 
@@ -54,6 +54,7 @@ require(['angular', './controllers', './filters', './services', 'angular-ui-rout
                         templateUrl: '/assets/templates/home.html',
                         controller: controllers.HomeCtrl
                     })
+                    // Child routes
                     .state('child', {
                         url: '/kind',
                         templateUrl: '/assets/templates/child/list.html',
@@ -73,6 +74,27 @@ require(['angular', './controllers', './filters', './services', 'angular-ui-rout
                         url: '/nieuw',
                         templateUrl: '/assets/templates/child/form.html',
                         controller: controllers.NewChildCtrl
+                    })
+                    // Animator routes
+                    .state('volunteer', {
+                        url: '/animator',
+                        templateUrl: '/assets/templates/volunteer/list.html',
+                        controller: controllers.VolunteerListCtrl
+                    })
+                    .state('volunteer.details', {
+                        url: '/details/:id',
+                        templateUrl: '/assets/templates/volunteer/details.html',
+                        controller: controllers.VolunteerDetailsCtrl
+                    })
+                    .state('volunteer.edit', {
+                        url: '/bewerken/:id',
+                        templateUrl: '/assets/templates/volunteer/form.html',
+                        controller: controllers.VolunteerDetailsCtrl
+                    })
+                    .state('volunteer.new', {
+                        url: '/nieuw',
+                        templateUrl: '/assets/templates/volunteer/form.html',
+                        controller: controllers.NewVolunteerCtrl
                     });
             });
 
