@@ -13,7 +13,7 @@ define(function () {
         $scope.save = function () {
             Child.update($scope.selectedChild, function () {
                 $mdToast.show($mdToast.simple().content("Kind opgeslagen"));
-                $state.go('child.details', { id: $scope.selectedChild.id });
+                $state.go('child.details', {id: $scope.selectedChild.id});
             }, function () {
                 $mdToast.show($mdToast.simple().content("Kon kind niet opslaan"));
             });
@@ -24,16 +24,16 @@ define(function () {
     controllers.ChildListCtrl = function ($scope, $state, Child) {
         $scope.children = Child.query();
 
-        $scope.create = function() {
+        $scope.create = function () {
             $state.go('child.new');
         };
 
-        $scope.refresh = function() {
+        $scope.refresh = function () {
             $scope.children = Child.query();
         };
     };
 
-    controllers.NewChildCtrl = function ($scope, $mdToast, $state, Child) {
+    controllers.NewChildCtrl = function ($scope, $mdToast, $state, $log, Child) {
         $scope.actionName = "Aanmaken";
         $scope.selectedChild = {};
         $scope.save = function () {
@@ -45,6 +45,7 @@ define(function () {
                 $mdToast.show($mdToast.simple().content("Kon kind niet aanmaken"));
             });
         };
+
     };
 
     controllers.VolunteerDetailsCtrl = function ($scope, $stateParams, $mdToast, $state, Volunteer) {
@@ -53,22 +54,27 @@ define(function () {
         $scope.save = function () {
             Volunteer.update($scope.selectedVolunteer, function () {
                 $mdToast.show($mdToast.simple().content("Animator opgeslagen"));
-                $state.go('volunteer.details', { id: $scope.selectedVolunteer.id });
+                $state.go('volunteer.details', {id: $scope.selectedVolunteer.id});
             }, function () {
                 $mdToast.show($mdToast.simple().content("Kon animator niet opslaan"));
             });
         };
+
+        $scope.$watch('selectedVolunteer.yearStartedVolunteering', function (val, old) {
+            $scope.selectedVolunteer.yearStartedVolunteering = parseInt(val);
+        });
+
         $scope.selectedVolunteer = Volunteer.get({id: $stateParams.id});
     };
 
     controllers.VolunteerListCtrl = function ($scope, $state, Volunteer) {
         $scope.volunteers = Volunteer.query();
 
-        $scope.create = function() {
+        $scope.create = function () {
             $state.go('volunteer.new');
         };
 
-        $scope.refresh = function() {
+        $scope.refresh = function () {
             $scope.volunteers = Volunteer.query();
         };
     };
@@ -79,11 +85,16 @@ define(function () {
         $scope.save = function () {
             Volunteer.save($scope.selectedVolunteer, function () {
                 $mdToast.show($mdToast.simple().content("Animator aangemaakt"));
+                $scope.refresh();
                 $state.go('volunteer');
             }, function () {
                 $mdToast.show($mdToast.simple().content("Kon animator niet aanmaken"));
             });
         };
+
+        $scope.$watch('selectedVolunteer.yearStartedVolunteering', function (val, old) {
+            $scope.selectedVolunteer.yearStartedVolunteering = parseInt(val);
+        });
     };
 
     controllers.HomeCtrl = function ($scope) {

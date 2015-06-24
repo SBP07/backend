@@ -25,6 +25,11 @@
         </md-input-container>
 
         <md-input-container>
+            <label>Rekeningnummer</label>
+            <input ng-model="selectedVolunteer.bankAccount"/>
+        </md-input-container>
+
+        <md-input-container>
             <label>GSM</label>
             <input ng-model="selectedVolunteer.mobilePhone"/>
         </md-input-container>
@@ -40,6 +45,11 @@
         </md-input-container>
 
         <md-input-container>
+            <label>Email</label>
+            <input ng-model="selectedVolunteer.email"/>
+        </md-input-container>
+
+        <md-input-container>
             <label>Straat en nummer</label>
             <input ng-model="selectedVolunteer.street"/>
         </md-input-container>
@@ -47,6 +57,11 @@
         <md-input-container>
             <label>Gemeente</label>
             <input ng-model="selectedVolunteer.city"/>
+        </md-input-container>
+
+        <md-input-container>
+            <label>Gestart in jaar</label>
+            <input ng-model="selectedVolunteer.yearStartedVolunteering"/>
         </md-input-container>
 
         <md-button class="md-raised md-primary" ng-click="save()" ng-disabled="!volunteerForm.$valid">{{ actionName }}
