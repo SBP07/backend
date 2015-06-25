@@ -18,27 +18,22 @@
 
     </head>
     <body layout="column">
-        <md-content layout="column" layout-fill>
-            <section layout="row" flex>
+        <md-content layout="row" layout-fill>
                 <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="true">
                     <md-toolbar class="md-theme-indigo">
                         <h1 class="md-toolbar-tools" ui-sref="home">speelsysteem</h1>
                     </md-toolbar>
                     <md-content layout-padding>
-                        <ul>
-                            <li ui-sref="home">Home</li>
-                            <li ui-sref="child">Kinderen</li>
-                            <li ui-sref="child.new">Nieuw kind</li>
-                            <li ui-sref="volunteer">Animatoren</li>
-                            <li ui-sref="volunteer.new">Nieuwe animator</li>
-                            <li ui-sref="child">Kinderen</li>
-                        </ul>
+                        <md-list>
+                            <md-list-item><a ui-sref="home">Home</a></md-list-item>
+                            <md-list-item><a ui-sref="child">Kinderen</a></md-list-item>
+                            <md-list-item><a ui-sref="volunteer">Animatoren</a></md-list-item>
+                        </md-list>
                     </md-content>
                 </md-sidenav>
                 <md-content layout="row" flex layout-padding ui-view>
                     <!-- main content -->
                 </md-content>
-            </section>
         </md-content>
 
     </body>

@@ -1,8 +1,9 @@
-<md-content class="people-list">
+<md-content flex="50" layout="column" layout-fill>
     <md-input-container>
         <label>Filter</label>
         <input ng-model="childFilterArg">
     </md-input-container>
+
     <md-list>
         <md-subheader class="md-no-sticky">Alle kinderen</md-subheader>
         <md-list-item class="md-3-line" ng-repeat="child in children | personFilter:childFilterArg">
