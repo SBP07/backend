@@ -31,6 +31,10 @@ define(function () {
         $scope.refresh = function () {
             $scope.children = Child.query();
         };
+
+        $scope.stateIs = function (name) {
+            return $state.is(name);
+        };
     };
 
     controllers.NewChildCtrl = function ($scope, $mdToast, $state, $log, Child) {
@@ -76,6 +80,10 @@ define(function () {
 
         $scope.refresh = function () {
             $scope.volunteers = Volunteer.query();
+        };
+
+        $scope.stateIs = function (name) {
+            return $state.is(name);
         };
     };
 

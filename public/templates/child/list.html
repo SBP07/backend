@@ -8,10 +8,9 @@
         <md-list-item class="md-3-line" ng-repeat="child in children | personFilter:childFilterArg">
             <ng-md-icon icon="account_child" size="64"></ng-md-icon>
             <div class="md-list-item-text">
-                <h3><a ui-sref="child.details({id: child.id})">{{ child.firstName }}</a></h3>
-                <h4>{{ child.lastName }}</h4>
-
-                <p>{{ child.city }}</p>
+                <h3><a ui-sref="child.details({id: child.id})">{{ child.firstName }} {{ child.lastName }}</a></h3>
+                <h4>{{ child.birthDate | date:"dd MMM yyyy" }}</h4>
+                <p>{{ child.street }}<span ng-show="child.street">,</span> {{ child.city }}</p>
             </div>
         </md-list-item>
     </md-list>
@@ -28,7 +27,7 @@
                 <ng-md-icon icon="refresh">
             </md-button>
 
-            <md-button class="md-icon-button" aria-label="New volunteer" ng-click="create()">
+            <md-button class="md-icon-button" aria-label="New volunteer" ng-click="create()" ng-hide="stateIs('child.new')">
                 <ng-md-icon icon="add">
             </md-button>
         </div>

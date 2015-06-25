@@ -1,4 +1,4 @@
-<md-content class="people-list">
+<md-content class="people-list" flex="70" layout-fill layout="column">
     <md-input-container>
         <label>Filter</label>
         <input ng-model="volunteerFilterArg">
@@ -9,10 +9,9 @@
         <md-list-item class="md-3-line" ng-repeat="volunteer in volunteers | personFilter:volunteerFilterArg">
             <ng-md-icon icon="account_circle" size="64"></ng-md-icon>
             <div class="md-list-item-text">
-                <h3><a ui-sref="volunteer.details({id: volunteer.id})">{{ volunteer.firstName }}</a></h3>
-                <h4>{{ volunteer.lastName }}</h4>
-
-                <p>{{ volunteer.city }}</p>
+                <h3><a ui-sref="volunteer.details({id: volunteer.id})">{{ volunteer.firstName + ' ' + volunteer.lastName }}</a></h3>
+                <h4>{{ volunteer.birthDate | date:"dd MMM yyyy" }}</h4>
+                <p>{{ volunteer.street }}<span ng-show="volunteer.street">,</span> {{ volunteer.city }}</p>
             </div>
         </md-list-item>
     </md-list>
@@ -29,7 +28,7 @@
                 <ng-md-icon icon="refresh">
             </md-button>
 
-            <md-button class="md-icon-button" aria-label="New volunteer" ng-click="create()">
+            <md-button class="md-icon-button" aria-label="New volunteer" ng-click="create()" ng-hide="stateIs('volunteer.new')">
                 <ng-md-icon icon="add">
             </md-button>
 
