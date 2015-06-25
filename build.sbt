@@ -26,19 +26,16 @@ resolvers += "scalaz-bintray http" at "http://dl.bintray.com/scalaz/releases"
 resolvers += Classpaths.sbtPluginReleases
 
 libraryDependencies ++= Seq(
-  evolutions,
   cache,
   ws,
   specs2 % Test,
 
-  // persistence
-  "com.typesafe.slick" %% "slick" % "3.0.0",
   "com.typesafe.play" %% "play-slick" % "1.0.0",
   "com.typesafe.play" %% "play-slick-evolutions" % "1.0.0",
   "com.h2database" % "h2" % "1.3.175",
-  "postgresql" % "postgresql" % "9.1-901.jdbc4",
+  "org.postgresql" % "postgresql" % "9.4-1201-jdbc41",
 
-  // WebJars
+
   "org.webjars" %% "webjars-play" % "2.4.0-1",
 
   "org.webjars.bower" % "angular-bootstrap" % "0.12.1",
