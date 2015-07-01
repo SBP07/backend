@@ -21,8 +21,11 @@ POST        /api/animator               controllers.ApiAnimators.create
 
 # Shifts
 GET         /api/shift/                  controllers.ApiShifts.all
+GET         /api/shift                   controllers.ApiShifts.all
 GET         /api/shift/:id               controllers.ApiShifts.byId(id: Long)
 #DELETE        /api/shift/:id           @controllers.ApiShifts.delete(id: Long)
+
+GET         /api/shift/bydate/:date      controllers.ApiShifts.byDate(date: String)
 
 
 ### Assets

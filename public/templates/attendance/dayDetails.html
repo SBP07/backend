@@ -1,0 +1,49 @@
+<md-content flex="30">
+    <md-input-container>
+        <label>Filter</label>
+        <input ng-model="childFilterArg">
+    </md-input-container>
+
+    <md-list>
+        <md-subheader class="md-no-sticky">Alle kinderen</md-subheader>
+        <md-list-item class="md-3-line" ng-repeat="child in children | personFilter:childFilterArg">
+            <ng-md-icon icon="account_child" size="64"></ng-md-icon>
+            <div class="md-list-item-text">
+                <h3><a ng-click="selectChild(child)">{{ child.firstName + ' ' + child.lastName }}</a></h3>
+                <h4>{{ child.birthDate | date:"dd MMM yyyy" }}</h4>
+
+                <p>{{ child.street }}<span ng-show="child.street">,</span> {{ child.city }}</p>
+                <p>{{ attendancesToday(child.id) }}</p>
+            </div>
+        </md-list-item>
+    </md-list>
+</md-content>
+
+<md-content flex="70">
+
+    <md-subheader>Geselecteerde kinderen</md-subheader>
+    <md-chips ng-model="selectedChildren" readonly="true">
+        <md-chip-template>
+            <strong>{{ $chip.firstName + ' ' + $chip.lastName }}</strong>
+            <button md-chip-remove class="md-chip-remove">
+                <md-icon md-svg-icon="md-close"></md-icon>
+            </button>
+        </md-chip-template>
+    </md-chips>
+
+    <md-content ng-repeat="shift in shifts">
+        <md-subheader>{{ shift.shiftType.description }}</md-subheader>
+
+        <md-content>
+            <md-chips ng-model="shift.presentChildren" readonly="true">
+                <md-chip-template>
+                    <strong>{{ $chip.firstName + ' ' + $chip.lastName }}</strong>
+                    <button md-chip-remove class="md-chip-remove">
+                        <md-icon md-svg-icon="md-close"></md-icon>
+                    </button>
+                </md-chip-template>
+            </md-chips>
+        </md-content>
+
+    </md-content>
+</md-content>

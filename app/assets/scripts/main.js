@@ -10,7 +10,8 @@ requirejs.config({
         'angular-animate': ['/assets/lib/angular-animate/angular-animate'],
         'angular-aria': ['/assets/lib/angular-aria/angular-aria'],
         'angular-material-icons': ['/assets/lib/angular-material-icons/angular-material-icons'],
-        'angular-messages': ['/assets/lib/angular-messages/angular-messages']
+        'angular-messages': ['/assets/lib/angular-messages/angular-messages'],
+        'angular-i18n-nl': ['/assets/webjars/angular-i18n/1.4.0/angular-locale_nl-be']
     },
     shim: {
         'angular': {
@@ -37,11 +38,14 @@ requirejs.config({
         },
         'angular-messages': {
             deps: ['angular']
+        },
+        'angular-i18n-nl': {
+            deps: ['angular']
         }
     }
 });
 
-require(['angular', './controllers', './filters', './services', 'angular-ui-router', 'angular-material', 'angular-resource', 'angular-material-icons'],
+require(['angular', './controllers', './filters', './services', 'angular-ui-router', 'angular-material', 'angular-resource', 'angular-material-icons', 'angular-i18n-nl'],
     function (angular, controllers) {
 
         angular.module('speelApp', ['speelApp.filters', 'speelApp.services', 'ui.router', 'ngResource', 'ngMaterial', 'ngMdIcons', 'ngMessages', 'ngAnimate'])
@@ -95,6 +99,16 @@ require(['angular', './controllers', './filters', './services', 'angular-ui-rout
                         url: '/nieuw',
                         templateUrl: '/assets/templates/volunteer/form.html',
                         controller: controllers.NewVolunteerCtrl
+                    })
+                    .state('attendance', {
+                        url: '/aanwezigheden',
+                        templateUrl: '/assets/templates/attendance/home.html',
+                        controller: controllers.AttendanceHomeCtrl
+                    })
+                    .state('attendance.dayDetails', {
+                        url: '/dag/:date',
+                        templateUrl: '/assets/templates/attendance/dayDetails.html',
+                        controller: controllers.AttendanceDayDetailsCtrl
                     });
             });
 

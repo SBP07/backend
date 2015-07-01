@@ -43,7 +43,7 @@ object ShiftJson {
 
       (JsPath \ "date").write[LocalDate] and
       (JsPath \ "place").write[String] and
-      (JsPath \ "shiftId").write[Long]
+      (JsPath \ "shiftTypeId").write[Long]
 
     )(unlift(Shift.unapply))
 

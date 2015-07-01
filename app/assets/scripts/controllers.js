@@ -37,7 +37,7 @@ define(function () {
         };
     };
 
-    controllers.NewChildCtrl = function ($scope, $mdToast, $state, $log, Child) {
+    controllers.NewChildCtrl = function ($scope, $mdToast, $state, Child) {
         $scope.actionName = "Aanmaken";
         $scope.selectedChild = {};
         $scope.save = function () {
@@ -107,6 +107,61 @@ define(function () {
 
     controllers.HomeCtrl = function ($scope) {
 
+    };
+
+    controllers.AttendanceHomeCtrl = function ($scope, Shift) {
+        Shift
+            .query()
+            .$promise
+            .then(function (shifts) {
+                return shifts
+                    .map(function (day) {
+                        return day.date;
+                    })
+                    .reduce(function (prev, current, index, array) {
+                        return (array.indexOf(current) == index) ? prev.concat(current) : prev;
+                    }, []);
+            })
+            .then(function (days) {
+                $scope.days = days;
+            });
+    };
+
+    controllers.AttendanceDayDetailsCtrl = function ($scope, $stateParams, $http, $log, Child) {
+        $scope.day = $stateParams.date;
+
+        $scope.shifts = {};
+        $http.get('/api/shift/bydate/' + $scope.day).then(function (res) {
+            $scope.shifts = res.data;
+        });
+
+        $scope.attendancesToday = function (childId) {
+            if (!$scope.shifts || !$scope.shifts.map) return '';
+
+            var attendanceMnemonics = $scope.shifts
+                .map(function (shift) {
+                    if (shift.presentChildren.some(function (child) {
+                            return childId == child.id;
+                        })) {
+                        return shift.shiftType.mnemonic;
+                    }
+
+                    return;
+                })
+                .filter(function (el) {
+                    return el;
+                })
+                .join(', ');
+            return attendanceMnemonics;
+        };
+
+        $scope.children = Child.query();
+        $scope.selectedChildren = [];
+
+        $scope.selectChild = function (child) {
+            if ($scope.selectedChildren.indexOf(child) == -1)
+                $scope.selectedChildren.push(child);
+        };
     };
 
     return controllers;

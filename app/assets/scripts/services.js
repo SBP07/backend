@@ -15,6 +15,13 @@ define(['angular'], function (angular) {
                     method: 'PUT'
                 }
             });
+        })
+        .factory('Shift', function ($resource) {
+            return $resource('/api/shift/:id', null, {
+                'update': {
+                    method: 'PUT'
+                }
+            });
         });
 
 });

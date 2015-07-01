@@ -47,6 +47,7 @@ libraryDependencies ++= Seq(
   "org.webjars.bower" % "angular-animate" % "1.4.0",
   "org.webjars.bower" % "angular-aria" % "1.4.0",
   "org.webjars.bower" % "angular-messages" % "1.4.0",
+  "org.webjars.bower" % "angular-i18n" % "1.4.0",
 
   "org.webjars.bower" % "requirejs" % "2.1.18"
 

@@ -1,9 +1,9 @@
 /*global define */
 
 define(['angular'], function (angular) {
-    angular.module('speelApp.filters', []).
-        filter('personFilter', function () {
-            return function (items, input/*, expression, comparator*/) {
+    angular.module('speelApp.filters', [])
+        .filter('personFilter', function () {
+            return function (items, input) {
                 var test = function(item) {
                     var cleanUp = function(it) {
                         it = it || '';
@@ -20,5 +20,4 @@ define(['angular'], function (angular) {
                 return items.filter(test);
             };
         });
-
 });
