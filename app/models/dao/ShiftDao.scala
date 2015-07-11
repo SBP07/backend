@@ -4,7 +4,7 @@ import java.time.LocalDate
 import javax.inject.Inject
 
 import _root_.models.{ShiftType, Shift, Child}
-import _root_.models.table.{ChildrenToShiftsTable, ChildTable, ShiftTypeTable, ShiftTable}
+import models.table.{ChildTableSlice, ShiftTypeTableSlice, ShiftTableSlice, ChildrenToShiftsTableSlice}
 import com.google.inject.ImplementedBy
 import helpers.Db.localdateToSqldateMapper
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfig}
@@ -22,7 +22,10 @@ trait ShiftDao extends GenericDao[Shift] {
 class SlickShiftDao @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
   extends ShiftDao
   with HasDatabaseConfig[JdbcProfile]
-  with ChildrenToShiftsTable
+  with ChildrenToShiftsTableSlice
+  with ShiftTableSlice
+  with ShiftTypeTableSlice
+  with ChildTableSlice
 {
 
   import driver.api._
@@ -55,7 +58,7 @@ class SlickShiftDao @Inject()(protected val dbConfigProvider: DatabaseConfigProv
   override def findByDateWithTypeAndChildren(date: LocalDate): Future[Seq[(ShiftType, Shift, Seq[Child])]] = {
     val typeTable = TableQuery[ShiftTypeTable]
     val childTable = TableQuery[ChildTable]
-    val childJoinTable = TableQuery[ChildrenToShifts]
+    val childJoinTable = TableQuery[ChildrenToShiftsTable]
 
     val query = for {
       shift <- shifts.filter(_.date === date)

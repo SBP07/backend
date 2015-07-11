@@ -3,7 +3,7 @@ package models.dao
 import javax.inject.Inject
 
 import _root_.models.ShiftType
-import _root_.models.table.ShiftTypeTable
+import _root_.models.table.ShiftTypeTableSlice
 import com.google.inject.ImplementedBy
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfig}
 import slick.driver.JdbcProfile
@@ -15,7 +15,11 @@ import scala.concurrent.Future
 trait ShiftTypeDao extends GenericDao[ShiftType]
 
 
-class SlickShiftTypeDao @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends ShiftTypeDao with HasDatabaseConfig[JdbcProfile] {
+class SlickShiftTypeDao @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
+  extends ShiftTypeDao
+  with HasDatabaseConfig[JdbcProfile]
+  with ShiftTypeTableSlice
+{
 
   import driver.api._
 

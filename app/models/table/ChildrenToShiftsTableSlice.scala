@@ -1,15 +1,19 @@
 package models.table
 
 import models._
+import play.api.db.slick.HasDatabaseConfig
 import slick.driver.JdbcProfile
 import slick.lifted.{ForeignKeyQuery, ProvenShape}
 
-trait ChildrenToShiftsTable {
-  protected val driver: JdbcProfile
+trait ChildrenToShiftsTableSlice
+  extends ChildTableSlice
+  with ShiftTableSlice
+{
+  this: HasDatabaseConfig[JdbcProfile] =>
 
   import driver.api._
 
-  private[models] class ChildrenToShifts(tag: Tag) extends Table[ChildPresence](tag, "child_to_shift") {
+  private[models] class ChildrenToShiftsTable(tag: Tag) extends Table[ChildPresence](tag, "child_to_shift") {
     private[models] val children = TableQuery[ChildTable]
     private[models] val shifts = TableQuery[ShiftTable]
 

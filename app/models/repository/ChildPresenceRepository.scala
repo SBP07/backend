@@ -14,7 +14,7 @@ import play.api.db.slick.DatabaseConfigProvider
 import play.api.db.slick.HasDatabaseConfig
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import slick.driver.JdbcProfile
-import _root_.models.table.ChildrenToShiftsTable
+import _root_.models.table.ChildrenToShiftsTableSlice
 
 
 @ImplementedBy(classOf[SlickChildPresenceRepository])
@@ -24,14 +24,14 @@ trait ChildPresenceRepository {
 }
 
 
-class SlickChildPresenceRepository extends ChildPresenceRepository with HasDatabaseConfig[JdbcProfile] with ChildrenToShiftsTable {
+class SlickChildPresenceRepository extends ChildPresenceRepository with HasDatabaseConfig[JdbcProfile] with ChildrenToShiftsTableSlice {
   protected val dbConfig = DatabaseConfigProvider.get[JdbcProfile](Play.current)
 
   import driver.api._
 
 //  val dbConfig = dbConfigProvider.get[JdbcProfile]
 
-  val presences = TableQuery[ChildrenToShifts]
+  val presences = TableQuery[ChildrenToShiftsTable]
 
   override def register(presence: ChildPresence): Future[Int] = db.run(presences += presence)
   override def unregister(presence: ChildPresence): Future[Int] = db.run(presences.filter(_.shiftId === presence.shiftId).delete)
