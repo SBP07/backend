@@ -5,14 +5,14 @@ define(['angular'], function (angular) {
         .filter('personFilter', function () {
             return function (items, input) {
                 var test = function(item) {
-                    var cleanUp = function(it) {
+                    var normalize = function(it) {
                         it = it || '';
                         return String(it).replace(/ /g, '').replace(/'/g, '').toLowerCase();
                     };
 
-                    var firstName = cleanUp(item.firstName);
-                    var lastName = cleanUp(item.lastName);
-                    input = cleanUp(input);
+                    var firstName = normalize(item.firstName);
+                    var lastName = normalize(item.lastName);
+                    input = normalize(input);
 
                     return (firstName + lastName).indexOf(input) != -1 || (lastName + firstName).indexOf(input) != -1;
                 };

@@ -127,40 +127,46 @@ define(function () {
             });
     };
 
-    controllers.AttendanceDayDetailsCtrl = function ($scope, $stateParams, $http, $log, Child) {
+    controllers.AttendanceDayDetailsCtrl = function ($scope, $stateParams, $http, Child) {
         $scope.day = $stateParams.date;
 
         $scope.shifts = {};
+
         $http.get('/api/shift/bydate/' + $scope.day).then(function (res) {
             $scope.shifts = res.data;
         });
 
-        $scope.attendancesToday = function (childId) {
-            if (!$scope.shifts || !$scope.shifts.map) return '';
+        $scope.children = Child.query();
 
-            var attendanceMnemonics = $scope.shifts
-                .map(function (shift) {
-                    if (shift.presentChildren.some(function (child) {
-                            return childId == child.id;
-                        })) {
-                        return shift.shiftType.mnemonic;
+        $scope.childAttended = function (childId, shiftId) {
+            if (!$scope.shifts || !$scope.shifts.map) return false;
+
+            var length = $scope.shifts
+                .filter(
+                    function (shift) {
+                        return shift.shiftId == shiftId;
                     }
+                )
+                .filter(
+                function (shift) {
+                    return shift.presentChildren.some(function (child) {
+                        return childId == child.id;
+                    });
+                }
+            ).length;
 
-                    return;
-                })
-                .filter(function (el) {
-                    return el;
-                })
-                .join(', ');
-            return attendanceMnemonics;
+            return length !== 0;
         };
 
-        $scope.children = Child.query();
-        $scope.selectedChildren = [];
+        $scope.addAttendance = function (child, shift) {
+            // TODO check for duplicates
+            shift.presentChildren.push(child);
+        };
 
-        $scope.selectChild = function (child) {
-            if ($scope.selectedChildren.indexOf(child) == -1)
-                $scope.selectedChildren.push(child);
+        $scope.removeAttendance = function (child, shift) {
+            shift.presentChildren = shift.presentChildren.filter(function (el) {
+                return el.id != child.id;
+            });
         };
     };
 
