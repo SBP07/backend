@@ -22,6 +22,13 @@ define(['angular'], function (angular) {
                     method: 'PUT'
                 }
             });
+        })
+        .factory('ChildPresence', function($http) {
+            return {
+                getById: function(childId) {
+                    return $http.get('/api/attendance/child/' + Number(childId));
+                }
+            };
         });
 
 });

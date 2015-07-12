@@ -36,5 +36,8 @@
         </md-input-container>
 
         <md-button class="md-raised md-primary" ui-sref="child.edit({ id: selectedChild.id })" ng-click="edit()">Bewerken</md-button>
+        <md-button class="md-raised" ui-sref="child.attendances({ id: selectedChild.id })">
+            <ng-md-icon icon="perm_contact_cal"></ng-md-icon> Aanwezigheden
+        </md-button>
     </form>
 </md-content>

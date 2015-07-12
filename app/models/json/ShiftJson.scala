@@ -69,4 +69,18 @@ object ShiftJson {
       (JsPath \ "numberOfChildren").read[Int]
     )(tripleDeconverter)
 
+  val shiftShiftTypeConverter: Tuple2[Shift, ShiftType] => Option[(Option[Long], LocalDate, String, Long, ShiftType)] = {
+    case (shift, shiftType) => Some((shift.id, shift.date, shift.place, shift.shiftTypeId, shiftType))
+  }
+
+  implicit val shiftShiftTypeWrites: Writes[(Shift, ShiftType)] = (
+    (JsPath \ "id").writeNullable[Long] and
+
+      (JsPath \ "date").write[LocalDate] and
+      (JsPath \ "place").write[String] and
+      (JsPath \ "shiftTypeId").write[Long] and
+      (JsPath \ "shiftType").write[ShiftType]
+
+    )(unlift(shiftShiftTypeConverter))
+
 }

@@ -79,6 +79,11 @@ require(['angular', './controllers', './filters', './services', 'angular-ui-rout
                         templateUrl: '/assets/templates/child/form.html',
                         controller: controllers.NewChildCtrl
                     })
+                    .state('child.attendances', {
+                        url: '/aanwezigheden/:id',
+                        templateUrl: '/assets/templates/child/attendances.html',
+                        controller: controllers.ChildAttendancesCtrl
+                    })
                     // Animator routes
                     .state('volunteer', {
                         url: '/animator',

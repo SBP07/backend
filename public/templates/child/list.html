@@ -12,6 +12,7 @@
                 <h3><a ui-sref="child.details({id: child.id})">{{ child.firstName }} {{ child.lastName }}</a></h3>
                 <h4>{{ child.birthDate | date:"dd MMM yyyy" }}</h4>
                 <p>{{ child.street }}<span ng-show="child.street">,</span> {{ child.city }}</p>
+                <ng-md-icon class="md-secondary" ui-sref="child.attendances({ id: child.id })" icon="perm_contact_cal"></ng-md-icon>
             </div>
         </md-list-item>
     </md-list>

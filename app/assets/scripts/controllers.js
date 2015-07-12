@@ -170,5 +170,16 @@ define(function () {
         };
     };
 
+    controllers.ChildAttendancesCtrl = function($scope, $log, $stateParams, ChildPresence, Child) {
+        $scope.attendances = [];
+
+        ChildPresence.getById($stateParams.id)
+            .then(function(res) {
+                $scope.attendances = res.data;
+            });
+
+        $scope.child = Child.get({id: $stateParams.id});
+    };
+
     return controllers;
 });

@@ -27,6 +27,9 @@ GET         /api/shift/:id               controllers.ApiShifts.byId(id: Long)
 
 GET         /api/shift/bydate/:date      controllers.ApiShifts.byDate(date: String)
 
+# Presences
+GET         /api/attendance/child/:id    controllers.ApiAttendances.presencesForChild(id: Long)
+
 
 ### Assets
 
