@@ -33,6 +33,12 @@ define(['angular'], function (angular) {
                         shiftId: shiftId,
                         childId: childId
                     });
+                },
+                unregisterPresence: function(childId, shiftId) {
+                    return $http.post('/api/attendance/child/unregister', {
+                        shiftId: shiftId,
+                        childId: childId
+                    });
                 }
             };
         });

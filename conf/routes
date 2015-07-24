@@ -30,6 +30,7 @@ GET         /api/shift/bydate/:date          controllers.ApiShifts.byDate(date: 
 # Presences
 GET         /api/attendance/child/:id        controllers.ApiAttendances.presencesForChild(id: Long)
 POST        /api/attendance/child/register   controllers.ApiAttendances.registerPresence
+POST        /api/attendance/child/unregister controllers.ApiAttendances.unregisterPresence
 
 
 ### Assets

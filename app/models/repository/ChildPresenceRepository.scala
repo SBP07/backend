@@ -39,7 +39,12 @@ class SlickChildPresenceRepository @Inject()(protected val dbConfigProvider: Dat
   val shiftTypes = TableQuery[ShiftTypeTable]
 
   override def register(presence: ChildPresence): Future[Int] = db.run(presences += presence)
-  override def unregister(presence: ChildPresence): Future[Int] = db.run(presences.filter(_.shiftId === presence.shiftId).delete)
+  override def unregister(presence: ChildPresence): Future[Int] = db.run {
+    presences
+      .filter(_.shiftId === presence.shiftId)
+      .filter(_.childId === presence.childId)
+      .delete
+  }
 
   override def findPresencesForChild(childId: Long): Future[Seq[(Shift, ShiftType)]] = {
     db.run {

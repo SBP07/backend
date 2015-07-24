@@ -170,9 +170,15 @@ define(function () {
         };
 
         $scope.removeAttendance = function (child, shift) {
-            shift.presentChildren = shift.presentChildren.filter(function (el) {
-                return el.id != child.id;
-            });
+            ChildPresence
+                .unregisterPresence(child.id, shift.shiftId)
+                .then(function () {
+                    shift.presentChildren = shift.presentChildren.filter(function (el) {
+                        return el.id != child.id;
+                    });
+                }, function () {
+                    $mdToast.show($mdToast.simple().content("Kon aanwezigheid niet verwijderen"));
+                });
         };
     };
 

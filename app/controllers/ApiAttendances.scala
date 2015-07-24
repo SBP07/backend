@@ -22,11 +22,25 @@ class ApiAttendances @Inject()(childPresenceRepository: ChildPresenceRepository,
 
   def registerPresence: Action[ChildPresence] = Action.async(parse.json(childPresenceReads)) { implicit req =>
 
-    childDao.findById(req.body.childId)
+    childDao
+      .findById(req.body.childId)
       .flatMap(_.fold(Future(BadRequest(s"No child found with id ${req.body.childId}"))) { child =>
       shiftDao.findById(req.body.shiftId).flatMap(_.fold(
           Future(BadRequest(s"No shift found with id ${req.body.shiftId}"))
         )(someInt => childPresenceRepository.register(req.body).map(someInt => Ok))
+      )
+    })
+
+  }
+
+  def unregisterPresence: Action[ChildPresence] = Action.async(parse.json(childPresenceReads)) { implicit req =>
+
+    childDao
+      .findById(req.body.childId)
+      .flatMap(_.fold(Future(BadRequest(s"No child found with id ${req.body.childId}"))) { child =>
+      shiftDao.findById(req.body.shiftId).flatMap(_.fold(
+          Future(BadRequest(s"No shift found with id ${req.body.shiftId}"))
+        )(someInt => childPresenceRepository.unregister(req.body).map(someInt => Ok))
       )
     })
 
