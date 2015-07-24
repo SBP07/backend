@@ -27,6 +27,12 @@ define(['angular'], function (angular) {
             return {
                 getById: function(childId) {
                     return $http.get('/api/attendance/child/' + Number(childId));
+                },
+                registerPresence: function(childId, shiftId) {
+                    return $http.post('/api/attendance/child/register', {
+                        shiftId: shiftId,
+                        childId: childId
+                    });
                 }
             };
         });

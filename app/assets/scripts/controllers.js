@@ -127,7 +127,7 @@ define(function () {
             });
     };
 
-    controllers.AttendanceDayDetailsCtrl = function ($scope, $stateParams, $http, Child) {
+    controllers.AttendanceDayDetailsCtrl = function ($scope, $stateParams, $http, $mdToast, $log, Child, ChildPresence) {
         $scope.day = $stateParams.date;
 
         $scope.shifts = {};
@@ -159,8 +159,14 @@ define(function () {
         };
 
         $scope.addAttendance = function (child, shift) {
-            // TODO check for duplicates
-            shift.presentChildren.push(child);
+            ChildPresence
+                .registerPresence(child.id, shift.shiftId)
+                .then(function(){
+                    // TODO check for duplicates
+                    shift.presentChildren.push(child);
+                }, function() {
+                    $mdToast.show($mdToast.simple().content("Kon aanwezigheid niet registreren"));
+                });
         };
 
         $scope.removeAttendance = function (child, shift) {
