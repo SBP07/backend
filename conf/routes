@@ -3,6 +3,11 @@
 # For continuous delivery
 GET         /heartbeat                       controllers.Main.heartbeat
 
+### Reports
+
+GET         /reports/volunteer/contact      controllers.Reports.volunteersContact
+GET         /reports/volunteer/all          controllers.Reports.allVolunteerDetails
+
 ### API
 
 # Children

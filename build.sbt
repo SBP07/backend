@@ -49,8 +49,10 @@ libraryDependencies ++= Seq(
   "org.webjars.bower" % "angular-messages" % "1.4.0",
   "org.webjars.bower" % "angular-i18n" % "1.4.0",
 
-  "org.webjars.bower" % "requirejs" % "2.1.18"
+  "org.webjars.bower" % "requirejs" % "2.1.18",
 
+
+  "io.github.cloudify" %% "spdf" % "1.3.1"
 )
 
 routesGenerator := InjectedRoutesGenerator
