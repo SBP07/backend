@@ -1,51 +1,51 @@
 # Home page
 
 # For continuous delivery
-GET         /heartbeat                       controllers.Main.heartbeat
+GET         /heartbeat                              controllers.Main.heartbeat
 
 ### Reports
 
-GET         /reports/volunteer/contact      controllers.Reports.volunteersContact
-GET         /reports/volunteer/all          controllers.Reports.allVolunteerDetails
+GET         /reports/personalInfo                   controllers.Reports.personalInfo
+GET         /reports/fiscalCertificate/:childId     controllers.Reports.fiscalCertificate(childId: Long)
 
 ### API
 
 # Children
-GET         /api/child/                      controllers.ApiChildren.all
-GET         /api/child                       controllers.ApiChildren.all
-GET         /api/child/:id                   controllers.ApiChildren.byId(id: Long)
-PUT         /api/child                       controllers.ApiChildren.update
-POST        /api/child                       controllers.ApiChildren.create
+GET         /api/child/                             controllers.ApiChildren.all
+GET         /api/child                              controllers.ApiChildren.all
+GET         /api/child/:id                          controllers.ApiChildren.byId(id: Long)
+PUT         /api/child                              controllers.ApiChildren.update
+POST        /api/child                              controllers.ApiChildren.create
 
 # Animators
-GET         /api/animator/                   controllers.ApiAnimators.all
-GET         /api/animator                    controllers.ApiAnimators.all
-GET         /api/animator/:id                controllers.ApiAnimators.byId(id: Long)
-PUT         /api/animator                    controllers.ApiAnimators.update
-POST        /api/animator                    controllers.ApiAnimators.create
+GET         /api/animator/                          controllers.ApiAnimators.all
+GET         /api/animator                           controllers.ApiAnimators.all
+GET         /api/animator/:id                       controllers.ApiAnimators.byId(id: Long)
+PUT         /api/animator                           controllers.ApiAnimators.update
+POST        /api/animator                           controllers.ApiAnimators.create
 
 # Shifts
-GET         /api/shift/                      controllers.ApiShifts.all
-GET         /api/shift                       controllers.ApiShifts.all
-GET         /api/shift/:id                   controllers.ApiShifts.byId(id: Long)
+GET         /api/shift/                             controllers.ApiShifts.all
+GET         /api/shift                              controllers.ApiShifts.all
+GET         /api/shift/:id                          controllers.ApiShifts.byId(id: Long)
 #DELETE        /api/shift/:id           @controllers.ApiShifts.delete(id: Long)
 
-GET         /api/shift/bydate/:date          controllers.ApiShifts.byDate(date: String)
+GET         /api/shift/bydate/:date                 controllers.ApiShifts.byDate(date: String)
 
 # Presences
-GET         /api/attendance/child/:id        controllers.ApiAttendances.presencesForChild(id: Long)
-POST        /api/attendance/child/register   controllers.ApiAttendances.registerPresence
-POST        /api/attendance/child/unregister controllers.ApiAttendances.unregisterPresence
+GET         /api/attendance/child/:id               controllers.ApiAttendances.presencesForChild(id: Long)
+POST        /api/attendance/child/register          controllers.ApiAttendances.registerPresence
+POST        /api/attendance/child/unregister        controllers.ApiAttendances.unregisterPresence
 
 
 ### Assets
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/webjars/*file            controllers.WebJarAssets.at(file)
+GET         /assets/webjars/*file                   controllers.WebJarAssets.at(file)
 #GET         /assets/versioned/*file            controllers.Assets.versioned(path="/public", file)
-GET         /assets/*file                    controllers.Assets.at(path="/public", file)
+GET         /assets/*file                           controllers.Assets.at(path="/public", file)
 #GET         /app/assets/*file            controllers.Assets.at(path="/public", file)
 
-GET         /                                controllers.Main.home
-GET         /app                             controllers.Main.home
-GET         /app/*path                       controllers.Main.any(path)
+GET         /                                       controllers.Main.home
+GET         /app                                    controllers.Main.home
+GET         /app/*path                              controllers.Main.any(path)

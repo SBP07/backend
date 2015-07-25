@@ -52,7 +52,8 @@ libraryDependencies ++= Seq(
   "org.webjars.bower" % "requirejs" % "2.1.18",
 
 
-  "io.github.cloudify" %% "spdf" % "1.3.1"
+  "org.apache.poi" % "poi" % "3.12",
+  "org.apache.poi" % "poi-scratchpad" % "3.12"
 )
 
 routesGenerator := InjectedRoutesGenerator
