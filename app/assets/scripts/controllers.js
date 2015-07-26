@@ -143,10 +143,10 @@ define(function () {
 
             var length = $scope.shifts
                 .filter(
-                    function (shift) {
-                        return shift.shiftId == shiftId;
-                    }
-                )
+                function (shift) {
+                    return shift.shiftId == shiftId;
+                }
+            )
                 .filter(
                 function (shift) {
                     return shift.presentChildren.some(function (child) {
@@ -161,10 +161,10 @@ define(function () {
         $scope.addAttendance = function (child, shift) {
             ChildPresence
                 .registerPresence(child.id, shift.shiftId)
-                .then(function(){
+                .then(function () {
                     // TODO check for duplicates
                     shift.presentChildren.push(child);
-                }, function() {
+                }, function () {
                     $mdToast.show($mdToast.simple().content("Kon aanwezigheid niet registreren"));
                 });
         };
@@ -182,11 +182,11 @@ define(function () {
         };
     };
 
-    controllers.ChildAttendancesCtrl = function($scope, $log, $stateParams, ChildPresence, Child) {
+    controllers.ChildAttendancesCtrl = function ($scope, $log, $stateParams, ChildPresence, Child) {
         $scope.attendances = [];
 
         ChildPresence.getById($stateParams.id)
-            .then(function(res) {
+            .then(function (res) {
                 $scope.attendances = res.data;
             });
 

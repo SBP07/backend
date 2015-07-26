@@ -17,7 +17,7 @@ trait ChildrenToShiftsTableSlice
     private[models] val children = TableQuery[ChildTable]
     private[models] val shifts = TableQuery[ShiftTable]
 
-    def * : ProvenShape[ChildPresence] = (childId, shiftId) <>(ChildPresence.tupled, ChildPresence.unapply)
+    def * : ProvenShape[ChildPresence] = (childId, shiftId) <> (ChildPresence.tupled, ChildPresence.unapply)
 
 //    def childFK: ForeignKeyQuery[ChildTable, Child] = foreignKey("child_fk", childId, children)(_.id)
 
