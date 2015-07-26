@@ -1,0 +1,12 @@
+<h2>Aanwezigheden voor {{ child.firstName + ' ' + child.lastName }}</h2>
+
+<p>{{ attendances.length }} aanwezigheden</p>
+
+<md-list>
+    <md-list-item ng-repeat="attendance in attendances">
+        <md-content>
+            <h3>{{ attendance.date | date:"EEEE d MMMM yyyy" }} {{ attendance.shiftType.mnemonic }}</h3>
+            <p>Locatie: {{ attendance.place }}, dagdeel: {{ attendance.shiftType.description.toLowerCase() }}</p>
+        </md-content>
+    </md-list-item>
+</md-list>

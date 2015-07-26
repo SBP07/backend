@@ -1,40 +1,41 @@
 @()
 
 <!DOCTYPE html>
-<html lang="nl" ng-app="speelsysteemApp">
+<html lang="nl">
     <head>
-        <base href="/">
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>speelsysteem</title>
 
-            <!-- Bootstrap -->
-        <link href="@routes.Assets.at("lib/bootstrap/css/bootstrap.min.css")" rel="stylesheet">
-
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic">
+        @*<link href="http://cdn.rawgit.com/angular/bower-material/v0.10.0/angular-material.css" rel="stylesheet">*@
+        <link href="@routes.WebJarAssets.at(WebJarAssets.locate("angular-material.css"))" rel="stylesheet">
         <link href="@routes.Assets.at("stylesheets/main.css")" rel="stylesheet">
+        <meta name="viewport" content="initial-scale=1" />
 
-        <script src="@routes.Assets.at("lib/xdate/src/xdate.js")"></script>
+        <script data-main="@routes.Assets.at("scripts/main.js")" src="@routes.Assets.at("lib/requirejs/require.js")"></script>
 
-        <script src="@routes.Assets.at("lib/angular/angular.js")"></script>
-        <script src="@routes.Assets.at("lib/angular-route/angular-route.js")"></script>
-        @*<script src="@routes.WebJarAssets.at(WebJarAssets.locate("xdate.js"))"></script>*@
-        <script src="@routes.Assets.at("app/services/child.js")"></script>
-        <script src="@routes.Assets.at("app/services/animator.js")"></script>
-        <script src="@routes.Assets.at("app/services/shift.js")"></script>
-        <script src="@routes.Assets.at("app/controllers/controllers.js")"></script>
-        <script src="@routes.Assets.at("lib/angular-bootstrap/ui-bootstrap-tpls.min.js ")"></script>
-        <script src="@routes.Assets.at("app/main.js")"></script>
-
-            <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-            <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-            <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
     </head>
-    <body>
-        @navbar()
-        <div class="container" ng-view ng-cloak></div>
+    <body layout="column">
+        <md-content layout="row" layout-fill>
+                <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="true">
+                    <md-toolbar class="md-theme-indigo">
+                        <h1 class="md-toolbar-tools" ui-sref="home">speelsysteem</h1>
+                    </md-toolbar>
+                    <md-content layout-padding>
+                        <md-list>
+                            <md-list-item><a ui-sref="home">Home</a></md-list-item>
+                            <md-list-item><a ui-sref="child">Kinderen</a></md-list-item>
+                            <md-list-item><a ui-sref="volunteer">Animatoren</a></md-list-item>
+                            <md-list-item><a ui-sref="attendance">Aanwezigheden</a></md-list-item>
+                        </md-list>
+                    </md-content>
+                </md-sidenav>
+                <md-content layout="row" flex layout-padding ui-view>
+                    <!-- main content -->
+                </md-content>
+        </md-content>
+
     </body>
 </html>

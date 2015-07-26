@@ -1,9 +1,16 @@
-body {
-    padding-top: 70px; /* for navbar */
+.auto-height {
+    height: 100%;
+    min-height: 0;
 }
 
-[ng-click],
-[data-ng-click],
-[x-ng-click] {
-    cursor: pointer;
+ng-md-icon {
+  fill: currentColor;
+  vertical-align: middle;
+  display: inline-block;
+  line-height: 1;
 }
+
+.fabToolbardemoBasicUsage md-fab-toolbar.md-left md-fab-trigger.align-with-text {
+    left: 7px;
+}
+

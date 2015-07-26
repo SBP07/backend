@@ -26,28 +26,34 @@ resolvers += "scalaz-bintray http" at "http://dl.bintray.com/scalaz/releases"
 resolvers += Classpaths.sbtPluginReleases
 
 libraryDependencies ++= Seq(
-  evolutions,
   cache,
   ws,
   specs2 % Test,
 
-//  "com.typesafe.play" %% "play-slick-evolutions" % "1.0.0"
-
-  "com.typesafe.slick" %% "slick" % "3.0.0",
   "com.typesafe.play" %% "play-slick" % "1.0.0",
   "com.typesafe.play" %% "play-slick-evolutions" % "1.0.0",
   "com.h2database" % "h2" % "1.3.175",
-  "mysql" % "mysql-connector-java" % "5.1.21",
-  "postgresql" % "postgresql" % "9.1-901.jdbc4",
+  "org.postgresql" % "postgresql" % "9.4-1201-jdbc41",
 
-  "com.github.tototoshi" %% "scala-csv" % "1.2.1",
 
   "org.webjars" %% "webjars-play" % "2.4.0-1",
+
   "org.webjars.bower" % "angular-bootstrap" % "0.12.1",
-  "org.webjars.bower" % "angular" % "1.3.15",
-  "org.webjars.bower" % "angular-route" % "1.3.15",
-  "org.webjars.bower" % "xdate" % "0.8.1",
-  "org.webjars" % "bootstrap" % "3.1.1-2"
+  "org.webjars.bower" % "angular" % "1.4.1",
+  "org.webjars.bower" % "angular-ui-router" % "0.2.15",
+  "org.webjars.npm" % "angular-material" % "0.10.0",
+  "org.webjars.bower" % "angular-material-icons" % "0.5.0",
+  "org.webjars.bower" % "angular-resource" % "1.4.0",
+  "org.webjars.bower" % "angular-animate" % "1.4.0",
+  "org.webjars.bower" % "angular-aria" % "1.4.0",
+  "org.webjars.bower" % "angular-messages" % "1.4.0",
+  "org.webjars.bower" % "angular-i18n" % "1.4.0",
+
+  "org.webjars.bower" % "requirejs" % "2.1.18",
+
+
+  "org.apache.poi" % "poi" % "3.12",
+  "org.apache.poi" % "poi-scratchpad" % "3.12"
 )
 
 routesGenerator := InjectedRoutesGenerator

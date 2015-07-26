@@ -1,10 +1,5 @@
-//resolvers += Classpaths.sbtPluginReleases
-
-// Plugins
-
 // Play
 addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.4.0")
-
 
 // web plugins
 
