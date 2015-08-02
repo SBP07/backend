@@ -32,10 +32,15 @@ GET         /api/shift/:id                          controllers.ApiShifts.byId(i
 
 GET         /api/shift/bydate/:date                 controllers.ApiShifts.byDate(date: String)
 
-# Presences
-GET         /api/attendance/child/:id               controllers.ApiAttendances.presencesForChild(id: Long)
-POST        /api/attendance/child/register          controllers.ApiAttendances.registerPresence
-POST        /api/attendance/child/unregister        controllers.ApiAttendances.unregisterPresence
+# Child presences
+GET         /api/attendance/child/:id               controllers.ApiChildAttendances.presencesForChild(id: Long)
+POST        /api/attendance/child/register          controllers.ApiChildAttendances.registerPresence
+POST        /api/attendance/child/unregister        controllers.ApiChildAttendances.unregisterPresence
+
+# Animator presences
+GET         /api/attendance/volunteer/:id           controllers.ApiAnimatorAttendances.presencesForAnimator(id: Long)
+POST        /api/attendance/volunteer/register      controllers.ApiAnimatorAttendances.registerPresence
+POST        /api/attendance/volunteer/unregister    controllers.ApiAnimatorAttendances.unregisterPresence
 
 
 ### Assets

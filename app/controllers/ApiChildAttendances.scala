@@ -13,7 +13,7 @@ import play.api.mvc.{Action, AnyContent, Controller}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class ApiAttendances @Inject()(childPresenceRepository: ChildPresenceRepository, childDao: ChildDao, shiftDao: ShiftDao) extends Controller {
+class ApiChildAttendances @Inject()(childPresenceRepository: ChildPresenceRepository, childDao: ChildDao, shiftDao: ShiftDao) extends Controller {
   def presencesForChild(childId: Long): Action[AnyContent] = Action.async {
     childPresenceRepository.findPresencesForChild(childId).map(shifts =>
       Ok(Json.toJson(shifts))

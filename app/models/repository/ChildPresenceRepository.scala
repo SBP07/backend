@@ -56,4 +56,3 @@ class SlickChildPresenceRepository @Inject()(protected val dbConfigProvider: Dat
     }
   }
 }
-
