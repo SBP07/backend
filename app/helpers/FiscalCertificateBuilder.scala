@@ -40,11 +40,7 @@ object FiscalCertificateBuilder {
       "{{ numAttendances.vm }}" -> fiscalCertificateInformation.attendances.numberOfVm.toString,
       "{{ numAttendances.mid }}" -> fiscalCertificateInformation.attendances.numberOfMid.toString,
       "{{ numAttendances.nm }}" -> fiscalCertificateInformation.attendances.numberOfNm.toString,
-      "{{ totalReceived }}" -> fiscalCertificateInformation.totalReceived.toString,
-
-
-      "Jonckheere" -> fiscalCertificateInformation.child.firstName,
-      "Louise" -> fiscalCertificateInformation.child.lastName
+      "{{ totalReceived }}" -> fiscalCertificateInformation.totalReceived.toString
 
     )
 

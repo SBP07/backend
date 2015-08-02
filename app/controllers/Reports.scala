@@ -56,7 +56,7 @@ class Reports @Inject()(animatorDao: AnimatorDao, childDao: ChildDao)
         FiscalCertificateResponsible("Example Example", "Street", "1234 City"),
         certificateId,
         child,
-        "ne langentijd",
+        "juli en augustus 2014",
         FiscalCertificateAttendances(attendancesVm, attendancesMid, attendancesNm)
       )
       val result = FiscalCertificateBuilder.build(fiscalInfo)
