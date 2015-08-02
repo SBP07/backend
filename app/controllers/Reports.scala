@@ -7,7 +7,7 @@ import javax.inject.Inject
 import helpers.DateTime._
 import helpers.FiscalCertificateBuilder.{FiscalCertificateAttendances, FiscalCertificateResponsible, FiscalCertificateInformation}
 import helpers.{FiscalCertificateBuilder, ReportBuilder}
-import models.dao.{ChildDao, AnimatorDao}
+import models.dao.{ChildDao, VolunteerDao}
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.apache.poi.ss.usermodel._
 import play.api.mvc._
@@ -16,14 +16,14 @@ import models.Child
 import scala.concurrent.ExecutionContext.Implicits.global
 
 
-class Reports @Inject()(animatorDao: AnimatorDao, childDao: ChildDao)
+class Reports @Inject()(volunteerDao: VolunteerDao, childDao: ChildDao)
   extends Controller
 {
 
   def personalInfo: Action[AnyContent] = Action.async {
     for {
       children <- childDao.findAll
-      volunteers <- animatorDao.findAll
+      volunteers <- volunteerDao.findAll
     } yield {
       val today = LocalDate.now
       val tmpFile: File = File.createTempFile(s"${today.format(fmt)} Export children and volunteers", ".xls.tmp")

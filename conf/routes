@@ -17,12 +17,12 @@ GET         /api/child/:id                          controllers.ApiChildren.byId
 PUT         /api/child                              controllers.ApiChildren.update
 POST        /api/child                              controllers.ApiChildren.create
 
-# Animators
-GET         /api/animator/                          controllers.ApiAnimators.all
-GET         /api/animator                           controllers.ApiAnimators.all
-GET         /api/animator/:id                       controllers.ApiAnimators.byId(id: Long)
-PUT         /api/animator                           controllers.ApiAnimators.update
-POST        /api/animator                           controllers.ApiAnimators.create
+# Volunteers
+GET         /api/volunteer/                         controllers.ApiVolunteers.all
+GET         /api/volunteer                          controllers.ApiVolunteers.all
+GET         /api/volunteer/:id                      controllers.ApiVolunteers.byId(id: Long)
+PUT         /api/volunteer                          controllers.ApiVolunteers.update
+POST        /api/volunteer                          controllers.ApiVolunteers.create
 
 # Shifts
 GET         /api/shift/                             controllers.ApiShifts.all
@@ -37,10 +37,10 @@ GET         /api/attendance/child/:id               controllers.ApiChildAttendan
 POST        /api/attendance/child/register          controllers.ApiChildAttendances.registerPresence
 POST        /api/attendance/child/unregister        controllers.ApiChildAttendances.unregisterPresence
 
-# Animator presences
-GET         /api/attendance/volunteer/:id           controllers.ApiAnimatorAttendances.presencesForAnimator(id: Long)
-POST        /api/attendance/volunteer/register      controllers.ApiAnimatorAttendances.registerPresence
-POST        /api/attendance/volunteer/unregister    controllers.ApiAnimatorAttendances.unregisterPresence
+# Volunteer presences
+GET         /api/attendance/volunteer/:id           controllers.ApiVolunteerAttendances.presencesForVolunteer(id: Long)
+POST        /api/attendance/volunteer/register      controllers.ApiVolunteerAttendances.registerPresence
+POST        /api/attendance/volunteer/unregister    controllers.ApiVolunteerAttendances.unregisterPresence
 
 
 ### Assets

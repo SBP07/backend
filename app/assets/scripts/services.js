@@ -10,7 +10,7 @@ define(['angular'], function (angular) {
             });
         })
         .factory('Volunteer', function ($resource) {
-            return $resource('/api/animator/:id', null, {
+            return $resource('/api/volunteer/:id', null, {
                 'update': {
                     method: 'PUT'
                 }

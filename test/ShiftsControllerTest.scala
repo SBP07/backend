@@ -1,7 +1,7 @@
 import java.time.LocalDate
 
 import controllers.ApiShifts
-import models.dao.ShiftRepository
+import models.dao.ShiftDao
 import models.{Child, Shift, ShiftType}
 import models.json.ShiftJson._
 import org.junit.runner._
@@ -9,6 +9,9 @@ import org.mockito.Matchers
 import org.specs2.mock._
 import org.specs2.runner._
 import play.api.test._
+
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 
 @RunWith(classOf[JUnitRunner])

@@ -1,15 +1,15 @@
 package models.json
 
-import models.{AnimatorPresence}
+import models.{VolunteerPresence}
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
 import play.api.libs.json._
 
-object AnimatorPresenceJson {
+object VolunteerPresenceJson {
 
-  implicit val animatorPresenceReads: Reads[AnimatorPresence] = (
+  implicit val volunteerPresenceReads: Reads[VolunteerPresence] = (
     (JsPath \ "volunteerId").read[Long] and
       (JsPath \ "shiftId").read[Long]
-    )(AnimatorPresence.apply _)
+    )(VolunteerPresence.apply _)
 
 }

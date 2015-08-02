@@ -2,7 +2,7 @@ package models
 
 import java.time.LocalDate
 
-case class Animator(
+case class Volunteer(
                      id: Option[Long] = None,
                      firstName: String,
                      lastName: String,
@@ -19,7 +19,7 @@ case class Animator(
                      birthDate: Option[LocalDate]
                      )
 
-object AnimatorConstants {
+object VolunteerConstants {
   val minimumYearStartedVolunteering: Int = 2000
   val maximumYearStartedVolunteering: Int = 2030
 }

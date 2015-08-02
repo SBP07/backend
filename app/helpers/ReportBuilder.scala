@@ -2,7 +2,7 @@ package helpers
 
 import java.time.LocalDate
 
-import models.{Animator, Child}
+import models.{Volunteer, Child}
 import org.apache.poi.ss.usermodel._
 import helpers.DateTime.exportFormat
 
@@ -53,10 +53,10 @@ object ReportBuilder {
 
   }
 
-  def addVolunteerSheet(volunteers: Seq[Animator], workbook: Workbook): Unit = {
+  def addVolunteerSheet(volunteers: Seq[Volunteer], workbook: Workbook): Unit = {
     val sheet: Sheet = workbook createSheet "Vrijwilligers"
 
-    val cols: List[Tuple2[String, Animator => String]] = List(
+    val cols: List[Tuple2[String, Volunteer => String]] = List(
       "Volgnummer" -> (_.id.fold("")(_.toString)),
       "Voornaam" -> (_.firstName),
       "Achternaam" -> (_.lastName),

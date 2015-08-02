@@ -8,15 +8,15 @@ import play.api.db.slick.HasDatabaseConfig
 import slick.driver.JdbcProfile
 import slick.lifted.ProvenShape
 
-trait AnimatorTableSlice { this: HasDatabaseConfig[JdbcProfile] =>
+trait VolunteerTableSlice { this: HasDatabaseConfig[JdbcProfile] =>
 
   import driver.api._
 
-  private[models] class AnimatorTable(tag: Tag) extends Table[Animator](tag, "animator") {
+  private[models] class VolunteerTable(tag: Tag) extends Table[Volunteer](tag, "volunteer") {
 
-    def * : ProvenShape[Animator] = (id.?, firstName, lastName, mobilePhone, landline, email,
+    def * : ProvenShape[Volunteer] = (id.?, firstName, lastName, mobilePhone, landline, email,
       street, city, bankAccount, yearStartedVolunteering, isPartOfCore, birthDate) <>
-      ((Animator.apply _).tupled, Animator.unapply)
+      ((Volunteer.apply _).tupled, Volunteer.unapply)
 
     private[models] def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
 

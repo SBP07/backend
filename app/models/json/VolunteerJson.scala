@@ -2,13 +2,13 @@ package models.json
 
 import java.time.LocalDate
 
-import models.Animator
+import models.Volunteer
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
-object AnimatorJson {
+object VolunteerJson {
 
-  implicit val animatorWrites: Writes[Animator] = (
+  implicit val volunteerWrites: Writes[Volunteer] = (
     (JsPath \ "id").writeNullable[Long] and
       (JsPath \ "firstName").write[String] and
       (JsPath \ "lastName").write[String] and
@@ -26,9 +26,9 @@ object AnimatorJson {
       (JsPath \ "isPartOfCore").write[Boolean] and
       (JsPath \ "birthDate").writeNullable[LocalDate]
 
-    )(unlift(Animator.unapply))
+    )(unlift(Volunteer.unapply))
 
-  implicit val animatorReads: Reads[Animator] = (
+  implicit val volunteerReads: Reads[Volunteer] = (
     (JsPath \ "id").readNullable[Long] and
       (JsPath \ "firstName").read[String] and
       (JsPath \ "lastName").read[String] and
@@ -46,5 +46,5 @@ object AnimatorJson {
       (JsPath \ "isPartOfCore").read[Boolean] and
       (JsPath \ "birthDate").readNullable[LocalDate]
 
-    )(Animator.apply _)
+    )(Volunteer.apply _)
 }

@@ -3,8 +3,8 @@ import java.time.LocalDate
 import controllers.ApiChildren
 import helpers.JsonHelpers.JsonStatus
 import models.Child
+import models.dao.ChildDao
 import models.json.ChildJson._
-import models.table.ChildRepository
 import org.junit.runner._
 import org.mockito.Matchers
 import org.mockito.Mockito.doNothing
@@ -13,6 +13,9 @@ import org.specs2.runner._
 import play.api.http.HeaderNames
 import play.api.libs.json._
 import play.api.test._
+
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 @RunWith(classOf[JUnitRunner])
 class ChildrenControllerTest extends PlaySpecification with Mockito {
@@ -23,12 +26,12 @@ class ChildrenControllerTest extends PlaySpecification with Mockito {
 
   "Requesting all children" should {
     "Return a correct response" in new WithApplication {
-      val mockedRepo = mock[ChildRepository]
-      mockedRepo.findAll(Matchers.any()) returns List(exampleChild)
+      val mockedRepo = mock[ChildDao]
+      mockedRepo.findAll returns Future(List(exampleChild))
 
-      val animatorController = new ApiChildren(mockedRepo)
+      val childrenController = new ApiChildren(mockedRepo)
 
-      val result = animatorController.allChildren.apply(FakeRequest())
+      val result = childrenController.all.apply(FakeRequest())
 
       status(result) must be equalTo OK
       contentType(result).map { res => res must be equalTo "application/json" }
@@ -41,12 +44,12 @@ class ChildrenControllerTest extends PlaySpecification with Mockito {
 
   "Requesting an existing child by id" should {
     "Return a correct JSON response" in new WithApplication() {
-      val mockedRepo = mock[ChildRepository]
-      mockedRepo.findById(Matchers.eq(5L))(Matchers.any()) returns Some(exampleChild)
+      val mockedRepo = mock[ChildDao]
+      mockedRepo.findById(Matchers.eq(5L)) returns Future(Some(exampleChild))
 
       val childController = new ApiChildren(mockedRepo)
 
-      val result = childController.childById(5).apply(FakeRequest())
+      val result = childController.byId(5).apply(FakeRequest())
 
       status(result) must be equalTo OK
       contentType(result).map { res => res must be equalTo "application/json" }
@@ -59,12 +62,12 @@ class ChildrenControllerTest extends PlaySpecification with Mockito {
 
   "Requesting a non-existing child by id" should {
     "Return a HTTP 404 with JSON response" in new WithApplication() {
-      val mockedRepo = mock[ChildRepository]
-      mockedRepo.findById(Matchers.eq(5L))(Matchers.any()) returns None
+      val mockedRepo = mock[ChildDao]
+      mockedRepo.findById(Matchers.eq(5L)) returns Future(None)
 
       val childController = new ApiChildren(mockedRepo)
 
-      val result = childController.childById(5).apply(FakeRequest())
+      val result = childController.byId(5).apply(FakeRequest())
 
       status(result) must be equalTo NOT_FOUND
       contentType(result).map { res => res must be equalTo "application/json" }
@@ -77,28 +80,28 @@ class ChildrenControllerTest extends PlaySpecification with Mockito {
 
   "Updating a child" should {
     "Return a bad request response on badly formatted input" in new WithApplication() {
-      val mockedRepo = mock[ChildRepository]
-      doNothing().when(mockedRepo).update(Matchers.any())(Matchers.any())
+      val mockedRepo = mock[ChildDao]
+      doNothing.when(mockedRepo).update(Matchers.any())
 
       val childController = new ApiChildren(mockedRepo)
 
       val json = Json.parse( """{"firstName": true}""")
-      val result = childController.update(5).apply(FakeRequest().withBody(json)).run
+      val result = childController.update.apply(FakeRequest().withBody(json)).run
 
       status(result) must be equalTo BAD_REQUEST
       contentType(result).map { res => res must be equalTo "application/json" }
 
-      there was no(mockedRepo).update(Matchers.any())(Matchers.any())
+      there was no(mockedRepo).update(Matchers.any())
     }
 
     "Update the child on a correctly formatted request" in new WithApplication() {
-      val mockedRepo = mock[ChildRepository]
-      doNothing().when(mockedRepo).update(Matchers.any())(Matchers.any())
+      val mockedRepo = mock[ChildDao]
+      doNothing.when(mockedRepo).update(Matchers.any())
 
       val childController = new ApiChildren(mockedRepo)
 
       val json = Json.toJson(exampleChild)
-      val result = childController.update(5).apply(FakeRequest().withJsonBody(json).withHeaders(HeaderNames.CONTENT_TYPE -> "application/json")).run
+      val result = childController.update.apply(FakeRequest().withJsonBody(json).withHeaders(HeaderNames.CONTENT_TYPE -> "application/json")).run
 
       play.Logger.debug(json.toString)
       play.Logger.debug(contentAsString(result))
@@ -111,41 +114,38 @@ class ChildrenControllerTest extends PlaySpecification with Mockito {
 
       validated.get must like { case JsonStatus("Success", _) => ok }
 
-      there was one(mockedRepo).update(Matchers.any())(Matchers.any())
+      there was one(mockedRepo).update(Matchers.any())
     }
   }
 
   "Inserting a child" should {
     "Return a bad request response on badly formatted input" in new WithApplication {
-      val mockedRepo = mock[ChildRepository]
-      mockedRepo.insert(Matchers.any())(Matchers.any()) returns 0
+      val mockedRepo = mock[ChildDao]
+      mockedRepo.insert(Matchers.any()) returns Future(0)
 
       val childController = new ApiChildren(mockedRepo)
 
       val json = Json.parse( """{"firstName": true}""")
-      val result = childController.newChild.apply(FakeRequest().withJsonBody(json)).run
+      val result = childController.create.apply(FakeRequest().withJsonBody(json)).run
 
       status(result) must be equalTo BAD_REQUEST
       contentType(result).map { res => res must be equalTo "application/json" }
 
-      there was no(mockedRepo).insert(Matchers.any())(Matchers.any())
+      there was no(mockedRepo).insert(Matchers.any())
     }
 
     "Work for correctly formatted inputs" in new WithApplication {
-      val mockedRepo = mock[ChildRepository]
-      mockedRepo.insert(Matchers.any())(Matchers.any()) returns 1
+      val mockedRepo = mock[ChildDao]
+      mockedRepo.insert(Matchers.any()) returns Future(1)
 
       val childController = new ApiChildren(mockedRepo)
 
       val json = Json.toJson(exampleChild)
-      val result = childController.newChild.apply(FakeRequest().withJsonBody(json).withHeaders(HeaderNames.CONTENT_TYPE -> "application/json")).run
-
-//      play.Logger.debug(json.toString)
-//      play.Logger.debug(contentAsString(result))
+      val result = childController.create.apply(FakeRequest().withJsonBody(json).withHeaders(HeaderNames.CONTENT_TYPE -> "application/json")).run
 
       status(result) must be equalTo CREATED
 
-      there was one(mockedRepo).insert(Matchers.any())(Matchers.any())
+      there was one(mockedRepo).insert(Matchers.any())
     }
 
   }
