@@ -30,18 +30,19 @@ libraryDependencies ++= Seq(
   ws,
   specs2 % Test,
 
-  "com.typesafe.play" %% "play-slick" % "1.0.0",
-  "com.typesafe.play" %% "play-slick-evolutions" % "1.0.0",
-  "com.h2database" % "h2" % "1.3.175",
+  "com.typesafe.play" %% "play-slick" % "1.0.1",
+  "io.strongtyped" %% "active-slick" % "0.3.1",
+  "com.typesafe.play" %% "play-slick-evolutions" % "1.0.1",
+  "com.h2database" % "h2" % "1.3.176",
   "org.postgresql" % "postgresql" % "9.4-1201-jdbc41",
 
 
-  "org.webjars" %% "webjars-play" % "2.4.0-1",
+  "org.webjars" %% "webjars-play" % "2.4.0",
 
   "org.webjars.bower" % "angular-bootstrap" % "0.12.1",
   "org.webjars.bower" % "angular" % "1.4.1",
   "org.webjars.bower" % "angular-ui-router" % "0.2.15",
-  "org.webjars.npm" % "angular-material" % "0.10.0",
+  "org.webjars.npm"   % "angular-material" % "0.10.0",
   "org.webjars.bower" % "angular-material-icons" % "0.5.0",
   "org.webjars.bower" % "angular-resource" % "1.4.0",
   "org.webjars.bower" % "angular-animate" % "1.4.0",
