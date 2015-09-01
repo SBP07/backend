@@ -4,7 +4,7 @@
         <md-list-item class="md-3-line" ng-repeat="day in days | orderBy">
             <ng-md-icon icon="event" size="64"></ng-md-icon>
             <div class="md-list-item-text">
-                <h3><a ui-sref="attendance.dayDetails({ date: day })">{{ day | date:"dd MMMM yyyy"}}</a></h3>
+                <h3><a ui-sref="attendanceChild.dayDetails({ date: day })">{{ day | date:"dd MMMM yyyy"}}</a></h3>
                 <h4>{{ day | date:"EEEE" }}</h4>
             </div>
         </md-list-item>

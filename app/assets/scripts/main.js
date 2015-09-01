@@ -105,12 +105,13 @@ require(['angular', './controllers', './filters', './services', 'angular-ui-rout
                         templateUrl: '/assets/templates/volunteer/form.html',
                         controller: controllers.NewVolunteerCtrl
                     })
-                    .state('attendance', {
+                    // Attendance routes
+                    .state('attendanceChild', {
                         url: '/aanwezigheden',
                         templateUrl: '/assets/templates/attendance/home.html',
                         controller: controllers.AttendanceHomeCtrl
                     })
-                    .state('attendance.dayDetails', {
+                    .state('attendanceChild.dayDetails', {
                         url: '/dag/:date',
                         templateUrl: '/assets/templates/attendance/dayDetails.html',
                         controller: controllers.AttendanceDayDetailsCtrl
