@@ -3,6 +3,19 @@
 <p>{{ attendances.length }} aanwezigheden</p>
 
 <md-list>
+    <md-list-item ng-repeat="attendanceByType in attendancesByType">
+        <md-content>
+            <h3>Aanwezigheden voor type {{ attendanceByType.mnemonic }}</h3>
+            <p>
+                {{ attendanceByType.count }} aanwezigheden voor type {{ attendanceByType.description }}
+            </p>
+        </md-content>
+    </md-list-item>
+</md-list>
+
+<md-divider></md-divider>
+
+<md-list>
     <md-list-item ng-repeat="attendance in attendances">
         <md-content>
             <h3>{{ attendance.date | date:"EEEE d MMMM yyyy" }} {{ attendance.shiftType.mnemonic }}</h3>

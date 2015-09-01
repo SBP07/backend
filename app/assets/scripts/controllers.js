@@ -143,15 +143,15 @@ define(function () {
 
             var length = $scope.shifts
                 .filter(
-                function (shift) {
-                    return shift.shiftId == shiftId;
-                }
-            )
+                    function (shift) {
+                        return shift.shiftId == shiftId;
+                    }
+                )
                 .filter(
-                function (shift) {
-                    return shift.presentChildren.some(function (child) {
-                        return childId == child.id;
-                    });
+                    function (shift) {
+                        return shift.presentChildren.some(function (child) {
+                            return childId == child.id;
+                        });
                 }
             ).length;
 
@@ -184,10 +184,36 @@ define(function () {
 
     controllers.ChildAttendancesCtrl = function ($scope, $log, $stateParams, ChildPresence, Child) {
         $scope.attendances = [];
+        $scope.attendancesByType = [];
+
+        // Example output:
+        // {
+        //     NM: { count: 16, mnemonic: 'NM', description: 'Namiddag' },
+        //     VM: { count: 10, mnemonic: 'VM', description: 'Voormiddag' },
+        //     MID: { count: 9, mnemonic: 'MID', description: 'Middag' }
+        // }
+
+        var formatAttendancesByType = function (att) {
+            var acc = {};
+            att.forEach(function (a) {
+                if (!acc[a.shiftType.mnemonic]) {
+                    acc[a.shiftType.mnemonic] = {
+                        count: 1,
+                        mnemonic: a.shiftType.mnemonic,
+                        description: a.shiftType.description
+                    };
+                } else {
+                    acc[a.shiftType.mnemonic].count++;
+                }
+            });
+            return acc;
+        };
+
 
         ChildPresence.getById($stateParams.id)
             .then(function (res) {
                 $scope.attendances = res.data;
+                $scope.attendancesByType = formatAttendancesByType(res.data);
             });
 
         $scope.child = Child.get({id: $stateParams.id});
