@@ -219,5 +219,11 @@ define(function () {
         $scope.child = Child.get({id: $stateParams.id});
     };
 
+    controllers.ReportsCtrl = function($scope, $window) {
+        $scope.allChildrenAndVolunteersReport = function() {
+            $window.location.href = "/reports/personalInfo";
+        };
+    };
+
     return controllers;
 });

@@ -115,6 +115,11 @@ require(['angular', './controllers', './filters', './services', 'angular-ui-rout
                         url: '/dag/:date',
                         templateUrl: '/assets/templates/attendance/dayDetails.html',
                         controller: controllers.AttendanceDayDetailsCtrl
+                    })
+                    .state('reports', {
+                        url: '/rapporten',
+                        templateUrl: '/assets/templates/reports/home.html',
+                        controller: controllers.ReportsCtrl
                     });
             });
 
