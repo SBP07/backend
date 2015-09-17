@@ -3,7 +3,7 @@ package models.dao
 import java.time.LocalDate
 import javax.inject.Inject
 
-import _root_.models.{ShiftType, Shift, Child}
+import models.{ChildPresence, ShiftType, Shift, Child}
 import models.table.{ChildTableSlice, ShiftTypeTableSlice, ShiftTableSlice, ChildrenToShiftsTableSlice}
 import com.google.inject.ImplementedBy
 import helpers.Db.localdateToSqldateMapper
@@ -56,22 +56,54 @@ class SlickShiftDao @Inject()(protected val dbConfigProvider: DatabaseConfigProv
   }
 
   override def findByDateWithTypeAndChildren(date: LocalDate): Future[Seq[(ShiftType, Shift, Seq[Child])]] = {
+    // SQL of what I'm trying to do here:
+    //
+    //    SELECT * FROM shift
+    //      LEFT JOIN child_to_shift ON shift.id = shift_id
+    //      LEFT JOIN child ON child.id = child_id
+    //    ORDER BY shift.id
+    // Then Seq[(Shift, Child)] => Seq[(Shift, Seq[Shift]) (children grouped by shift)
+
+
     val typeTable = TableQuery[ShiftTypeTable]
     val childTable = TableQuery[ChildTable]
     val childJoinTable = TableQuery[ChildrenToShiftsTable]
 
-    val query = for {
+    // this will return all the shifts, but not with the attending children
+    val allShiftsOnDay = for {
       shift <- shifts.filter(_.date === date)
-      shiftType <- typeTable if shiftType.id === shift.shiftTypeId
-      childJoinTable <- childJoinTable if childJoinTable.shiftId === shift.id
-      child <- childTable if child.id === childJoinTable.childId
-    } yield (shiftType, shift, child)
+      shiftType <- typeTable if shift.shiftTypeId === shiftType.id
+    } yield (shift, shiftType)
 
-    db.run(query.result).map { list =>
-      list.groupBy(_._2.id).map{ tuple =>
-        val head = tuple._2.head
-        (head._1, head._2, tuple._2.map(_._3))
-      }.toSeq
+    // this won't return the shifts on which no child is attending
+    // we'll combine it with all the shifts on this day afterwards
+    val shiftsWithChildrenOnDay = for {
+      shift <- shifts filter (_.date === date)
+      shiftType <- typeTable if shift.shiftTypeId === shiftType.id
+      join <- childJoinTable if join.shiftId === shift.id
+      child <- childTable if child.id === join.childId
+    } yield (shift, shiftType, child)
+
+    for {
+      allShifts <- db.run(allShiftsOnDay.result)
+      withChildren <- db.run(shiftsWithChildrenOnDay.result)
+    } yield {
+      val allShiftsTransformed: Seq[(Shift, ShiftType, Seq[Child])] = allShifts.map(a => (a._1, a._2, Nil))
+      val withChildrenTransformed: Seq[(Shift, ShiftType, Seq[Child])] =
+        withChildren.foldLeft(Nil: Seq[(Shift, ShiftType, Seq[Child])]) { (total, n) =>
+          if (total.exists(_._1 == n._1)) {
+            val tuple: (Shift, ShiftType, Seq[Child]) = (n._1, n._2, total.filter(_._1 == n._1).head._3 :+ n._3)
+            total.filterNot(_._1 == n._1) :+ tuple
+          } else {
+            val toAdd: (Shift, ShiftType, Seq[Child]) = (n._1, n._2, Seq(n._3))
+            total :+ toAdd
+          }
+      }
+
+      allShiftsTransformed.map { tuple =>
+        val children: Seq[Child] = withChildrenTransformed.find(_._1 == tuple._1).map(_._3).getOrElse(Nil)
+        (tuple._2, tuple._1, children)
+      }
     }
   }
 
