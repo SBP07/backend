@@ -82,7 +82,7 @@ require(['angular', './controllers', './filters', './services', 'angular-ui-rout
                     .state('child.attendances', {
                         url: '/aanwezigheden/:id',
                         templateUrl: '/assets/templates/child/attendances.html',
-                        controller: controllers.ChildAttendancesCtrl
+                        controller: controllers.attendances.child.AttendancesSelectionCtrl
                     })
                     // Volunteer routes
                     .state('volunteer', {
@@ -106,15 +106,30 @@ require(['angular', './controllers', './filters', './services', 'angular-ui-rout
                         controller: controllers.NewVolunteerCtrl
                     })
                     // Attendance routes
-                    .state('attendanceChild', {
+                    .state('attendance', {
                         url: '/aanwezigheden',
                         templateUrl: '/assets/templates/attendance/home.html',
-                        controller: controllers.AttendanceHomeCtrl
+                        controller: controllers.attendances.HomeCtrl
                     })
-                    .state('attendanceChild.dayDetails', {
+                    .state('attendance.child', {
+                        url: '/kind',
+                        templateUrl: '/assets/templates/attendance/child/daySelection.html',
+                        controller: controllers.attendances.child.DaySelectionCtrl
+                    })
+                    .state('attendance.child.dayDetails', {
                         url: '/dag/:date',
-                        templateUrl: '/assets/templates/attendance/dayDetails.html',
-                        controller: controllers.AttendanceDayDetailsCtrl
+                        templateUrl: '/assets/templates/attendance/child/dayDetails.html',
+                        controller: controllers.attendances.child.DayDetailsCtrl
+                    })
+                    .state('attendance.volunteer', {
+                        url: '/vrijwilliger',
+                        templateUrl: '/assets/templates/attendance/volunteer/daySelection.html',
+                        controller: controllers.attendances.volunteer.DaySelectionCtrl
+                    })
+                    .state('attendance.volunteer.dayDetails', {
+                        url: '/dag/:date',
+                        templateUrl: '/assets/templates/attendance/volunteer/dayDetails.html',
+                        controller: controllers.attendances.volunteer.DayDetailsCtrl
                     })
                     .state('reports', {
                         url: '/rapporten',

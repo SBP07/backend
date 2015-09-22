@@ -41,6 +41,9 @@ define(['angular'], function (angular) {
                     });
                 }
             };
+        })
+        .factory('VolunteerPresence', function($http) {
+            return {};
         });
 
 });

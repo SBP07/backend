@@ -109,114 +109,190 @@ define(function () {
 
     };
 
-    controllers.AttendanceHomeCtrl = function ($scope, Shift) {
-        Shift
-            .query()
-            .$promise
-            .then(function (shifts) {
-                return shifts
-                    .map(function (day) {
-                        return day.date;
-                    })
-                    .reduce(function (prev, current, index, array) {
-                        return (array.indexOf(current) == index) ? prev.concat(current) : prev;
-                    }, []);
-            })
-            .then(function (days) {
-                $scope.days = days;
-            });
-    };
+    controllers.attendances = {
+        HomeCtrl: function($scope) {},
+        child: {
+            DayDetailsCtrl: function ($scope, $stateParams, $http, $mdToast, $log, Child, ChildPresence) {
+                $scope.day = $stateParams.date;
 
-    controllers.AttendanceDayDetailsCtrl = function ($scope, $stateParams, $http, $mdToast, $log, Child, ChildPresence) {
-        $scope.day = $stateParams.date;
+                $scope.shifts = {};
 
-        $scope.shifts = {};
+                $http.get('/api/shift/bydate/' + $scope.day).then(function (res) {
+                    $scope.shifts = res.data;
+                });
 
-        $http.get('/api/shift/bydate/' + $scope.day).then(function (res) {
-            $scope.shifts = res.data;
-        });
+                $scope.children = Child.query();
 
-        $scope.children = Child.query();
+                $scope.childAttended = function (childId, shiftId) {
+                    if (!$scope.shifts || !$scope.shifts.map) return false;
 
-        $scope.childAttended = function (childId, shiftId) {
-            if (!$scope.shifts || !$scope.shifts.map) return false;
+                    var length = $scope.shifts
+                        .filter(
+                        function (shift) {
+                            return shift.shiftId == shiftId;
+                        }
+                    )
+                        .filter(
+                        function (shift) {
+                            return shift.presentChildren.some(function (child) {
+                                return childId == child.id;
+                            });
+                        }
+                    ).length;
 
-            var length = $scope.shifts
-                .filter(
-                    function (shift) {
-                        return shift.shiftId == shiftId;
-                    }
-                )
-                .filter(
-                    function (shift) {
-                        return shift.presentChildren.some(function (child) {
-                            return childId == child.id;
+                    return length !== 0;
+                };
+
+                $scope.addAttendance = function (child, shift) {
+                    ChildPresence
+                        .registerPresence(child.id, shift.shiftId)
+                        .then(function () {
+                            // TODO check for duplicates
+                            shift.presentChildren.push(child);
+                        }, function () {
+                            $mdToast.show($mdToast.simple().content("Kon aanwezigheid niet registreren"));
                         });
-                }
-            ).length;
+                };
 
-            return length !== 0;
-        };
-
-        $scope.addAttendance = function (child, shift) {
-            ChildPresence
-                .registerPresence(child.id, shift.shiftId)
-                .then(function () {
-                    // TODO check for duplicates
-                    shift.presentChildren.push(child);
-                }, function () {
-                    $mdToast.show($mdToast.simple().content("Kon aanwezigheid niet registreren"));
-                });
-        };
-
-        $scope.removeAttendance = function (child, shift) {
-            ChildPresence
-                .unregisterPresence(child.id, shift.shiftId)
-                .then(function () {
-                    shift.presentChildren = shift.presentChildren.filter(function (el) {
-                        return el.id != child.id;
+                $scope.removeAttendance = function (child, shift) {
+                    ChildPresence
+                        .unregisterPresence(child.id, shift.shiftId)
+                        .then(function () {
+                            shift.presentChildren = shift.presentChildren.filter(function (el) {
+                                return el.id != child.id;
+                            });
+                        }, function () {
+                            $mdToast.show($mdToast.simple().content("Kon aanwezigheid niet verwijderen"));
+                        });
+                };
+            },
+            DaySelectionCtrl: function ($scope, Shift) {
+                Shift
+                    .query()
+                    .$promise
+                    .then(function (shifts) {
+                        return shifts
+                            .map(function (day) {
+                                return day.date;
+                            })
+                            .reduce(function (prev, current, index, array) {
+                                return (array.indexOf(current) == index) ? prev.concat(current) : prev;
+                            }, []);
+                    })
+                    .then(function (days) {
+                        $scope.days = days;
                     });
-                }, function () {
-                    $mdToast.show($mdToast.simple().content("Kon aanwezigheid niet verwijderen"));
+            },
+            AttendancesSelectionCtrl: function ($scope, $log, $stateParams, ChildPresence, Child) {
+                $scope.attendances = [];
+                $scope.attendancesByType = [];
+
+                // Example output:
+                // {
+                //     NM: { count: 16, mnemonic: 'NM', description: 'Namiddag' },
+                //     VM: { count: 10, mnemonic: 'VM', description: 'Voormiddag' },
+                //     MID: { count: 9, mnemonic: 'MID', description: 'Middag' }
+                // }
+
+                var formatAttendancesByType = function (att) {
+                    var acc = {};
+                    att.forEach(function (a) {
+                        if (!acc[a.shiftType.mnemonic]) {
+                            acc[a.shiftType.mnemonic] = {
+                                count: 1,
+                                mnemonic: a.shiftType.mnemonic,
+                                description: a.shiftType.description
+                            };
+                        } else {
+                            acc[a.shiftType.mnemonic].count++;
+                        }
+                    });
+                    return acc;
+                };
+
+
+                ChildPresence.getById($stateParams.id)
+                    .then(function (res) {
+                        $scope.attendances = res.data;
+                        $scope.attendancesByType = formatAttendancesByType(res.data);
+                    });
+
+                $scope.child = Child.get({id: $stateParams.id});
+            }
+        },
+        volunteer: {
+            DayDetailsCtrl: function ($scope, $stateParams, $http, $mdToast, $log, Volunteer, VolunteerPresence) {
+                $scope.day = $stateParams.date;
+
+                $scope.shifts = {};
+
+                $http.get('/api/shift/bydate/' + $scope.day).then(function (res) {
+                    $scope.shifts = res.data;
                 });
-        };
-    };
 
-    controllers.ChildAttendancesCtrl = function ($scope, $log, $stateParams, ChildPresence, Child) {
-        $scope.attendances = [];
-        $scope.attendancesByType = [];
+                $scope.volunteers = Volunteer.query();
 
-        // Example output:
-        // {
-        //     NM: { count: 16, mnemonic: 'NM', description: 'Namiddag' },
-        //     VM: { count: 10, mnemonic: 'VM', description: 'Voormiddag' },
-        //     MID: { count: 9, mnemonic: 'MID', description: 'Middag' }
-        // }
+                $scope.volunteerAttended = function (volunteerId, shiftId) {
+                    if (!$scope.shifts || !$scope.shifts.map) return false;
 
-        var formatAttendancesByType = function (att) {
-            var acc = {};
-            att.forEach(function (a) {
-                if (!acc[a.shiftType.mnemonic]) {
-                    acc[a.shiftType.mnemonic] = {
-                        count: 1,
-                        mnemonic: a.shiftType.mnemonic,
-                        description: a.shiftType.description
-                    };
-                } else {
-                    acc[a.shiftType.mnemonic].count++;
-                }
-            });
-            return acc;
-        };
+                    var length = $scope.shifts
+                        .filter(
+                        function (shift) {
+                            return shift.shiftId == shiftId;
+                        }
+                    )
+                        .filter(
+                        function (shift) {
+                            return shift.presentVolunteers.some(function (child) {
+                                return volunteerId == child.id;
+                            });
+                        }
+                    ).length;
 
+                    return length !== 0;
+                };
 
-        ChildPresence.getById($stateParams.id)
-            .then(function (res) {
-                $scope.attendances = res.data;
-                $scope.attendancesByType = formatAttendancesByType(res.data);
-            });
+                $scope.addAttendance = function (volunteer, shift) {
+                    VolunteerPresence
+                        .registerPresence(volunteer.id, shift.shiftId)
+                        .then(function () {
+                            // TODO check for duplicates
+                            shift.presentVolunteers.push(volunteer);
+                        }, function () {
+                            $mdToast.show($mdToast.simple().content("Kon aanwezigheid niet registreren"));
+                        });
+                };
 
-        $scope.child = Child.get({id: $stateParams.id});
+                $scope.removeAttendance = function (volunteer, shift) {
+                    VolunteerPresence
+                        .unregisterPresence(volunteer.id, shift.shiftId)
+                        .then(function () {
+                            shift.presentVolunteers = shift.presentVolunteers.filter(function (el) {
+                                return el.id != volunteer.id;
+                            });
+                        }, function () {
+                            $mdToast.show($mdToast.simple().content("Kon aanwezigheid niet verwijderen"));
+                        });
+                };
+            },
+            DaySelectionCtrl: function ($scope, Shift) {
+                Shift
+                    .query()
+                    .$promise
+                    .then(function (shifts) {
+                        return shifts
+                            .map(function (day) {
+                                return day.date;
+                            })
+                            .reduce(function (prev, current, index, array) {
+                                return (array.indexOf(current) == index) ? prev.concat(current) : prev;
+                            }, []);
+                    })
+                    .then(function (days) {
+                        $scope.days = days;
+                    });
+            }
+        }
     };
 
     controllers.ReportsCtrl = function($scope, $window) {

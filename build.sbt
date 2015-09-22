@@ -42,7 +42,7 @@ libraryDependencies ++= Seq(
   "org.webjars.bower" % "angular-bootstrap" % "0.12.1",
   "org.webjars.bower" % "angular" % "1.4.1",
   "org.webjars.bower" % "angular-ui-router" % "0.2.15",
-  "org.webjars.npm"   % "angular-material" % "0.10.0",
+  "org.webjars.npm"   % "angular-material" % "0.10.1",
   "org.webjars.bower" % "angular-material-icons" % "0.5.0",
   "org.webjars.bower" % "angular-resource" % "1.4.0",
   "org.webjars.bower" % "angular-animate" % "1.4.0",

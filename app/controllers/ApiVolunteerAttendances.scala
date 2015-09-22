@@ -1,5 +1,7 @@
 package controllers
 
+import java.time.LocalDate
+import java.time.format.DateTimeParseException
 import javax.inject.Inject
 
 import models.{VolunteerPresence, ChildPresence}
@@ -47,5 +49,20 @@ class ApiVolunteerAttendances @Inject()(volunteerPresenceRepository: VolunteerPr
       )
     })
 
+  }
+
+  def onDate(dateString: String): Action[AnyContent] = Action.async { req =>
+    import helpers.DateTime.fmt
+
+    try {
+      val date: LocalDate = LocalDate.parse(dateString, fmt)
+
+      volunteerPresenceRepository.findPresencesByDate(date).map { data =>
+        Ok(Json.toJson(data))
+      }
+    }
+    catch {
+      case e: DateTimeParseException => Future(BadRequest(s"Could not parse date $dateString"))
+    }
   }
 }
