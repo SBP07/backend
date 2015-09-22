@@ -14,7 +14,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.db.slick.HasDatabaseConfig
 import slick.driver.JdbcProfile
-import models.table.{VolunteerTableSlice, VolunteerToShiftsTableSlice, ShiftTypeTableSlice, ShiftTableSlice}
+import models.table.{VolunteerTable, VolunteerToShiftsTable, ShiftTypeTable, ShiftTable}
 
 
 @ImplementedBy(classOf[SlickVolunteerPresenceRepository])
@@ -30,12 +30,8 @@ trait VolunteerPresenceRepository {
 class SlickVolunteerPresenceRepository @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
   extends VolunteerPresenceRepository
   with HasDatabaseConfig[JdbcProfile]
-  with VolunteerToShiftsTableSlice
-  with ShiftTableSlice
-  with ShiftTypeTableSlice
-  with VolunteerTableSlice
 {
-  import driver.api._
+  import slick.driver.PostgresDriver.api._
 
   val dbConfig = dbConfigProvider.get[JdbcProfile]
 

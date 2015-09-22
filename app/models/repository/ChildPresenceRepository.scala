@@ -11,7 +11,7 @@ import models.{ShiftType, Shift, ChildPresence}
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.db.slick.HasDatabaseConfig
 import slick.driver.JdbcProfile
-import models.table.{ShiftTypeTableSlice, ShiftTableSlice, ChildrenToShiftsTableSlice}
+import models.table.{ShiftTypeTable, ShiftTable, ChildrenToShiftsTable}
 
 
 @ImplementedBy(classOf[SlickChildPresenceRepository])
@@ -26,11 +26,8 @@ trait ChildPresenceRepository {
 class SlickChildPresenceRepository @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
   extends ChildPresenceRepository
   with HasDatabaseConfig[JdbcProfile]
-  with ChildrenToShiftsTableSlice
-  with ShiftTableSlice
-  with ShiftTypeTableSlice
 {
-  import driver.api._
+  import slick.driver.PostgresDriver.api._
 
   val dbConfig = dbConfigProvider.get[JdbcProfile]
 

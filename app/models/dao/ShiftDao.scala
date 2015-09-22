@@ -4,7 +4,7 @@ import java.time.LocalDate
 import javax.inject.Inject
 
 import models.{ChildPresence, ShiftType, Shift, Child}
-import models.table.{ChildTableSlice, ShiftTypeTableSlice, ShiftTableSlice, ChildrenToShiftsTableSlice}
+import models.table.{ChildTable, ShiftTypeTable, ShiftTable, ChildrenToShiftsTable}
 import com.google.inject.ImplementedBy
 import helpers.Db.localdateToSqldateMapper
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfig}
@@ -22,10 +22,6 @@ trait ShiftDao extends GenericDao[Shift] {
 class SlickShiftDao @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
   extends ShiftDao
   with HasDatabaseConfig[JdbcProfile]
-  with ChildrenToShiftsTableSlice
-  with ShiftTableSlice
-  with ShiftTypeTableSlice
-  with ChildTableSlice
 {
 
   import driver.api._

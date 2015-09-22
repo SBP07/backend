@@ -3,7 +3,7 @@ package models.dao
 import javax.inject.Inject
 
 import _root_.models.Child
-import models.table.ChildTableSlice
+import models.table.ChildTable
 import com.google.inject.ImplementedBy
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfig}
 import slick.driver.JdbcProfile
@@ -17,7 +17,6 @@ trait ChildDao extends GenericDao[Child]
 class SlickChildDao @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
   extends ChildDao
   with HasDatabaseConfig[JdbcProfile]
-  with ChildTableSlice
 {
 
   import driver.api._

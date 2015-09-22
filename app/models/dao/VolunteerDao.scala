@@ -3,7 +3,7 @@ package models.dao
 import javax.inject.Inject
 
 import _root_.models.Volunteer
-import models.table.VolunteerTableSlice
+import models.table.VolunteerTable
 import com.google.inject.ImplementedBy
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfig}
 import slick.driver.JdbcProfile
@@ -17,7 +17,6 @@ trait VolunteerDao extends GenericDao[Volunteer]
 class SlickVolunteerDao @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
   extends VolunteerDao
   with HasDatabaseConfig[JdbcProfile]
-  with VolunteerTableSlice
 {
 
   import driver.api._
