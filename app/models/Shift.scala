@@ -10,4 +10,5 @@ object ShiftTypeConstants {
   val vm = 1L
   val mid = 2L
   val nm = 3L
+  val ext = 4L
 }

@@ -14,6 +14,7 @@ import play.api.mvc._
 import models.Child
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 
 class Reports @Inject()(volunteerDao: VolunteerDao, childDao: ChildDao)
@@ -69,5 +70,16 @@ class Reports @Inject()(volunteerDao: VolunteerDao, childDao: ChildDao)
       Ok.sendFile(tmpFile, fileName = _ => s"${today.format(fmt)} Fiscaal attest voor ${child.firstName} ${child.lastName}.doc")
     }))
 
+  }
+
+  def fiscalCertificates(dateFrom: LocalDate, dateUntil: LocalDate): Action[AnyContent] = Action { implicit req =>
+    // needed field
+    //  for each child: name, firstName, street, city, birthDate
+    //  periode: dateFrom and dateUntil
+    //  aantal opvangdagen
+    //  dagtarief
+    //  totaal ontvangen bedrag
+    //  aantal vm, mid, nm
+    NotImplemented
   }
 }
