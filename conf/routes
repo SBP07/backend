@@ -1,52 +1,9 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
 # Home page
+GET     /                           controllers.Application.index
 
-# For continuous delivery
-GET         /heartbeat                                  controllers.Main.heartbeat
-
-### Reports
-
-GET         /reports/personalInfo                       controllers.Reports.personalInfo
-GET         /reports/fiscalCertificate/:childId         controllers.Reports.fiscalCertificate(childId: Long)
-
-### API
-
-# Children
-GET         /api/child/                                 controllers.ApiChildren.all
-GET         /api/child                                  controllers.ApiChildren.all
-GET         /api/child/:id                              controllers.ApiChildren.byId(id: Long)
-PUT         /api/child                                  controllers.ApiChildren.update
-POST        /api/child                                  controllers.ApiChildren.create
-
-# Volunteers
-GET         /api/volunteer/                             controllers.ApiVolunteers.all
-GET         /api/volunteer                              controllers.ApiVolunteers.all
-GET         /api/volunteer/:id                          controllers.ApiVolunteers.byId(id: Long)
-PUT         /api/volunteer                              controllers.ApiVolunteers.update
-POST        /api/volunteer                              controllers.ApiVolunteers.create
-
-# Shifts
-GET         /api/shift/                                 controllers.ApiShifts.all
-GET         /api/shift                                  controllers.ApiShifts.all
-GET         /api/shift/:id                              controllers.ApiShifts.byId(id: Long)
-#DELETE        /api/shift/:id           @controllers.ApiShifts.delete(id: Long)
-
-GET         /api/shift/bydate/:date                     controllers.ApiShifts.byDate(date: String)
-
-# Child presences
-GET         /api/attendance/child/:id                   controllers.ApiChildAttendances.presencesForChild(id: Long)
-POST        /api/attendance/child/register              controllers.ApiChildAttendances.registerPresence
-POST        /api/attendance/child/unregister            controllers.ApiChildAttendances.unregisterPresence
-
-# Volunteer presences
-GET         /api/attendance/volunteer/:id               controllers.ApiVolunteerAttendances.presencesForVolunteer(id: Long)
-POST        /api/attendance/volunteer/register          controllers.ApiVolunteerAttendances.registerPresence
-POST        /api/attendance/volunteer/unregister        controllers.ApiVolunteerAttendances.unregisterPresence
-GET         /api/attendance/volunteer/onDate/:date      controllers.ApiVolunteerAttendances.onDate(date: String)
-
-
-### Assets
-
-#GET         /assets/versioned/*file            controllers.Assets.versioned(path="/public", file)
-GET         /assets/*file                               controllers.Assets.at(path="/public", file)
-#GET         /app/assets/*file            controllers.Assets.at(path="/public", file)
-
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

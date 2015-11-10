@@ -1,46 +1,20 @@
-name := "speelsysteem"
+name := """playback"""
 
 version := "1.0-SNAPSHOT"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
-scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature")
-
-//scalaVersion := "2.11.6"
-
-// Resolvers
-
-resolvers += "Typesafe repository" at "http://repo.typesafe.com/typesafe/releases/"
-
-resolvers += "sonatype-releases" at "https://oss.sonatype.org/content/repositories/releases/"
-
-resolvers += "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases/"
-
-resolvers += "Typesafe Snapshots" at "http://repo.typesafe.com/typesafe/snapshots/"
-
-resolvers += "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases"
-
-resolvers += "scalaz-bintray http" at "http://dl.bintray.com/scalaz/releases"
-
-
-resolvers += Classpaths.sbtPluginReleases
+scalaVersion := "2.11.6"
 
 libraryDependencies ++= Seq(
+  jdbc,
   cache,
   ws,
-  specs2 % Test,
-  filters,
-
-  "com.typesafe.play" %% "play-slick" % "1.0.1",
-  "io.strongtyped" %% "active-slick" % "0.3.1",
-  "com.typesafe.play" %% "play-slick-evolutions" % "1.0.1",
-  "com.h2database" % "h2" % "1.3.176",
-  "org.postgresql" % "postgresql" % "9.4-1201-jdbc41",
-
-  "org.apache.poi" % "poi" % "3.12",
-  "org.apache.poi" % "poi-scratchpad" % "3.12"
+  specs2 % Test
 )
 
-routesGenerator := InjectedRoutesGenerator
+resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
 
-fork in run := true
+// Play provides two styles of routers, one expects its actions to be injected, the
+// other, legacy style, accesses its actions statically.
+routesGenerator := InjectedRoutesGenerator
