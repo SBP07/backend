@@ -4,7 +4,7 @@ import com.google.inject.Inject
 import dao.RepoFor
 import io.strongtyped.active.slick.JdbcProfileProvider.PostgresProfileProvider
 import io.strongtyped.active.slick.{EntityActions, ActiveRecord}
-import models.organisation.Address
+import models.tenant.Address
 import play.api._
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.mvc._

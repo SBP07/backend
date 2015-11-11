@@ -1,4 +1,4 @@
-package dao.organisation
+package dao.tenant
 
 import dao.RepoFor
 import io.strongtyped.active.slick._
@@ -7,7 +7,7 @@ import slick.ast.BaseTypedType
 import io.strongtyped.active.slick.Lens._
 import scala.language.postfixOps
 import scala.concurrent.ExecutionContext.Implicits.global
-import models.organisation.Child
+import models.tenant.Child
 
 object ChildRepo extends RepoFor[Child, Long] {
 

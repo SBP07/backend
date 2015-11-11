@@ -1,4 +1,4 @@
-package models.organisation
+package models.tenant
 
 import java.time.LocalDateTime
 

@@ -1,4 +1,4 @@
-package dao.organisation
+package dao.tenant
 
 import dao.RepoFor
 import io.strongtyped.active.slick._
@@ -7,7 +7,7 @@ import slick.ast.BaseTypedType
 import io.strongtyped.active.slick.Lens._
 import scala.language.postfixOps
 import scala.concurrent.ExecutionContext.Implicits.global
-import models.organisation.Address
+import models.tenant.Address
 
 object AddressRepo extends RepoFor[Address, Long] {
 

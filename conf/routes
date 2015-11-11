@@ -11,11 +11,11 @@ GET     /                           controllers.Application.index
 
 ### Unprotected API (for testing)
 
-GET     /api/unprotected/tenant             controllers.api.OrganisationController.getAll
-POST    /api/unprotected/tenant             controllers.api.OrganisationController.create
-GET     /api/unprotected/tenant/id/:id      controllers.api.OrganisationController.getById(id: Long)
-PUT     /api/unprotected/tenant             controllers.api.OrganisationController.update
-DELETE  /api/unprotected/tenant/id/:id      controllers.api.OrganisationController.delete(id: Long)
+GET     /api/unprotected/tenant             controllers.api.TenantController.getAll
+POST    /api/unprotected/tenant             controllers.api.TenantController.create
+GET     /api/unprotected/tenant/id/:id      controllers.api.TenantController.getById(id: Long)
+PUT     /api/unprotected/tenant             controllers.api.TenantController.update
+DELETE  /api/unprotected/tenant/id/:id      controllers.api.TenantController.delete(id: Long)
 
 GET     /api/unprotected/address             controllers.api.AddressController.getAll
 POST    /api/unprotected/address             controllers.api.AddressController.create

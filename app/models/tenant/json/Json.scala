@@ -1,7 +1,7 @@
-package models.organisation.json
+package models.tenant.json
 
 import play.api.libs.json._
-import models.organisation._
+import models.tenant._
 
 object AddressJson {
   implicit val addressReads: Reads[Address] = Json.reads[Address]

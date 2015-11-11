@@ -1,3 +1,3 @@
-package models.organisation
+package models.tenant
 
 case class Crew(firstName: String, lastName: String)
