@@ -1,0 +1,18 @@
+package controllers.api
+
+import com.google.inject.Inject
+import dao.RepoFor
+import models.organisation.Child
+import play.api._
+import play.api.db.slick.DatabaseConfigProvider
+import play.api.libs.json._
+
+class ChildController @Inject()(dbConfigProvider: DatabaseConfigProvider) extends GenericApiController(dbConfigProvider) {
+  override type Id = Long
+  override type Model = Child
+
+  override val repo: RepoFor[Child, Id] = dao.organisation.ChildRepo
+
+  override implicit val reads: Reads[Model] = models.organisation.json.ChildJson.childReads
+  override implicit val writes: Writes[Model] = models.organisation.json.ChildJson.childWrites
+}
