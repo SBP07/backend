@@ -1,14 +1,18 @@
 package dao.admin
 
+import java.util.UUID
+
 import dao.RepoFor
 import models.admin.Tenant
 import slick.ast.BaseTypedType
+import io.strongtyped.active.slick._
+import slick.driver.PostgresDriver.MappedColumnType
 
 import io.strongtyped.active.slick.Lens._
 import scala.language.postfixOps
 
-object TenantRepo extends RepoFor[Tenant, Long] {
 
+object TenantRepo extends RepoFor[Tenant, UUID] {
   import jdbcProfile.api._
 
   val baseTypedType = implicitly[BaseTypedType[Id]]

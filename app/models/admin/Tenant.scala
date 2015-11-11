@@ -1,3 +1,5 @@
 package models.admin
 
-case class Tenant(id: Option[Long], canonicalName: String, name: String)
+import java.util.UUID
+
+case class Tenant(id: Option[UUID], canonicalName: String, name: String)

@@ -1,5 +1,7 @@
 package dao.tenant
 
+import java.util.UUID
+
 import dao.RepoFor
 import io.strongtyped.active.slick._
 import slick.ast.BaseTypedType
@@ -9,7 +11,7 @@ import scala.language.postfixOps
 import scala.concurrent.ExecutionContext.Implicits.global
 import models.tenant.Address
 
-object AddressRepo extends RepoFor[Address, Long] {
+object AddressRepo extends RepoFor[Address, UUID] {
 
   import jdbcProfile.api._
 
