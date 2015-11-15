@@ -1,0 +1,24 @@
+package controllers.authentication
+
+import javax.inject.Inject
+
+import com.mohiva.play.silhouette.api.{ Environment, LogoutEvent, Silhouette }
+import com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator
+import com.mohiva.play.silhouette.impl.providers.SocialProviderRegistry
+import models.tenant.Crew
+import play.api.i18n.MessagesApi
+import play.api.mvc.{Action, AnyContent}
+
+import scala.concurrent.Future
+
+class JWTCredentialsTestController @Inject()(
+                                                 val messagesApi: MessagesApi,
+                                                 val env: Environment[Crew, JWTAuthenticator],
+                                                 socialProviderRegistry: SocialProviderRegistry
+                                               )
+  extends Silhouette[Crew, JWTAuthenticator]
+{
+  def index: Action[AnyContent] = SecuredAction.async { implicit request =>
+    Future.successful(Ok("Secured action"))
+  }
+}
