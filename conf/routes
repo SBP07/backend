@@ -29,5 +29,16 @@ GET     /api/unprotected/child/id/:id      controllers.api.ChildController.getBy
 PUT     /api/unprotected/child             controllers.api.ChildController.update
 DELETE  /api/unprotected/child/id/:id      controllers.api.ChildController.delete(id: java.util.UUID)
 
+### Authentication
+
+POST    /api/v0/auth/signUp                  controllers.authentication.SignUpController.signUp
+POST    /api/v0/auth/cookie/signIn           controllers.authentication.CookieCredentialsAuthController.authenticate
+GET     /api/v0/auth/cookie/test             controllers.authentication.CookieCredentialsTestController.index
+
+POST    /api/v0/auth/jwt/signIn           controllers.authentication.JWTCredentialsAuthController.authenticate
+GET     /api/v0/auth/jwt/test             controllers.authentication.JWTCredentialsTestController.index
+
+
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+GET         /assets/*file                    controllers.Assets.at(path="/public", file)
+GET         /webjars/*file                   controllers.WebJarAssets.at(file)
