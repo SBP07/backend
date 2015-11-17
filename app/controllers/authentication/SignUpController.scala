@@ -8,7 +8,7 @@ import com.mohiva.play.silhouette.api._
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.services.AvatarService
 import com.mohiva.play.silhouette.api.util.PasswordHasher
-import com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator
+import com.mohiva.play.silhouette.impl.authenticators.{JWTAuthenticator, CookieAuthenticator}
 import com.mohiva.play.silhouette.impl.providers._
 import models.bindmodels.{SignUpDataJson, SignUpData}
 import models.tenant.Crew
@@ -32,19 +32,19 @@ import scala.concurrent.Future
   */
 class SignUpController @Inject()(
                                   val messagesApi: MessagesApi,
-                                  val env: Environment[Crew, CookieAuthenticator],
+                                  val env: Environment[Crew, JWTAuthenticator],
                                   userService: UserService,
                                   authInfoRepository: AuthInfoRepository,
                                   avatarService: AvatarService,
                                   passwordHasher: PasswordHasher)
-  extends Silhouette[Crew, CookieAuthenticator] {
+  extends Silhouette[Crew, JWTAuthenticator] {
 
   def signUp: Action[SignUpData] = Action.async(parse.json(SignUpDataJson.dataReads)) { implicit req =>
     val data = req.body
     val loginInfo = LoginInfo(CredentialsProvider.ID, data.email)
     userService.retrieve(loginInfo).flatMap {
       case Some(user) =>
-        Future.successful(BadRequest(Messages("user.exists")))
+        Future.successful(BadRequest(Json.toJson(Json.obj("message" -> Messages("user.exists")))))
       case None =>
         val authInfo = passwordHasher.hash(data.password)
         val user = Crew(
