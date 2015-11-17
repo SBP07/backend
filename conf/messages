@@ -1,6 +1,9 @@
 error.email = Valid email required
 error.required = This field is required
 invalid.credentials = Invalid credentials!
+authentication.successful = Authentication successful
+not.authenticated = Not authenticated, access denied
+not.authorized = You do not have persmission to access this resource because you do not possess the neccessary authorization
 access.denied = Access denied!
 user.exists = There already exists a user with this email!
 could.not.authenticate = Could not authenticate with social provider! Please try again!
