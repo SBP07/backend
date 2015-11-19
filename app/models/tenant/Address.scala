@@ -2,4 +2,11 @@ package models.tenant
 
 import java.util.UUID
 
-case class Address(id: Option[UUID], street: String, number: String, zipCode: Int, city: String)
+import models.helpers.BelongsToTenant
+
+case class Address(
+                    street: String,
+                    number: String,
+                    zipCode: Int,
+                    city: String
+                  )

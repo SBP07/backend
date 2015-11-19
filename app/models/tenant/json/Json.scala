@@ -1,6 +1,11 @@
 package models.tenant.json
 
+import java.time.LocalDate
+import java.util.UUID
+
 import play.api.libs.json._
+import play.api.libs.functional.syntax._
+import play.api.libs.json.Reads._
 import models.tenant._
 
 object AddressJson {
@@ -9,8 +14,36 @@ object AddressJson {
 }
 
 object ChildJson {
-  implicit val childReads: Reads[Child] = Json.reads[Child]
-  implicit val childWrites: Writes[Child] = Json.writes[Child]
+  import AddressJson._
+
+  implicit val childReads: Reads[Child] = (
+    (JsPath \ "id").readNullable[UUID] and
+
+      (JsPath \ "firstName").read[String] and
+      (JsPath \ "lastName").read[String] and
+
+      (JsPath \ "birthDate").readNullable[LocalDate] and
+
+      (JsPath \ "address").readNullable[Address] and
+
+      (JsPath \ "tenantId").read[UUID]
+
+    ) (Child.apply _)
+
+  implicit val childWrites: Writes[Child] = (
+    (JsPath \ "id").write[Option[UUID]] and
+
+    (JsPath \ "firstName").write[String] and
+    (JsPath \ "lastName").write[String] and
+
+    (JsPath \ "birthDate").write[Option[LocalDate]] and
+
+    (JsPath \ "address").write[Option[Address]] and
+
+    (JsPath \ "tenantId").write[UUID]
+
+    ) (unlift(Child.unapply))
+
 }
 
 object ContactPersonJson {

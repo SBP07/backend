@@ -17,17 +17,13 @@ GET     /api/unprotected/tenant/id/:id      controllers.api.TenantController.get
 PUT     /api/unprotected/tenant             controllers.api.TenantController.update
 DELETE  /api/unprotected/tenant/id/:id      controllers.api.TenantController.delete(id: java.util.UUID)
 
-GET     /api/unprotected/address             controllers.api.AddressController.getAll
-POST    /api/unprotected/address             controllers.api.AddressController.create
-GET     /api/unprotected/address/id/:id      controllers.api.AddressController.getById(id: java.util.UUID)
-PUT     /api/unprotected/address             controllers.api.AddressController.update
-DELETE  /api/unprotected/address/id/:id      controllers.api.AddressController.delete(id: java.util.UUID)
+### API
 
-GET     /api/unprotected/child             controllers.api.ChildController.getAll
-POST    /api/unprotected/child             controllers.api.ChildController.create
-GET     /api/unprotected/child/id/:id      controllers.api.ChildController.getById(id: java.util.UUID)
-PUT     /api/unprotected/child             controllers.api.ChildController.update
-DELETE  /api/unprotected/child/id/:id      controllers.api.ChildController.delete(id: java.util.UUID)
+GET     /api/v0/child             controllers.api.ChildController.getAll
+POST    /api/v0/child             controllers.api.ChildController.create
+GET     /api/v0/child/id/:id      controllers.api.ChildController.getById(id: java.util.UUID)
+PUT     /api/v0/child             controllers.api.ChildController.update
+DELETE  /api/v0/child/id/:id      controllers.api.ChildController.delete(id: java.util.UUID)
 
 ### Authentication
 
