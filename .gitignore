@@ -15,5 +15,3 @@ dist
 /.settings
 /.target
 
-conf/evolutions
-
