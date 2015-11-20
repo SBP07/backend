@@ -5,7 +5,7 @@ import com.mohiva.play.silhouette.impl.authenticators.{JWTAuthenticator, CookieA
 import com.mohiva.play.silhouette.impl.providers.SocialProviderRegistry
 import dao.RepoFor
 import io.strongtyped.active.slick.ActiveRecord
-import models.tenant.Crew
+import models.tenant.AuthCrewUser
 import org.postgresql.util.PSQLException
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.i18n.MessagesApi
@@ -17,9 +17,9 @@ import scala.util.{Failure, Success}
 
 abstract class GenericApiController(val dbConfigProvider: DatabaseConfigProvider,
                                     val messagesApi: MessagesApi,
-                                    val env: Environment[Crew, JWTAuthenticator],
+                                    val env: Environment[AuthCrewUser, JWTAuthenticator],
                                     val socialProviderRegistry: SocialProviderRegistry)
-  extends Silhouette[Crew, JWTAuthenticator]
+  extends Silhouette[AuthCrewUser, JWTAuthenticator]
 {
 
 

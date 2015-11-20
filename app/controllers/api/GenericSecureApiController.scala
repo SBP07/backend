@@ -3,7 +3,7 @@ package controllers.api
 import com.mohiva.play.silhouette.api.{Silhouette, Environment}
 import com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator
 import com.mohiva.play.silhouette.impl.providers.SocialProviderRegistry
-import models.tenant.Crew
+import models.tenant.AuthCrewUser
 import org.postgresql.util.PSQLException
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.i18n.MessagesApi
@@ -15,10 +15,10 @@ import scala.util.{Failure, Success}
 
 abstract class GenericSecureApiController(dbConfigProvider: DatabaseConfigProvider,
                                           messagesApi: MessagesApi,
-                                          env: Environment[Crew, JWTAuthenticator],
+                                          env: Environment[AuthCrewUser, JWTAuthenticator],
                                           socialProviderRegistry: SocialProviderRegistry)
   extends GenericApiController(dbConfigProvider, messagesApi, env, socialProviderRegistry)
-  with Silhouette[Crew, JWTAuthenticator]
+  with Silhouette[AuthCrewUser, JWTAuthenticator]
 {
   import dbConfig.driver.api._
 

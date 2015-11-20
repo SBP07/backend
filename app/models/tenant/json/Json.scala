@@ -52,8 +52,17 @@ object ContactPersonJson {
 }
 
 object CrewJson {
+  import AddressJson._
+
   implicit val crewReads: Reads[Crew] = Json.reads[Crew]
   implicit val crewWrites: Writes[Crew] = Json.writes[Crew]
+}
+
+object AuthCrewUserJson {
+  import AddressJson._
+
+  implicit val crewReads: Reads[AuthCrewUser] = Json.reads[AuthCrewUser]
+  implicit val crewWrites: Writes[AuthCrewUser] = Json.writes[AuthCrewUser]
 }
 
 object DayJson {

@@ -72,14 +72,16 @@ CREATE TABLE child (
 
   tenant_id        UUID,
 
-    PRIMARY KEY (id)
+  PRIMARY KEY (id)
 );
 
 CREATE TABLE crew (
-  id          UUID NOT NULL DEFAULT uuid_generate_v1mc(),
-  first_name   VARCHAR(255) NOT NULL,
-  last_name    VARCHAR(255) NOT NULL,
-  birth_date  DATE,
+  id               UUID         NOT NULL DEFAULT uuid_generate_v1mc(),
+  first_name       VARCHAR(255) NOT NULL,
+  last_name        VARCHAR(255) NOT NULL,
+  birth_date       DATE,
+
+  email            VARCHAR(255),
 
   address_street   VARCHAR(255),
   address_number   VARCHAR(255),
@@ -88,7 +90,7 @@ CREATE TABLE crew (
 
   tenant_id        UUID,
 
-  PRIMARY KEY( id)
+  PRIMARY KEY (id)
 )
 
 # --- !Downs

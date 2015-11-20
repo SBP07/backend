@@ -4,7 +4,7 @@ import java.util.UUID
 import javax.inject.Inject
 
 import com.mohiva.play.silhouette.api.LoginInfo
-import models.tenant.Crew
+import models.tenant.AuthCrewUser
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 
@@ -29,7 +29,7 @@ class UserDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
     } yield dbUser
     db.run(userQuery.result.headOption).map { dbUserOption =>
       dbUserOption.map { user =>
-        Crew(UUID.fromString(user.userID), loginInfo, user.firstName, user.lastName, user.fullName, user.email, user.avatarURL)
+        AuthCrewUser(UUID.fromString(user.userID), loginInfo, user.firstName, user.lastName, user.fullName, user.email, user.avatarURL)
       }
     }
   }
@@ -49,7 +49,7 @@ class UserDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
     db.run(query.result.headOption).map { resultOption =>
       resultOption.map {
         case (user, loginInfo) =>
-          Crew(
+          AuthCrewUser(
             UUID.fromString(user.userID),
             LoginInfo(loginInfo.providerID, loginInfo.providerKey),
             user.firstName,
@@ -67,7 +67,7 @@ class UserDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
    * @param user The user to save.
    * @return The saved user.
    */
-  def save(user: Crew) = {
+  def save(user: AuthCrewUser) = {
     val dbUser = DBUser(user.userID.toString, user.firstName, user.lastName, user.fullName, user.email, user.avatarURL)
     val dbLoginInfo = DBLoginInfo(None, user.loginInfo.providerID, user.loginInfo.providerKey)
     // We don't have the LoginInfo id so we try to get it first.

@@ -8,14 +8,14 @@ import com.mohiva.play.silhouette.impl.authenticators.{JWTAuthenticator, CookieA
 import com.mohiva.play.silhouette.impl.providers.SocialProviderRegistry
 import dao.RepoFor
 import models.admin.Tenant
-import models.tenant.Crew
+import models.tenant.AuthCrewUser
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.i18n.MessagesApi
 import play.api.libs.json._
 
 class TenantController @Inject()(dbConfigProvider: DatabaseConfigProvider,
                                  messagesApi: MessagesApi,
-                                 env: Environment[Crew, JWTAuthenticator],
+                                 env: Environment[AuthCrewUser, JWTAuthenticator],
                                  socialProviderRegistry: SocialProviderRegistry)
   extends GenericApiController(dbConfigProvider, messagesApi, env, socialProviderRegistry)
 {

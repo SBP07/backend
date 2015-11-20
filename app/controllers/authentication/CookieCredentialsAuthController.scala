@@ -12,7 +12,7 @@ import com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator
 import com.mohiva.play.silhouette.impl.exceptions.IdentityNotFoundException
 import com.mohiva.play.silhouette.impl.providers._
 import models.bindmodels.SignInData
-import models.tenant.Crew
+import models.tenant.AuthCrewUser
 import net.ceedubs.ficus.Ficus._
 import play.api.Configuration
 import play.api.i18n.{Messages, MessagesApi}
@@ -36,15 +36,15 @@ import scala.language.postfixOps
   * @param clock The clock instance.
   */
 class CookieCredentialsAuthController @Inject()(
-                                           val messagesApi: MessagesApi,
-                                           val env: Environment[Crew, CookieAuthenticator],
-                                           userService: UserService,
-                                           authInfoRepository: AuthInfoRepository,
-                                           credentialsProvider: CredentialsProvider,
-                                           socialProviderRegistry: SocialProviderRegistry,
-                                           configuration: Configuration,
-                                           clock: Clock)
-  extends Silhouette[Crew, CookieAuthenticator] {
+                                                 val messagesApi: MessagesApi,
+                                                 val env: Environment[AuthCrewUser, CookieAuthenticator],
+                                                 userService: UserService,
+                                                 authInfoRepository: AuthInfoRepository,
+                                                 credentialsProvider: CredentialsProvider,
+                                                 socialProviderRegistry: SocialProviderRegistry,
+                                                 configuration: Configuration,
+                                                 clock: Clock)
+  extends Silhouette[AuthCrewUser, CookieAuthenticator] {
 
   def authenticate: Action[SignInData.Data] = Action.async(parse.json(SignInData.dataReads)) { implicit req =>
     val data = req.body

@@ -10,7 +10,7 @@ import dao.auth.UserDAO
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
-import models.tenant.Crew
+import models.tenant.AuthCrewUser
 
 /**
  * Handles actions to users.
@@ -25,7 +25,7 @@ class UserServiceImpl @Inject() (userDAO: UserDAO) extends UserService {
    * @param loginInfo The login info to retrieve a user.
    * @return The retrieved user or None if no user could be retrieved for the given login info.
    */
-  def retrieve(loginInfo: LoginInfo): Future[Option[Crew]] = userDAO.find(loginInfo)
+  def retrieve(loginInfo: LoginInfo): Future[Option[AuthCrewUser]] = userDAO.find(loginInfo)
 
   /**
    * Saves a user.
@@ -33,7 +33,7 @@ class UserServiceImpl @Inject() (userDAO: UserDAO) extends UserService {
    * @param user The user to save.
    * @return The saved user.
    */
-  def save(user: Crew) = userDAO.save(user)
+  def save(user: AuthCrewUser) = userDAO.save(user)
 
   /**
    * Saves the social profile for a user.
@@ -54,7 +54,7 @@ class UserServiceImpl @Inject() (userDAO: UserDAO) extends UserService {
           avatarURL = profile.avatarURL
         ))
       case None => // Insert a new user
-        userDAO.save(Crew(
+        userDAO.save(AuthCrewUser(
           userID = UUID.randomUUID(),
           loginInfo = profile.loginInfo,
           firstName = profile.firstName,
