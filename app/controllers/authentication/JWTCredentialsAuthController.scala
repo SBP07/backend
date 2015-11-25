@@ -75,7 +75,7 @@ class JWTCredentialsAuthController @Inject()(
       }
     }.recover {
       case e: ProviderException =>
-        Unauthorized(Json.obj("message" -> Messages("invalid.credentials")))
+        Unauthorized(Json.obj("message" -> Messages("invalid.credentials"), "status" -> "error"))
     }
   }
 }
