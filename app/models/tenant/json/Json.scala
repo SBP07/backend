@@ -3,10 +3,12 @@ package models.tenant.json
 import java.time.LocalDate
 import java.util.UUID
 
+import play.api.data.validation.ValidationError
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
 import models.tenant._
+import models.Role
 
 object AddressJson {
   implicit val addressReads: Reads[Address] = Json.reads[Address]
@@ -58,8 +60,24 @@ object CrewJson {
   implicit val crewWrites: Writes[Crew] = Json.writes[Crew]
 }
 
+object RoleJson {
+  implicit val roleReads: Reads[Role] = Json.reads[Role]
+
+  implicit object RoleReads extends Reads[Role] {
+    def reads(json: JsValue): JsResult[Role] = json match {
+      case JsString(s) => JsSuccess(Role(s))
+      case _ => JsError(Seq(JsPath() -> Seq(ValidationError("error.expected.jsstring"))))
+    }
+  }
+
+  implicit object RoleWrites extends Writes[Role] {
+    def writes(o: Role): JsString = JsString(o.name)
+  }
+}
+
 object AuthCrewUserJson {
   import AddressJson._
+  import RoleJson._
 
   implicit val crewReads: Reads[AuthCrewUser] = Json.reads[AuthCrewUser]
   implicit val crewWrites: Writes[AuthCrewUser] = Json.writes[AuthCrewUser]

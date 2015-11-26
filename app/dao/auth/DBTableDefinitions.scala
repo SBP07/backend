@@ -9,6 +9,15 @@ trait DBTableDefinitions {
   protected val driver: JdbcProfile
   import driver.api._
 
+  case class DBRole(
+    id: String
+  )
+
+  class Roles(tag: Tag) extends Table[DBRole](tag, "auth_roles") {
+    def id = column[String]("name", O.PrimaryKey)
+    def * = id <> (DBRole.apply, DBRole.unapply)
+  }
+
   case class DBUser (
     userID: String,
     firstName: Option[String],
@@ -17,6 +26,21 @@ trait DBTableDefinitions {
     email: Option[String],
     avatarURL: Option[String]
   )
+
+  case class DBUserRole(userId: String, roleId: String)
+
+  class UsersToRoles(tag: Tag) extends Table[DBUserRole](tag, "auth_user_to_roles") {
+    def userId = column[String]("user_id")
+    def roleId = column[String]("role_id")
+
+    def * = (userId, roleId) <> (DBUserRole.tupled, DBUserRole.unapply)
+
+    def userFk = foreignKey("user_fk", userId, users)(_.id)
+    def roleFk = foreignKey("role_fk", roleId, roles)(_.id)
+  }
+
+  val users = TableQuery[Users]
+  val roles = TableQuery[Roles]
 
   class Users(tag: Tag) extends Table[DBUser](tag, "auth_user") {
     def id = column[String]("userID", O.PrimaryKey)
@@ -134,6 +158,8 @@ trait DBTableDefinitions {
   val slickOAuth2Infos = TableQuery[OAuth2Infos]
   val slickOpenIDInfos = TableQuery[OpenIDInfos]
   val slickOpenIDAttributes = TableQuery[OpenIDAttributes]
+
+  val slickUserRoles = TableQuery[UsersToRoles]
   
   // queries used in multiple places
   def loginInfoQuery(loginInfo: LoginInfo) = 

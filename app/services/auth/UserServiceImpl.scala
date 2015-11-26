@@ -6,6 +6,7 @@ import javax.inject.Inject
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.impl.providers.CommonSocialProfile
 import dao.auth.UserDAO
+import models.Role
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -43,7 +44,7 @@ class UserServiceImpl @Inject() (userDAO: UserDAO) extends UserService {
    * @param profile The social profile to save.
    * @return The user for whom the profile was saved.
    */
-  def save(profile: CommonSocialProfile) = {
+  def save(profile: CommonSocialProfile): Future[AuthCrewUser] = {
     userDAO.find(profile.loginInfo).flatMap {
       case Some(user) => // Update user with profile
         userDAO.save(user.copy(
@@ -61,7 +62,8 @@ class UserServiceImpl @Inject() (userDAO: UserDAO) extends UserService {
           lastName = profile.lastName,
           fullName = profile.fullName,
           email = profile.email,
-          avatarURL = profile.avatarURL
+          avatarURL = profile.avatarURL,
+          roles = Set(Role.NormalUser)
         ))
     }
   }

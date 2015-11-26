@@ -4,6 +4,7 @@ import java.time.LocalDate
 import java.util.UUID
 
 import com.mohiva.play.silhouette.api.{Identity, LoginInfo}
+import models.Role
 import models.helpers.BelongsToTenant
 
 /**
@@ -18,14 +19,15 @@ import models.helpers.BelongsToTenant
   * @param avatarURL Maybe the avatar URL of the authenticated provider.
   */
 case class AuthCrewUser(
-                 userID: UUID,
-                 loginInfo: LoginInfo,
-                 firstName: Option[String],
-                 lastName: Option[String],
-                 fullName: Option[String],
-                 email: Option[String],
-                 avatarURL: Option[String]
-               )
+                         userID: UUID,
+                         loginInfo: LoginInfo,
+                         firstName: Option[String],
+                         lastName: Option[String],
+                         fullName: Option[String],
+                         email: Option[String],
+                         avatarURL: Option[String],
+                         roles: Set[Role]
+                       )
   extends Identity
 
 

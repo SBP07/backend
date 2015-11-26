@@ -10,6 +10,7 @@ import com.mohiva.play.silhouette.api.services.AvatarService
 import com.mohiva.play.silhouette.api.util.PasswordHasher
 import com.mohiva.play.silhouette.impl.authenticators.{JWTAuthenticator, CookieAuthenticator}
 import com.mohiva.play.silhouette.impl.providers._
+import models.Role.NormalUser
 import models.bindmodels.{SignUpDataJson, SignUpData}
 import models.tenant.AuthCrewUser
 import play.api.i18n.{MessagesApi, Messages}
@@ -54,7 +55,8 @@ class SignUpController @Inject()(
           lastName = Some(data.lastName),
           fullName = Some(data.firstName + " " + data.lastName),
           email = Some(data.email),
-          avatarURL = None
+          avatarURL = None,
+          Set(NormalUser)
         )
         for {
           avatar <- avatarService.retrieveURL(data.email)

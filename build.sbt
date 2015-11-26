@@ -24,8 +24,10 @@ libraryDependencies ++= Seq(
   "org.webjars" %% "webjars-play" % "2.4.0-1",
 
   "com.mohiva" %% "play-silhouette" % "3.0.0",
+  filters,
 
-  filters
+
+  "org.scalaz" %% "scalaz-core" % "7.1.5"
 )
 
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
