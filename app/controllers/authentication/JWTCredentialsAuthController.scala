@@ -20,6 +20,7 @@ import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import play.api.mvc.Action
+import utils.JsonStatus
 
 import scala.concurrent.Future
 import scala.concurrent.duration._
@@ -75,7 +76,7 @@ class JWTCredentialsAuthController @Inject()(
       }
     }.recover {
       case e: ProviderException =>
-        Unauthorized(Json.obj("message" -> Messages("invalid.credentials"), "status" -> "error"))
+        Unauthorized(JsonStatus.error("message" -> Messages("invalid.credentials")))
     }
   }
 }

@@ -9,6 +9,7 @@ import models.tenant.AuthCrewUser
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent}
+import utils.JsonStatus
 
 import scala.concurrent.Future
 
@@ -20,6 +21,6 @@ class JWTCredentialsTestController @Inject()(
   extends Silhouette[AuthCrewUser, JWTAuthenticator]
 {
   def index: Action[AnyContent] = SecuredAction.async { implicit request =>
-    Future.successful(Ok(Json.obj("message" -> Messages("authentication.successful"))))
+    Future.successful(Ok(JsonStatus.error("message" -> Messages("authentication.successful"))))
   }
 }

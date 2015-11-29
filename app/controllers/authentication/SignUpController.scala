@@ -18,6 +18,7 @@ import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json.Json
 import play.api.mvc.Action
 import models.tenant.json.AuthCrewUserJson.crewWrites
+import utils.JsonStatus
 
 import scala.concurrent.Future
 
@@ -45,7 +46,7 @@ class SignUpController @Inject()(
     val loginInfo = LoginInfo(CredentialsProvider.ID, data.email)
     userService.retrieve(loginInfo).flatMap {
       case Some(user) =>
-        Future.successful(BadRequest(Json.toJson(Json.obj("message" -> Messages("user.exists")))))
+        Future.successful(BadRequest(JsonStatus.error("message" -> Messages("user.exists"))))
       case None =>
         val authInfo = passwordHasher.hash(data.password)
         val user = AuthCrewUser(

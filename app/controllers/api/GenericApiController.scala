@@ -12,6 +12,7 @@ import play.api.i18n.MessagesApi
 import play.api.mvc._
 import slick.driver.JdbcProfile
 import play.api.libs.json._
+import utils.JsonStatus
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.{Failure, Success}
 
@@ -53,7 +54,7 @@ abstract class GenericApiController(val dbConfigProvider: DatabaseConfigProvider
   def delete(id: Id): Action[AnyContent] = Action.async {
     db.run(repo.filterById(id).delete).map {
       i =>
-        if (i == 0) NotFound else Ok
+        if (i == 0) NotFound(JsonStatus.error("message" -> "Not found")) else Ok
     }
   }
 
@@ -71,8 +72,10 @@ abstract class GenericApiController(val dbConfigProvider: DatabaseConfigProvider
     parsed =>
       db.run(convertToPersistable(parsed.body).save.asTry).map {
         case Success(created) => Ok(Json.toJson(convertToDisplayable(created)))
-        case Failure(e: PSQLException) if e.getSQLState == "23505" => InternalServerError("Unique key violation: unique key already exists in the database.")
-        case Failure(t: PSQLException) => InternalServerError("PSQL error.")
+        case Failure(e: PSQLException) if e.getSQLState == "23505" => InternalServerError(
+          JsonStatus.error("message" -> "Unique key violation: unique key already exists in the database.")
+        )
+        case Failure(t: PSQLException) => InternalServerError(JsonStatus.error("message" -> "PSQL error."))
       }
 
   }

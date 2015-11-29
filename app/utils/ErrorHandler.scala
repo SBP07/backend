@@ -35,7 +35,7 @@ class ErrorHandler @Inject() (
     * @return The result to send to the client.
     */
   override def onNotAuthenticated(request: RequestHeader, messages: Messages): Option[Future[Result]] = {
-    Some(Future.successful(Unauthorized(Json.toJson(Json.obj("message" -> messages("not.authenticated"))))))
+    Some(Future.successful(Unauthorized(JsonStatus.error("message" -> messages("not.authenticated")))))
   }
 
   /**
@@ -48,6 +48,6 @@ class ErrorHandler @Inject() (
     * @return The result to send to the client.
     */
   override def onNotAuthorized(request: RequestHeader, messages: Messages): Option[Future[Result]] = {
-    Some(Future.successful(Forbidden(Json.toJson(Json.obj("message" -> messages("not.authorized"))))))
+    Some(Future.successful(Forbidden(JsonStatus.error("message" -> messages("not.authorized")))))
   }
 }
