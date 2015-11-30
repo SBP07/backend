@@ -26,25 +26,32 @@ class UserDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
     * @param loginInfo The login info of the user to find.
     * @return The found user or None if no user for the given login info could be found.
     */
-  def find(loginInfo: LoginInfo) = {
+  def find(loginInfo: LoginInfo): Future[Option[AuthCrewUser]] = {
     val userQuery = for {
       dbLoginInfo <- loginInfoQuery(loginInfo)
       dbUserLoginInfo <- slickUserLoginInfos.filter(_.loginInfoId === dbLoginInfo.id)
       dbUser <- slickUsers.filter(_.id === dbUserLoginInfo.userID)
-    } yield dbUser
-    db.run(userQuery.result.headOption).map { dbUserOption =>
-      dbUserOption.map { user =>
-        AuthCrewUser(
-          UUID.fromString(user.userID),
-          loginInfo,
-          user.firstName,
-          user.lastName,
-          user.fullName,
-          user.email,
-          user.avatarURL,
-          Set.empty[Role] // TODO
-        )
-      }
+      dbRoles <- slickUserRoles.filter(_.userId === dbUserLoginInfo.userID) // TODO get the roles out and set them on the user
+    } yield (dbUser, dbRoles)
+    db.run(userQuery.result).map { dbOption =>
+      dbOption
+        .groupBy(_._1)
+        .map { case (k, v) => (k, v.map(_._2)) }
+        .headOption
+        .map { userWithRoles =>
+          val user = userWithRoles._1
+          val roles = userWithRoles._2.map(dbRole => Role(dbRole.roleId)).toSet
+          AuthCrewUser(
+            UUID.fromString(user.userID),
+            loginInfo,
+            user.firstName,
+            user.lastName,
+            user.fullName,
+            user.email,
+            user.avatarURL,
+            roles
+          )
+        }
     }
   }
 
