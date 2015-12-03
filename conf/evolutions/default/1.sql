@@ -53,8 +53,8 @@ CREATE TABLE "auth_openidattributes" (
 -- Custom authentication tables
 CREATE TABLE "auth_user_to_roles" (
   "user_id" VARCHAR(255) NOT NULL,
-  "role_id" VARCHAR NOT NULL,
-  PRIMARY KEY(user_id, role_id),
+  "role_id" VARCHAR      NOT NULL,
+  PRIMARY KEY (user_id, role_id),
   FOREIGN KEY (user_id) REFERENCES auth_user ("userID")
 );
 -- End authentication tables
@@ -67,13 +67,31 @@ CREATE TABLE tenant (
 );
 
 CREATE TABLE child (
+  id         UUID         NOT NULL DEFAULT uuid_generate_v1mc(),
+  first_name VARCHAR(255) NOT NULL,
+  last_name  VARCHAR(255) NOT NULL,
+
+  birth_date DATE,
+
+  tenant_id  UUID,
+
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE contact_person (
   id               UUID         NOT NULL DEFAULT uuid_generate_v1mc(),
   first_name       VARCHAR(255) NOT NULL,
   last_name        VARCHAR(255) NOT NULL,
 
-  birth_date       DATE,
+  address_street   VARCHAR(255),
+  address_zip_code INT,
+  address_city     VARCHAR(255),
+  address_country  VARCHAR(255),
 
-  tenant_id        UUID,
+  landline         VARCHAR(50),
+  mobile_phone     VARCHAR(50),
+
+  tenant_cname     VARCHAR(25)  NOT NULL REFERENCES tenant ("canonical_name"),
 
   PRIMARY KEY (id)
 );
@@ -87,17 +105,18 @@ CREATE TABLE crew (
   email            VARCHAR(255),
 
   address_street   VARCHAR(255),
-  address_number   VARCHAR(255),
   address_zip_code INT,
   address_city     VARCHAR(255),
+  address_country  VARCHAR(255),
 
   tenant_id        UUID,
 
   PRIMARY KEY (id)
 )
 
-# --- !Downs
+  # --- !Downs
 
+DROP TABLE "contact_person";
 DROP TABLE "child";
 DROP TABLE "crew";
 DROP TABLE "tenant";

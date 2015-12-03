@@ -45,20 +45,7 @@ object ChildJson {
 object ContactPersonJson {
   import AddressJson._
 
-  implicit val contactPersonReads: Reads[ContactPerson] =  (
-      (JsPath \ "id").readNullable[UUID] and
-
-      (JsPath \ "firstName").read[String] and
-      (JsPath \ "lastName").read[String] and
-
-      (JsPath \ "address").readNullable[Address] and
-
-      (JsPath \ "landline").readNullable[String] and
-      (JsPath \ "mobilePhone").readNullable[String] and
-
-      (JsPath \ "tenantId").read[String]
-
-    ) (ContactPerson.apply _)
+  implicit val contactPersonReads: Reads[ContactPerson] =  Json.reads[ContactPerson]
   implicit val contactPersonWrites: Writes[ContactPerson] = Json.writes[ContactPerson]
 }
 

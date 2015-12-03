@@ -12,5 +12,5 @@ case class ContactPerson(
   landline: Option[String],
   mobilePhone: Option[String],
 
-  tenantId: String
+  tenantName: String
 )

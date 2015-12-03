@@ -31,6 +31,12 @@ GET     /api/v0/crew/id/:id      controllers.api.CrewController.getById(id: java
 PUT     /api/v0/crew             controllers.api.CrewController.update
 DELETE  /api/v0/crew/id/:id      controllers.api.CrewController.delete(id: java.util.UUID)
 
+GET     /api/v0/contactPerson             controllers.api.ContactPersonController.getAll
+POST    /api/v0/contactPerson             controllers.api.ContactPersonController.create
+GET     /api/v0/contactPerson/id/:id      controllers.api.ContactPersonController.getById(id: java.util.UUID)
+PUT     /api/v0/contactPerson             controllers.api.ContactPersonController.update
+DELETE  /api/v0/contactPerson/id/:id      controllers.api.ContactPersonController.delete(id: java.util.UUID)
+
 ### Authentication
 
 POST    /api/v0/auth/signUp                  controllers.authentication.SignUpController.signUp
