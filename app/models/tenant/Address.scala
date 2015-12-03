@@ -6,7 +6,7 @@ import models.helpers.BelongsToTenant
 
 case class Address(
                     street: String,
-                    number: String,
                     zipCode: Int,
-                    city: String
+                    city: String,
+                    country: String
                   )

@@ -73,11 +73,6 @@ CREATE TABLE child (
 
   birth_date       DATE,
 
-  address_street   VARCHAR(255),
-  address_number   VARCHAR(255),
-  address_zip_code INT,
-  address_city     VARCHAR(255),
-
   tenant_id        UUID,
 
   PRIMARY KEY (id)

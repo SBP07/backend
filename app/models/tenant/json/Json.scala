@@ -16,8 +16,6 @@ object AddressJson {
 }
 
 object ChildJson {
-  import AddressJson._
-
   implicit val childReads: Reads[Child] = (
     (JsPath \ "id").readNullable[UUID] and
 
@@ -25,8 +23,6 @@ object ChildJson {
       (JsPath \ "lastName").read[String] and
 
       (JsPath \ "birthDate").readNullable[LocalDate] and
-
-      (JsPath \ "address").readNullable[Address] and
 
       (JsPath \ "tenantId").read[UUID]
 
@@ -40,8 +36,6 @@ object ChildJson {
 
     (JsPath \ "birthDate").write[Option[LocalDate]] and
 
-    (JsPath \ "address").write[Option[Address]] and
-
     (JsPath \ "tenantId").write[UUID]
 
     ) (unlift(Child.unapply))
@@ -49,7 +43,22 @@ object ChildJson {
 }
 
 object ContactPersonJson {
-  implicit val contactPersonReads: Reads[ContactPerson] = Json.reads[ContactPerson]
+  import AddressJson._
+
+  implicit val contactPersonReads: Reads[ContactPerson] =  (
+      (JsPath \ "id").readNullable[UUID] and
+
+      (JsPath \ "firstName").read[String] and
+      (JsPath \ "lastName").read[String] and
+
+      (JsPath \ "address").readNullable[Address] and
+
+      (JsPath \ "landline").readNullable[String] and
+      (JsPath \ "mobilePhone").readNullable[String] and
+
+      (JsPath \ "tenantId").read[String]
+
+    ) (ContactPerson.apply _)
   implicit val contactPersonWrites: Writes[ContactPerson] = Json.writes[ContactPerson]
 }
 

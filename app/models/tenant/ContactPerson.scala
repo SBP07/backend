@@ -1,3 +1,16 @@
 package models.tenant
 
-case class ContactPerson(firstName: String, lastName: String)
+import java.util.UUID
+
+case class ContactPerson(
+  id: Option[UUID],
+  firstName: String,
+  lastName: String,
+
+  address: Option[Address],
+
+  landline: Option[String],
+  mobilePhone: Option[String],
+
+  tenantId: String
+)

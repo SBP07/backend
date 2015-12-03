@@ -17,22 +17,22 @@ case class PersistableCrew(
                             avatarURL: Option[String],
                             birthDate: Option[LocalDate],
                             street: Option[String],
-                            number: Option[String],
                             zipCode: Option[Int],
                             city: Option[String],
+                            country: Option[String],
                             tenantId: UUID
                           ) extends BelongsToTenant {
   def convert: Crew = {
-    val address = for {street <- street; number <- number; zipCode <- zipCode; city <- city}
+    val address = for {street <- street; zipCode <- zipCode; city <- city; country <- country }
       yield {
-        Address(street, number, zipCode, city)
+        Address(street, zipCode, city, country)
       }
     Crew(id, /*loginInfo*/ null, firstName, lastName, fullName, email, avatarURL, birthDate, address, tenantId)
   }
 }
 
 object PersistableCrew extends ((Option[UUID]/*, LoginInfo*/, Option[String], Option[String], Option[String], Option[String],
-  Option[String], Option[LocalDate], Option[String], Option[String], Option[Int], Option[String], UUID)
+  Option[String], Option[LocalDate], Option[String], Option[Int], Option[String], Option[String], UUID)
   => PersistableCrew)
 {
   def build(crew: Crew): PersistableCrew = {
@@ -46,9 +46,9 @@ object PersistableCrew extends ((Option[UUID]/*, LoginInfo*/, Option[String], Op
       crew.avatarURL,
       crew.birthDate,
       crew.address.map(_.street),
-      crew.address.map(_.number),
       crew.address.map(_.zipCode),
       crew.address.map(_.city),
+      crew.address.map(_.country),
       crew.tenantId
     )
   }

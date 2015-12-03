@@ -40,12 +40,12 @@ object CrewRepo extends RepoFor[PersistableCrew, UUID] {
     def avatarUrl = column[Option[String]]("avatar_url")
     def birthDate = column[Option[LocalDate]]("birth_date")
     def street = column[Option[String]]("address_street")
-    def number = column[Option[String]]("address_number")
     def zipCode = column[Option[Int]]("address_zip_code")
+    def country = column[Option[String]]("address_country")
     def city = column[Option[String]]("address_city")
     def tenantId = column[UUID]("tenant_id")
 
-    def * : ProvenShape[PersistableCrew] = (id.?, firstName, lastName, fullName, email, avatarUrl, birthDate, street, number, zipCode, city, tenantId) <> (PersistableCrew.tupled, PersistableCrew.unapply _)
+    def * : ProvenShape[PersistableCrew] = (id.?, firstName, lastName, fullName, email, avatarUrl, birthDate, street, zipCode, country, city, tenantId) <> (PersistableCrew.tupled, PersistableCrew.unapply _)
 
   }
 

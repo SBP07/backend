@@ -12,9 +12,9 @@ import io.strongtyped.active.slick.Lens._
 import slick.lifted.ProvenShape
 import scala.language.postfixOps
 import scala.concurrent.ExecutionContext.Implicits.global
-import models.tenant.persistable.PersistableChild
+import models.tenant.Child
 
-object ChildRepo extends RepoFor[PersistableChild, UUID] {
+object ChildRepo extends RepoFor[Child, UUID] {
 
   import jdbcProfile.api._
 
@@ -26,14 +26,14 @@ object ChildRepo extends RepoFor[PersistableChild, UUID] {
 
   def $id(table: ChildTable): Rep[Id] = table.id
 
-  val idLens = lens { child: PersistableChild => child.id } { (child, id) => child.copy(id = id) }
+  val idLens = lens { child: Child => child.id } { (child, id) => child.copy(id = id) }
 
   implicit val myDateColumnType = MappedColumnType.base[LocalDate, Date](
     ld => Date.valueOf(ld),
     d => d.toLocalDate
   )
 
-  class ChildTable(tag: Tag) extends Table[PersistableChild](tag, "child") {
+  class ChildTable(tag: Tag) extends Table[Child](tag, "child") {
     def id = column[Id]("id", O.PrimaryKey, O.AutoInc)
 
     def firstName = column[String]("first_name")
@@ -42,17 +42,9 @@ object ChildRepo extends RepoFor[PersistableChild, UUID] {
 
     def birthDate = column[Option[LocalDate]]("birth_date")
 
-    def street = column[Option[String]]("address_street")
-
-    def number = column[Option[String]]("address_number")
-
-    def zipCode = column[Option[Int]]("address_zip_code")
-
-    def city = column[Option[String]]("address_city")
-
     def tenantId = column[UUID]("tenant_id")
 
-    def * : ProvenShape[PersistableChild] = (id.?, firstName, lastName, birthDate, street, number, zipCode, city, tenantId) <> (PersistableChild.tupled, PersistableChild.unapply _)
+    def * : ProvenShape[Child] = (id.?, firstName, lastName, birthDate, tenantId) <> (Child.tupled, Child.unapply _)
 
   }
 
