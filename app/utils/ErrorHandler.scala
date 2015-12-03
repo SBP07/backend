@@ -50,4 +50,17 @@ class ErrorHandler @Inject() (
   override def onNotAuthorized(request: RequestHeader, messages: Messages): Option[Future[Result]] = {
     Some(Future.successful(Forbidden(JsonStatus.error("message" -> messages("not.authorized")))))
   }
+
+  override def onBadRequest(request: RequestHeader, message: String): Future[Result] =
+    Future.successful(
+      BadRequest(
+        JsonStatus.error("message" -> "Bad request",
+          "details" -> Json.obj(
+            "requestMethod" -> request.method,
+            "requestUri" -> request.uri,
+            "message" -> message
+          )
+        )
+      )
+    )
 }
