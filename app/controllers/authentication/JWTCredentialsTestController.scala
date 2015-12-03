@@ -21,6 +21,15 @@ class JWTCredentialsTestController @Inject()(
   extends Silhouette[AuthCrewUser, JWTAuthenticator]
 {
   def index: Action[AnyContent] = SecuredAction.async { implicit request =>
-    Future.successful(Ok(JsonStatus.error("message" -> Messages("authentication.successful"))))
+    Future.successful(Ok(
+      JsonStatus.success(
+        "message" -> Messages("authentication.successful",
+        "identity" -> Json.obj(
+          "name" -> s"${request.identity.firstName} ${request.identity.lastName}",
+          "userId" -> request.identity.userID,
+          "roles" -> request.identity.roles.map(_.name)
+        )
+        ))
+    ))
   }
 }
