@@ -1,5 +1,6 @@
 package dao.auth
 
+import java.util.UUID
 import javax.inject.Inject
 
 import models.Role
@@ -14,7 +15,7 @@ class RoleDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
 
   val usersToRoles = TableQuery[UsersToRoles]
 
-  override def getRoles(userId: String): Future[Set[Role]] = {
+  override def getRoles(userId: UUID): Future[Set[Role]] = {
     val query = for {
       userToRole <- usersToRoles if userToRole.userId === userId
     } yield {

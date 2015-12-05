@@ -42,7 +42,7 @@ class UserDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
           val user = userWithRoles._1
           val roles = userWithRoles._2.map(dbRole => Role(dbRole.roleId)).toSet
           AuthCrewUser(
-            UUID.fromString(user.userID),
+            user.userID,
             loginInfo,
             user.firstName,
             user.lastName,
@@ -57,7 +57,7 @@ class UserDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
 
   def find(userID: UUID): Future[Option[AuthCrewUser]] = {
     val query = for {
-      dbUser <- slickUsers.filter(_.id === userID.toString)
+      dbUser <- slickUsers.filter(_.id === userID)
       dbUserLoginInfo <- slickUserLoginInfos.filter(_.userID === dbUser.id)
       dbLoginInfo <- slickLoginInfos.filter(_.id === dbUserLoginInfo.loginInfoId)
     } yield (dbUser, dbLoginInfo)
@@ -69,7 +69,7 @@ class UserDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
           val user = result._1
           val loginInfo = result._2
           AuthCrewUser(
-            UUID.fromString(user.userID),
+            user.userID,
             LoginInfo(loginInfo.providerID, loginInfo.providerKey),
             user.firstName,
             user.lastName,
@@ -93,8 +93,8 @@ class UserDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
     * @return The saved user.
     */
   def save(user: AuthCrewUser): Future[AuthCrewUser] = {
-    val dbUser = DBUser(user.userID.toString, user.firstName, user.lastName, user.fullName, user.email, user.avatarURL)
-    val dbUserRoles: Set[DBUserRole] = user.roles.map(role => DBUserRole(user.userID.toString, role.name))
+    val dbUser = DBUser(user.userID, user.firstName, user.lastName, user.fullName, user.email, user.avatarURL)
+    val dbUserRoles: Set[DBUserRole] = user.roles.map(role => DBUserRole(user.userID, role.name))
     val dbLoginInfo = DBLoginInfo(None, user.loginInfo.providerID, user.loginInfo.providerKey)
     // We don't have the LoginInfo id so we try to get it first.
     // If there is no LoginInfo yet for this user we retrieve the id on insertion.    

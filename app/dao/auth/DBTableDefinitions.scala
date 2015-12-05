@@ -1,5 +1,7 @@
 package dao.auth
 
+import java.util.UUID
+
 import com.mohiva.play.silhouette.api.LoginInfo
 import slick.driver.JdbcProfile
 import slick.lifted.ProvenShape.proveShapeOf
@@ -10,7 +12,7 @@ trait DBTableDefinitions {
   import driver.api._
 
   case class DBUser (
-    userID: String,
+    userID: UUID,
     firstName: Option[String],
     lastName: Option[String],
     fullName: Option[String],
@@ -18,10 +20,10 @@ trait DBTableDefinitions {
     avatarURL: Option[String]
   )
 
-  case class DBUserRole(userId: String, roleId: String)
+  case class DBUserRole(userId: UUID, roleId: String)
 
   class UsersToRoles(tag: Tag) extends Table[DBUserRole](tag, "auth_user_to_roles") {
-    def userId = column[String]("user_id")
+    def userId = column[UUID]("user_id")
     def roleId = column[String]("role_id")
 
     def * = (userId, roleId) <> (DBUserRole.tupled, DBUserRole.unapply)
@@ -32,7 +34,7 @@ trait DBTableDefinitions {
   val users = TableQuery[Users]
 
   class Users(tag: Tag) extends Table[DBUser](tag, "auth_user") {
-    def id = column[String]("userID", O.PrimaryKey)
+    def id = column[UUID]("userID", O.PrimaryKey)
     def firstName = column[Option[String]]("firstName")
     def lastName = column[Option[String]]("lastName")
     def fullName = column[Option[String]]("fullName")
@@ -55,12 +57,12 @@ trait DBTableDefinitions {
   }
 
   case class DBUserLoginInfo (
-    userID: String,
+    userID: UUID,
     loginInfoId: Long
   )
 
   class UserLoginInfos(tag: Tag) extends Table[DBUserLoginInfo](tag, "auth_userlogininfo") {
-    def userID = column[String]("userID")
+    def userID = column[UUID]("userID")
     def loginInfoId = column[Long]("loginInfoId")
     def * = (userID, loginInfoId) <> (DBUserLoginInfo.tupled, DBUserLoginInfo.unapply)
   }

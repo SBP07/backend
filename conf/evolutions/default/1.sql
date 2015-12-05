@@ -4,7 +4,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- Authentication tables
 CREATE TABLE "auth_user" (
-  "userID"    VARCHAR NOT NULL PRIMARY KEY,
+  "userID"    UUID NOT NULL PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   "firstName" VARCHAR,
   "lastName"  VARCHAR,
   "fullName"  VARCHAR,
@@ -17,8 +17,8 @@ CREATE TABLE "auth_logininfo" (
   "providerKey" VARCHAR   NOT NULL
 );
 CREATE TABLE "auth_userlogininfo" (
-  "userID"      VARCHAR NOT NULL,
-  "loginInfoId" BIGINT  NOT NULL
+  "userID"      UUID   NOT NULL,
+  "loginInfoId" BIGINT NOT NULL
 );
 CREATE TABLE "auth_passwordinfo" (
   "hasher"      VARCHAR NOT NULL,
@@ -52,8 +52,8 @@ CREATE TABLE "auth_openidattributes" (
 
 -- Custom authentication tables
 CREATE TABLE "auth_user_to_roles" (
-  "user_id" VARCHAR(255) NOT NULL,
-  "role_id" VARCHAR      NOT NULL,
+  "user_id" UUID    NOT NULL,
+  "role_id" VARCHAR NOT NULL,
   PRIMARY KEY (user_id, role_id),
   FOREIGN KEY (user_id) REFERENCES auth_user ("userID")
 );
