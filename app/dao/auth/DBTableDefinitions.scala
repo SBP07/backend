@@ -1,5 +1,7 @@
 package dao.auth
 
+import java.sql.Date
+import java.time.LocalDate
 import java.util.UUID
 
 import com.mohiva.play.silhouette.api.LoginInfo
@@ -11,13 +13,19 @@ trait DBTableDefinitions {
   protected val driver: JdbcProfile
   import driver.api._
 
+  implicit val myDateColumnType = MappedColumnType.base[LocalDate, Date](
+    ld => Date.valueOf(ld),
+    d => d.toLocalDate
+  )
+
   case class DBUser (
     userID: Option[UUID],
     firstName: Option[String],
     lastName: Option[String],
     fullName: Option[String],
     email: Option[String],
-    avatarURL: Option[String]
+    avatarURL: Option[String],
+    birthDate: Option[LocalDate]
   )
 
   case class DBUserRole(userId: UUID, roleId: String)
@@ -40,7 +48,8 @@ trait DBTableDefinitions {
     def fullName = column[Option[String]]("fullName")
     def email = column[Option[String]]("email")
     def avatarURL = column[Option[String]]("avatarURL")
-    def * = (id.?, firstName, lastName, fullName, email, avatarURL) <> (DBUser.tupled, DBUser.unapply)
+    def birthDate = column[Option[LocalDate]]("birth_date")
+    def * = (id.?, firstName, lastName, fullName, email, avatarURL, birthDate) <> (DBUser.tupled, DBUser.unapply)
   }
 
   case class DBLoginInfo (
