@@ -19,7 +19,7 @@ import models.helpers.BelongsToTenant
   * @param avatarURL Maybe the avatar URL of the authenticated provider.
   */
 case class AuthCrewUser(
-                         userID: UUID,
+                         userID: Option[UUID],
                          loginInfo: LoginInfo,
                          firstName: Option[String],
                          lastName: Option[String],

@@ -12,7 +12,7 @@ trait DBTableDefinitions {
   import driver.api._
 
   case class DBUser (
-    userID: UUID,
+    userID: Option[UUID],
     firstName: Option[String],
     lastName: Option[String],
     fullName: Option[String],
@@ -34,13 +34,13 @@ trait DBTableDefinitions {
   val users = TableQuery[Users]
 
   class Users(tag: Tag) extends Table[DBUser](tag, "auth_user") {
-    def id = column[UUID]("userID", O.PrimaryKey)
+    def id = column[UUID]("userID", O.PrimaryKey, O.AutoInc)
     def firstName = column[Option[String]]("firstName")
     def lastName = column[Option[String]]("lastName")
     def fullName = column[Option[String]]("fullName")
     def email = column[Option[String]]("email")
     def avatarURL = column[Option[String]]("avatarURL")
-    def * = (id, firstName, lastName, fullName, email, avatarURL) <> (DBUser.tupled, DBUser.unapply)
+    def * = (id.?, firstName, lastName, fullName, email, avatarURL) <> (DBUser.tupled, DBUser.unapply)
   }
 
   case class DBLoginInfo (
