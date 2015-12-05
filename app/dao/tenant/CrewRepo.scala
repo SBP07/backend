@@ -33,16 +33,21 @@ object CrewRepo extends RepoFor[PersistableCrew, UUID] {
 
   class CrewTable(tag: Tag) extends Table[PersistableCrew](tag, "crew") {
     def id = column[Id]("id", O.PrimaryKey, O.AutoInc)
+
     def firstName = column[Option[String]]("first_name")
     def lastName = column[Option[String]]("last_name")
     def fullName = column[Option[String]]("full_name")
+
     def email = column[Option[String]]("email")
     def avatarUrl = column[Option[String]]("avatar_url")
+
     def birthDate = column[Option[LocalDate]]("birth_date")
+
     def street = column[Option[String]]("address_street")
     def zipCode = column[Option[Int]]("address_zip_code")
     def country = column[Option[String]]("address_country")
     def city = column[Option[String]]("address_city")
+
     def tenantId = column[UUID]("tenant_id")
 
     def * : ProvenShape[PersistableCrew] = (id.?, firstName, lastName, fullName, email, avatarUrl, birthDate, street, zipCode, country, city, tenantId) <> (PersistableCrew.tupled, PersistableCrew.unapply _)
