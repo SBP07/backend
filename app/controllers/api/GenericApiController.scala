@@ -75,7 +75,9 @@ abstract class GenericApiController(val dbConfigProvider: DatabaseConfigProvider
         case Failure(e: PSQLException) if e.getSQLState == "23505" => InternalServerError(
           JsonStatus.error("message" -> "Unique key violation: unique key already exists in the database.")
         )
-        case Failure(t: PSQLException) => InternalServerError(JsonStatus.error("message" -> "PSQL error."))
+        case Failure(t: PSQLException) => InternalServerError(
+          JsonStatus.error("message" -> "PSQL error", "info" -> t.getServerErrorMessage.toString)
+        )
       }
 
   }

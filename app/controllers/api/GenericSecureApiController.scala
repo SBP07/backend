@@ -9,6 +9,7 @@ import play.api.db.slick.DatabaseConfigProvider
 import play.api.i18n.MessagesApi
 import play.api.libs.json.Json
 import play.api.mvc.{AnyContent, Action}
+import utils.JsonStatus
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.{Failure, Success}
@@ -48,8 +49,12 @@ abstract class GenericSecureApiController(dbConfigProvider: DatabaseConfigProvid
     parsed =>
       db.run(convertToPersistable(parsed.body).save.asTry).map {
         case Success(created) => Ok(Json.toJson(convertToDisplayable(created)))
-        case Failure(e: PSQLException) if e.getSQLState == "23505" => InternalServerError("Unique key violation: unique key already exists in the database.")
-        case Failure(t: PSQLException) => InternalServerError("PSQL error.")
+        case Failure(e: PSQLException) if e.getSQLState == "23505" => InternalServerError(
+          JsonStatus.error("message" -> "Unique key violation: unique key already exists in the database.")
+        )
+        case Failure(t: PSQLException) => InternalServerError(
+          JsonStatus.error("message" -> "PSQL error", "info" -> t.getServerErrorMessage.toString)
+        )
       }
 
   }
