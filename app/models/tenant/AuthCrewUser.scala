@@ -34,18 +34,3 @@ case class AuthCrewUser(
                          tenantCanonicalName: String
                        )
   extends Identity
-
-
-case class Crew(
-                 id: Option[UUID],
-                 loginInfo: LoginInfo,
-                 firstName: Option[String],
-                 lastName: Option[String],
-                 fullName: Option[String],
-                 email: Option[String],
-                 avatarURL: Option[String],
-                 birthDate: Option[LocalDate],
-                 address: Option[Address],
-                 tenantId: UUID
-               )
-  extends Identity with BelongsToTenant
