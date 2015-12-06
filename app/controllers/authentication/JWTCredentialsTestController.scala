@@ -6,6 +6,7 @@ import com.mohiva.play.silhouette.api.{ Environment, LogoutEvent, Silhouette }
 import com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator
 import com.mohiva.play.silhouette.impl.providers.SocialProviderRegistry
 import models.tenant.AuthCrewUser
+import models.tenant.json.AuthCrewUserJson.crewWrites
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent}
@@ -24,11 +25,8 @@ class JWTCredentialsTestController @Inject()(
     Future.successful(Ok(
       JsonStatus.success(
         "message" -> Messages("authentication.successful"),
-        "identity" -> Json.obj(
-          "name" -> s"${request.identity.firstName} ${request.identity.lastName}",
-          "userId" -> request.identity.userID,
-          "roles" -> request.identity.roles.map(_.name)
-        ))
+        "identity" -> request.identity
+        )
     ))
   }
 }
