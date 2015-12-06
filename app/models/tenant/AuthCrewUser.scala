@@ -17,6 +17,8 @@ import models.helpers.BelongsToTenant
   * @param fullName Maybe the full name of the authenticated user.
   * @param email Maybe the email of the authenticated provider.
   * @param avatarURL Maybe the avatar URL of the authenticated provider.
+  * @param birthDate Maybe the date the user was born
+  * @param roles The roles the user has
   */
 case class AuthCrewUser(
                          userID: Option[UUID],
@@ -26,6 +28,7 @@ case class AuthCrewUser(
                          fullName: Option[String],
                          email: Option[String],
                          avatarURL: Option[String],
+                         birthDate: Option[LocalDate],
                          roles: Set[Role]
                        )
   extends Identity

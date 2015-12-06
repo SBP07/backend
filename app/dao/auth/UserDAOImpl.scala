@@ -49,6 +49,7 @@ class UserDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
             user.fullName,
             user.email,
             user.avatarURL,
+            user.birthDate,
             roles
           )
         }
@@ -76,6 +77,7 @@ class UserDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
               user.fullName,
               user.email,
               user.avatarURL,
+              user.birthDate,
               roles
             )
           }
@@ -94,7 +96,7 @@ class UserDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
     * @return The saved user.
     */
   def save(user: AuthCrewUser): Future[AuthCrewUser] = {
-    val dbUser = DBUser(user.userID, user.firstName, user.lastName, user.fullName, user.email, user.avatarURL)
+    val dbUser = DBUser(user.userID, user.firstName, user.lastName, user.fullName, user.email, user.avatarURL, user.birthDate)
     val dbLoginInfo = DBLoginInfo(None, user.loginInfo.providerID, user.loginInfo.providerKey)
     // We don't have the LoginInfo id so we try to get it first.
     // If there is no LoginInfo yet for this user we retrieve the id on insertion.

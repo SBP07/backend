@@ -4,12 +4,13 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- Authentication tables
 CREATE TABLE "auth_user" (
-  "userID"    UUID NOT NULL PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  "firstName" VARCHAR,
-  "lastName"  VARCHAR,
-  "fullName"  VARCHAR,
-  "email"     VARCHAR,
-  "avatarURL" VARCHAR
+  "userID"     UUID NOT NULL PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  "firstName"  VARCHAR,
+  "lastName"   VARCHAR,
+  "fullName"   VARCHAR,
+  "email"      VARCHAR,
+  "avatarURL"  VARCHAR,
+  "birth_date" DATE
 );
 CREATE TABLE "auth_logininfo" (
   "id"          BIGSERIAL NOT NULL PRIMARY KEY,
@@ -114,7 +115,7 @@ CREATE TABLE crew (
   PRIMARY KEY (id)
 );
 
-  # --- !Downs
+# --- !Downs
 
 DROP TABLE "contact_person";
 DROP TABLE "child";
