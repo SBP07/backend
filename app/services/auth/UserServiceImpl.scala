@@ -44,7 +44,7 @@ class UserServiceImpl @Inject() (userDAO: UserDAO) extends UserService {
    * @param profile The social profile to save.
    * @return The user for whom the profile was saved.
    */
-  def save(profile: CommonSocialProfile): Future[AuthCrewUser] = {
+  def save(profile: CommonSocialProfile, tenantCanonicalName: String): Future[AuthCrewUser] = {
     userDAO.find(profile.loginInfo).flatMap {
       case Some(user) => // Update user with profile
         userDAO.save(user.copy(
@@ -65,7 +65,9 @@ class UserServiceImpl @Inject() (userDAO: UserDAO) extends UserService {
           email = profile.email,
           avatarURL = profile.avatarURL,
           birthDate = None,
-          roles = Set(Role.NormalUser)
+          address = None,
+          roles = Set(Role.NormalUser),
+          tenantCanonicalName = tenantCanonicalName
         ))
     }
   }

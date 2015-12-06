@@ -4,7 +4,7 @@ import java.util.UUID
 import javax.inject.Inject
 
 import com.mohiva.play.silhouette.api.LoginInfo
-import models.tenant.AuthCrewUser
+import models.tenant.{Address, AuthCrewUser}
 import models.Role
 import play.api.db.slick.DatabaseConfigProvider
 
@@ -41,6 +41,11 @@ class UserDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
         .map { userWithRoles =>
           val user = userWithRoles._1
           val roles = userWithRoles._2.map(dbRole => Role(dbRole.roleId)).toSet
+          val address = for {
+            street <- user.street; city <- user.city; zipCode <- user.zipCode; country <- user.country
+          } yield {
+            Address(street, zipCode, city, country)
+          }
           AuthCrewUser(
             user.userID,
             loginInfo,
@@ -50,7 +55,9 @@ class UserDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
             user.email,
             user.avatarURL,
             user.birthDate,
-            roles
+            address,
+            roles,
+            user.tenantCanonicalName
           )
         }
     }
@@ -69,6 +76,11 @@ class UserDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
           roleDAO.getRoles(userId).map { roles =>
             val user = result._1
             val loginInfo = result._2
+            val address = for {
+              street <- user.street; city <- user.city; zipCode <- user.zipCode; country <- user.country
+            } yield {
+              Address(street, zipCode, city, country)
+            }
             AuthCrewUser(
               user.userID,
               LoginInfo(loginInfo.providerID, loginInfo.providerKey),
@@ -78,7 +90,9 @@ class UserDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
               user.email,
               user.avatarURL,
               user.birthDate,
-              roles
+              address,
+              roles,
+              user.tenantCanonicalName
             )
           }
         }
@@ -96,7 +110,9 @@ class UserDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
     * @return The saved user.
     */
   def save(user: AuthCrewUser): Future[AuthCrewUser] = {
-    val dbUser = DBUser(user.userID, user.firstName, user.lastName, user.fullName, user.email, user.avatarURL, user.birthDate)
+    val dbUser = DBUser(user.userID, user.firstName, user.lastName, user.fullName, user.email, user.avatarURL,
+      user.address.map(_.street), user.address.map(_.zipCode), user.address.map(_.city), user.address.map(_.country),
+      user.birthDate, user.tenantCanonicalName)
     val dbLoginInfo = DBLoginInfo(None, user.loginInfo.providerID, user.loginInfo.providerKey)
     // We don't have the LoginInfo id so we try to get it first.
     // If there is no LoginInfo yet for this user we retrieve the id on insertion.

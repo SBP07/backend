@@ -17,15 +17,15 @@ object TenantRepo extends RepoFor[Tenant, UUID] {
 
   val baseTypedType = implicitly[BaseTypedType[Id]]
 
-  type EntityTable = OrganisationTable
+  type EntityTable = TenantTable
 
-  val tableQuery = TableQuery[OrganisationTable]
+  val tableQuery = TableQuery[TenantTable]
 
-  def $id(table: OrganisationTable): Rep[Id] = table.id
+  def $id(table: TenantTable): Rep[Id] = table.id
 
   val idLens = lens { org: Tenant => org.id } { (org, id) => org.copy(id = id) }
 
-  class OrganisationTable(tag: Tag) extends Table[Tenant](tag, "tenant") {
+  class TenantTable(tag: Tag) extends Table[Tenant](tag, "tenant") {
     def id = column[Id]("id", O.PrimaryKey, O.AutoInc)
     def canonicalName = column[String]("canonical_name")
     def name = column[String]("name")

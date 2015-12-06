@@ -41,7 +41,7 @@ class SignUpController @Inject()(
                                   passwordHasher: PasswordHasher)
   extends Silhouette[AuthCrewUser, JWTAuthenticator] {
 
-  def signUp: Action[SignUpData] = Action.async(parse.json(SignUpDataJson.dataReads)) { implicit req =>
+  def signUp: Action[SignUpData] = SecuredAction.async(parse.json(SignUpDataJson.dataReads)) { implicit req =>
     val data = req.body
     val loginInfo = LoginInfo(CredentialsProvider.ID, data.email)
     userService.retrieve(loginInfo).flatMap {
@@ -58,7 +58,9 @@ class SignUpController @Inject()(
           email = Some(data.email),
           avatarURL = None,
           birthDate = None,
-          Set(NormalUser)
+          address = None,
+          roles = Set(NormalUser),
+          tenantCanonicalName = req.identity.tenantCanonicalName
         )
         for {
           avatar <- avatarService.retrieveURL(data.email)

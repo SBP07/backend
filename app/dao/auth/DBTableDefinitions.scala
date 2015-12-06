@@ -1,9 +1,11 @@
 package dao.auth
 
+import java.sql.Date
 import java.time.LocalDate
 import java.util.UUID
 
 import com.mohiva.play.silhouette.api.LoginInfo
+import dao.admin.TenantRepo
 import slick.driver.JdbcProfile
 import slick.lifted.ProvenShape.proveShapeOf
 
@@ -12,6 +14,9 @@ trait DBTableDefinitions {
   protected val driver: JdbcProfile
   import driver.api._
 
+  val users = TableQuery[Users]
+  val tenants = TableQuery[TenantRepo.TenantTable]
+
   case class DBUser (
     userID: Option[UUID],
     firstName: Option[String],
@@ -19,7 +24,12 @@ trait DBTableDefinitions {
     fullName: Option[String],
     email: Option[String],
     avatarURL: Option[String],
-    birthDate: Option[LocalDate]
+    street: Option[String],
+    zipCode: Option[Int],
+    city: Option[String],
+    country: Option[String],
+    birthDate: Option[LocalDate],
+    tenantCanonicalName: String
   )
 
   case class DBUserRole(userId: UUID, roleId: String)
@@ -33,10 +43,8 @@ trait DBTableDefinitions {
     def userFk = foreignKey("user_fk", userId, users)(_.id)
   }
 
-  val users = TableQuery[Users]
-
   class Users(tag: Tag) extends Table[DBUser](tag, "auth_user") {
-    implicit val JavaLocalDateMapper = MappedColumnType.base[LocalDate, java.sql.Date](
+    implicit val JavaLocalDateMapper = MappedColumnType.base[LocalDate, Date](
       d => java.sql.Date.valueOf(d),
       d => d.toLocalDate
     )
@@ -47,8 +55,17 @@ trait DBTableDefinitions {
     def fullName = column[Option[String]]("fullName")
     def email = column[Option[String]]("email")
     def avatarURL = column[Option[String]]("avatarURL")
+    def street = column[Option[String]]("address_street")
+    def zipCode = column[Option[Int]]("address_zipcode")
+    def city = column[Option[String]]("address_city")
+    def country = column[Option[String]]("address_country")
     def birthDate = column[Option[LocalDate]]("birth_date")
-    def * = (id.?, firstName, lastName, fullName, email, avatarURL, birthDate) <> (DBUser.tupled, DBUser.unapply)
+    def tenantCanonicalName = column[String]("tenant_cname")
+
+    def * = (id.?, firstName, lastName, fullName, email, avatarURL, street, zipCode, city, country, birthDate,
+      tenantCanonicalName) <> (DBUser.tupled, DBUser.unapply)
+
+    def tenantFk = foreignKey("tenant_fk", tenantCanonicalName, tenants)(_.canonicalName)
   }
 
   case class DBLoginInfo (
