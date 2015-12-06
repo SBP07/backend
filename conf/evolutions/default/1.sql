@@ -113,7 +113,7 @@ CREATE TABLE crew (
   tenant_id        UUID,
 
   PRIMARY KEY (id)
-)
+);
 
   # --- !Downs
 
