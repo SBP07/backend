@@ -9,8 +9,7 @@ CREATE TABLE "auth_user" (
   "lastName"  VARCHAR,
   "fullName"  VARCHAR,
   "email"     VARCHAR,
-  "avatarURL" VARCHAR,
-  "birth_date" DATE
+  "avatarURL" VARCHAR
 );
 CREATE TABLE "auth_logininfo" (
   "id"          BIGSERIAL NOT NULL PRIMARY KEY,

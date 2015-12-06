@@ -26,8 +26,6 @@ case class AuthCrewUser(
                          fullName: Option[String],
                          email: Option[String],
                          avatarURL: Option[String],
-
-                         birthDate: Option[LocalDate],
                          roles: Set[Role]
                        )
   extends Identity
