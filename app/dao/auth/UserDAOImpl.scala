@@ -31,7 +31,7 @@ class UserDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
       dbLoginInfo <- loginInfoQuery(loginInfo)
       dbUserLoginInfo <- slickUserLoginInfos.filter(_.loginInfoId === dbLoginInfo.id)
       dbUser <- slickUsers.filter(_.id === dbUserLoginInfo.userID)
-      dbRoles <- slickUserRoles.filter(_.userId === dbUserLoginInfo.userID) // TODO get the roles out and set them on the user
+      dbRoles <- slickUserRoles.filter(_.userId === dbUserLoginInfo.userID)
     } yield (dbUser, dbRoles)
     db.run(userQuery.result).map { dbOption =>
       dbOption
