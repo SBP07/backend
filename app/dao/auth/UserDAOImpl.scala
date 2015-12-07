@@ -4,7 +4,7 @@ import java.util.UUID
 import javax.inject.Inject
 
 import com.mohiva.play.silhouette.api.LoginInfo
-import models.tenant.{Address, AuthCrewUser}
+import models.tenant.{Address, Crew}
 import models.Role
 import play.api.db.slick.DatabaseConfigProvider
 
@@ -26,7 +26,7 @@ class UserDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
     * @param loginInfo The login info of the user to find.
     * @return The found user or None if no user for the given login info could be found.
     */
-  def find(loginInfo: LoginInfo): Future[Option[AuthCrewUser]] = {
+  def find(loginInfo: LoginInfo): Future[Option[Crew]] = {
     val userQuery = for {
       dbLoginInfo <- loginInfoQuery(loginInfo)
       dbUserLoginInfo <- slickUserLoginInfos.filter(_.loginInfoId === dbLoginInfo.id)
@@ -46,7 +46,7 @@ class UserDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
           } yield {
             Address(street, zipCode, city, country)
           }
-          AuthCrewUser(
+          Crew(
             user.userID,
             loginInfo,
             user.firstName,
@@ -63,7 +63,7 @@ class UserDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
     }
   }
 
-  def find(userID: UUID): Future[Option[AuthCrewUser]] = {
+  def find(userID: UUID): Future[Option[Crew]] = {
     val query = for {
       dbUser <- slickUsers.filter(_.id === userID)
       dbUserLoginInfo <- slickUserLoginInfos.filter(_.userID === dbUser.id)
@@ -81,7 +81,7 @@ class UserDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
             } yield {
               Address(street, zipCode, city, country)
             }
-            AuthCrewUser(
+            Crew(
               user.userID,
               LoginInfo(loginInfo.providerID, loginInfo.providerKey),
               user.firstName,
@@ -109,7 +109,7 @@ class UserDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
     * @param user The user to save.
     * @return The saved user.
     */
-  def save(user: AuthCrewUser): Future[AuthCrewUser] = {
+  def save(user: Crew): Future[Crew] = {
     val dbUser = DBUser(user.userID, user.firstName, user.lastName, user.fullName, user.email, user.avatarURL,
       user.address.map(_.street), user.address.map(_.zipCode), user.address.map(_.city), user.address.map(_.country),
       user.birthDate, user.tenantCanonicalName)

@@ -11,7 +11,7 @@ import models.Role
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
-import models.tenant.AuthCrewUser
+import models.tenant.Crew
 
 /**
  * Handles actions to users.
@@ -26,7 +26,7 @@ class UserServiceImpl @Inject() (userDAO: UserDAO) extends UserService {
    * @param loginInfo The login info to retrieve a user.
    * @return The retrieved user or None if no user could be retrieved for the given login info.
    */
-  def retrieve(loginInfo: LoginInfo): Future[Option[AuthCrewUser]] = userDAO.find(loginInfo)
+  def retrieve(loginInfo: LoginInfo): Future[Option[Crew]] = userDAO.find(loginInfo)
 
   /**
    * Saves a user.
@@ -34,7 +34,7 @@ class UserServiceImpl @Inject() (userDAO: UserDAO) extends UserService {
    * @param user The user to save.
    * @return The saved user.
    */
-  def save(user: AuthCrewUser) = userDAO.save(user)
+  def save(user: Crew) = userDAO.save(user)
 
   /**
    * Saves the social profile for a user.
@@ -44,7 +44,7 @@ class UserServiceImpl @Inject() (userDAO: UserDAO) extends UserService {
    * @param profile The social profile to save.
    * @return The user for whom the profile was saved.
    */
-  def save(profile: CommonSocialProfile, tenantCanonicalName: String): Future[AuthCrewUser] = {
+  def save(profile: CommonSocialProfile, tenantCanonicalName: String): Future[Crew] = {
     userDAO.find(profile.loginInfo).flatMap {
       case Some(user) => // Update user with profile
         userDAO.save(user.copy(
@@ -56,7 +56,7 @@ class UserServiceImpl @Inject() (userDAO: UserDAO) extends UserService {
           avatarURL = profile.avatarURL
         ))
       case None => // Insert a new user
-        userDAO.save(AuthCrewUser(
+        userDAO.save(Crew(
           userID = None,
           loginInfo = profile.loginInfo,
           firstName = profile.firstName,

@@ -3,7 +3,7 @@ package dao.auth
 import java.util.UUID
 
 import models.Role
-import models.tenant.AuthCrewUser
+import models.tenant.Crew
 
 
 import scala.concurrent.Future

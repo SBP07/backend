@@ -18,7 +18,7 @@ import com.mohiva.play.silhouette.impl.providers.openid.services.PlayOpenIDServi
 import com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository
 import com.mohiva.play.silhouette.impl.services._
 import com.mohiva.play.silhouette.impl.util._
-import models.tenant.AuthCrewUser
+import models.tenant.Crew
 import dao.auth._
 import net.ceedubs.ficus.Ficus._
 import net.ceedubs.ficus.readers.ArbitraryTypeReader._
@@ -73,9 +73,9 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
   def provideCookieEnvironment(
                                 userService: UserService,
                                 authenticatorService: AuthenticatorService[CookieAuthenticator],
-                                eventBus: EventBus): Environment[AuthCrewUser, CookieAuthenticator] = {
+                                eventBus: EventBus): Environment[Crew, CookieAuthenticator] = {
 
-    Environment[AuthCrewUser, CookieAuthenticator](
+    Environment[Crew, CookieAuthenticator](
       userService,
       authenticatorService,
       Seq(),
@@ -95,9 +95,9 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
   def provideJWTEnvironment(
                                 userService: UserService,
                                 authenticatorService: AuthenticatorService[JWTAuthenticator],
-                                eventBus: EventBus): Environment[AuthCrewUser, JWTAuthenticator] = {
+                                eventBus: EventBus): Environment[Crew, JWTAuthenticator] = {
 
-    Environment[AuthCrewUser, JWTAuthenticator](
+    Environment[Crew, JWTAuthenticator](
       userService,
       authenticatorService,
       Seq(),

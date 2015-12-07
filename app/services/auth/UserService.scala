@@ -2,14 +2,14 @@ package services.auth
 
 import com.mohiva.play.silhouette.api.services.IdentityService
 import com.mohiva.play.silhouette.impl.providers.CommonSocialProfile
-import models.tenant.AuthCrewUser
+import models.tenant.Crew
 
 import scala.concurrent.Future
 
 /**
  * Handles actions to users.
  */
-trait UserService extends IdentityService[AuthCrewUser] {
+trait UserService extends IdentityService[Crew] {
 
   /**
    * Saves a user.
@@ -17,7 +17,7 @@ trait UserService extends IdentityService[AuthCrewUser] {
    * @param user The user to save.
    * @return The saved user.
    */
-  def save(user: AuthCrewUser): Future[AuthCrewUser]
+  def save(user: Crew): Future[Crew]
 
   /**
    * Saves the social profile for a user.
@@ -27,5 +27,5 @@ trait UserService extends IdentityService[AuthCrewUser] {
    * @param profile The social profile to save.
    * @return The user for whom the profile was saved.
    */
-  def save(profile: CommonSocialProfile, tenantCanonicalName: String): Future[AuthCrewUser]
+  def save(profile: CommonSocialProfile, tenantCanonicalName: String): Future[Crew]
 }

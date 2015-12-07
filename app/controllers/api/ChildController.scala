@@ -7,7 +7,7 @@ import com.mohiva.play.silhouette.api.Environment
 import com.mohiva.play.silhouette.impl.authenticators.{JWTAuthenticator, CookieAuthenticator}
 import com.mohiva.play.silhouette.impl.providers.SocialProviderRegistry
 import dao.RepoFor
-import models.tenant.{AuthCrewUser, Child}
+import models.tenant.{Crew, Child}
 import play.api._
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.i18n.MessagesApi
@@ -15,7 +15,7 @@ import play.api.libs.json._
 
 class ChildController @Inject()(dbConfigProvider: DatabaseConfigProvider,
                                 messagesApi: MessagesApi,
-                                env: Environment[AuthCrewUser, JWTAuthenticator],
+                                env: Environment[Crew, JWTAuthenticator],
                                 socialProviderRegistry: SocialProviderRegistry)
   extends GenericSecureApiController(dbConfigProvider, messagesApi, env, socialProviderRegistry)
 {

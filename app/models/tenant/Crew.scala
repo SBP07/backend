@@ -5,7 +5,6 @@ import java.util.UUID
 
 import com.mohiva.play.silhouette.api.{Identity, LoginInfo}
 import models.Role
-import models.helpers.BelongsToTenant
 
 /**
   * The crew (user) object.
@@ -20,17 +19,16 @@ import models.helpers.BelongsToTenant
   * @param birthDate Maybe the date the user was born
   * @param roles The roles the user has
   */
-case class AuthCrewUser(
-                         userID: Option[UUID],
-                         loginInfo: LoginInfo,
-                         firstName: Option[String],
-                         lastName: Option[String],
-                         fullName: Option[String],
-                         email: Option[String],
-                         avatarURL: Option[String],
-                         birthDate: Option[LocalDate],
-                         address: Option[Address],
-                         roles: Set[Role],
-                         tenantCanonicalName: String
-                       )
-  extends Identity
+case class Crew(
+  userID: Option[UUID],
+  loginInfo: LoginInfo,
+  firstName: Option[String],
+  lastName: Option[String],
+  fullName: Option[String],
+  email: Option[String],
+  avatarURL: Option[String],
+  birthDate: Option[LocalDate],
+  address: Option[Address],
+  roles: Set[Role],
+  tenantCanonicalName: String
+) extends Identity

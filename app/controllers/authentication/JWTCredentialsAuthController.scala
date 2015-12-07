@@ -12,7 +12,7 @@ import com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator
 import com.mohiva.play.silhouette.impl.exceptions.IdentityNotFoundException
 import com.mohiva.play.silhouette.impl.providers._
 import models.bindmodels.SignInData
-import models.tenant.AuthCrewUser
+import models.tenant.Crew
 import net.ceedubs.ficus.Ficus._
 import play.api.Configuration
 import play.api.i18n.{Messages, MessagesApi}
@@ -39,14 +39,14 @@ import scala.concurrent.duration._
   */
 class JWTCredentialsAuthController @Inject()(
                                               val messagesApi: MessagesApi,
-                                              val env: Environment[AuthCrewUser, JWTAuthenticator],
+                                              val env: Environment[Crew, JWTAuthenticator],
                                               userService: UserService,
                                               authInfoRepository: AuthInfoRepository,
                                               credentialsProvider: CredentialsProvider,
                                               socialProviderRegistry: SocialProviderRegistry,
                                               configuration: Configuration,
                                               clock: Clock)
-  extends Silhouette[AuthCrewUser, JWTAuthenticator] {
+  extends Silhouette[Crew, JWTAuthenticator] {
 
 
   /**

@@ -4,7 +4,7 @@ import java.util.UUID
 import javax.inject.Inject
 
 import models.Role
-import models.tenant.AuthCrewUser
+import models.tenant.Crew
 import play.api.db.slick.DatabaseConfigProvider
 
 import scala.concurrent.ExecutionContext.Implicits.global
