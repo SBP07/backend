@@ -4,7 +4,6 @@ import java.time.LocalDate
 import java.util.UUID
 
 import models.helpers.BelongsToTenant
-import models.helpers.BelongsToTenant
 import models.tenant.Address
 import models.tenant.ContactPerson
 import models.tenant.{ContactPerson, Address}
@@ -22,8 +21,8 @@ case class PersistableContactPerson(
   landline: Option[String],
   mobilePhone: Option[String],
 
-  tenantName: String
-) //extends BelongsToTenant TODO
+  override val tenantName: String
+) extends BelongsToTenant
 {
   def convert: ContactPerson = {
     val address = for { street <- street; zipCode <- zipCode; city <- city; country <- country }

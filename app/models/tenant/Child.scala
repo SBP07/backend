@@ -12,6 +12,6 @@ case class Child(
 
                   birthDate: Option[LocalDate],
 
-                  override val tenantId: UUID
+                  tenantId: UUID
 
-                ) extends BelongsToTenant
+                )

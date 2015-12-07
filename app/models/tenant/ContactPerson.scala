@@ -2,6 +2,8 @@ package models.tenant
 
 import java.util.UUID
 
+import models.helpers.BelongsToTenant
+
 case class ContactPerson(
   id: Option[UUID],
   firstName: String,
@@ -12,5 +14,5 @@ case class ContactPerson(
   landline: Option[String],
   mobilePhone: Option[String],
 
-  tenantName: String
-)
+  override val tenantName: String
+) extends BelongsToTenant
