@@ -14,5 +14,5 @@ case class ContactPerson(
   landline: Option[String],
   mobilePhone: Option[String],
 
-  override val tenantName: String
+  override val tenantCanonicalName: String
 ) extends BelongsToTenant

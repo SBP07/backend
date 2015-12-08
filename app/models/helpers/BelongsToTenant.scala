@@ -1,5 +1,5 @@
 package models.helpers
 
 trait BelongsToTenant {
-  val tenantName: String
+  val tenantCanonicalName: String
 }

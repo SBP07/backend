@@ -21,13 +21,13 @@ case class PersistableContactPerson(
   landline: Option[String],
   mobilePhone: Option[String],
 
-  override val tenantName: String
+  override val tenantCanonicalName: String
 ) extends BelongsToTenant
 {
   def convert: ContactPerson = {
     val address = for { street <- street; zipCode <- zipCode; city <- city; country <- country }
       yield { Address(street, zipCode, city, country) }
-    ContactPerson(id, firstName, lastName, address, landline, mobilePhone, tenantName)
+    ContactPerson(id, firstName, lastName, address, landline, mobilePhone, tenantCanonicalName)
   }
 }
 
@@ -45,6 +45,6 @@ object PersistableContactPerson extends ((Option[UUID], String, String, Option[S
       contactPerson.address.map(_.country),
       contactPerson.landline,
       contactPerson.mobilePhone,
-      contactPerson.tenantName)
+      contactPerson.tenantCanonicalName)
   }
 }
