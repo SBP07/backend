@@ -3,7 +3,7 @@ package controllers.authentication
 import java.util.UUID
 import javax.inject.Inject
 
-import _root_.services.auth.UserService
+import _root_.services.auth.{DatabaseSetup, UserService}
 import com.mohiva.play.silhouette.api._
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.services.AvatarService
@@ -38,7 +38,8 @@ class SignUpController @Inject()(
                                   userService: UserService,
                                   authInfoRepository: AuthInfoRepository,
                                   avatarService: AvatarService,
-                                  passwordHasher: PasswordHasher)
+                                  passwordHasher: PasswordHasher,
+                                  databaseSetup: DatabaseSetup)
   extends Silhouette[Crew, JWTAuthenticator] {
 
   def signUp: Action[SignUpData] = SecuredAction.async(parse.json(SignUpDataJson.dataReads)) { implicit req =>

@@ -120,6 +120,8 @@ CREATE TABLE crew (
   PRIMARY KEY (id)
 );
 
+INSERT INTO tenant(id, name, canonical_name) VALUES ('11111111-1111-1111-1111-111111111111', 'Platformadministratie', 'platform');
+
 # --- !Downs
 
 DROP TABLE "contact_person";
