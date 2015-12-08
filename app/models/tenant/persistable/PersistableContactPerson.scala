@@ -22,12 +22,16 @@ case class PersistableContactPerson(
   mobilePhone: Option[String],
 
   override val tenantCanonicalName: String
-) extends BelongsToTenant
+) extends BelongsToTenant[PersistableContactPerson]
 {
   def convert: ContactPerson = {
     val address = for { street <- street; zipCode <- zipCode; city <- city; country <- country }
       yield { Address(street, zipCode, city, country) }
     ContactPerson(id, firstName, lastName, address, landline, mobilePhone, tenantCanonicalName)
+  }
+
+  def copyTenantCanonicalName(tenantCanonicalName: String): PersistableContactPerson = {
+    copy(tenantCanonicalName = tenantCanonicalName)
   }
 }
 

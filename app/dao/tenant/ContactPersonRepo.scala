@@ -6,6 +6,7 @@ import java.util.UUID
 
 import dao.RepoFor
 import io.strongtyped.active.slick._
+import models.helpers.BelongsToTenantTable
 import models.tenant.persistable.PersistableContactPerson
 import slick.ast.BaseTypedType
 
@@ -27,7 +28,7 @@ object ContactPersonRepo extends RepoFor[PersistableContactPerson, UUID] {
 
   val idLens = lens { person: PersistableContactPerson => person.id } { (person, id) => person.copy(id = id) }
 
-  class ContactPersonTable(tag: Tag) extends Table[PersistableContactPerson](tag, "contact_person") {
+  class ContactPersonTable(tag: Tag) extends Table[PersistableContactPerson](tag, "contact_person") with BelongsToTenantTable {
     def id = column[Id]("id", O.PrimaryKey, O.AutoInc)
 
     def firstName = column[String]("first_name")
@@ -41,10 +42,10 @@ object ContactPersonRepo extends RepoFor[PersistableContactPerson, UUID] {
     def landline = column[Option[String]]("landline")
     def mobilePhone = column[Option[String]]("mobile_phone")
 
-    def tenantId = column[String]("tenant_cname")
+    def tenantCanonicalName = column[String]("tenant_cname")
 
     def * : ProvenShape[PersistableContactPerson] = (id.?, firstName, lastName, street, zipCode, city, country, landline, mobilePhone,
-      tenantId) <> (PersistableContactPerson.tupled, PersistableContactPerson.unapply)
+      tenantCanonicalName) <> (PersistableContactPerson.tupled, PersistableContactPerson.unapply)
 
   }
 }

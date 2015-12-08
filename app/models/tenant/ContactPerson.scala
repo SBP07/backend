@@ -15,4 +15,6 @@ case class ContactPerson(
   mobilePhone: Option[String],
 
   override val tenantCanonicalName: String
-) extends BelongsToTenant
+) extends BelongsToTenant[ContactPerson] {
+  def copyTenantCanonicalName(tenantCanonicalName: String) = copy(tenantCanonicalName = tenantCanonicalName)
+}
