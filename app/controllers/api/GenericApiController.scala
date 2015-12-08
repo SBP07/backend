@@ -1,7 +1,7 @@
 package controllers.api
 
 import com.mohiva.play.silhouette.api.{Silhouette, Environment}
-import com.mohiva.play.silhouette.impl.authenticators.{JWTAuthenticator, CookieAuthenticator}
+import com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator
 import com.mohiva.play.silhouette.impl.providers.SocialProviderRegistry
 import dao.RepoFor
 import io.strongtyped.active.slick.ActiveRecord
@@ -17,26 +17,22 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.{Failure, Success}
 
 abstract class GenericApiController(val dbConfigProvider: DatabaseConfigProvider,
-                                    val messagesApi: MessagesApi,
-                                    val env: Environment[Crew, JWTAuthenticator],
-                                    val socialProviderRegistry: SocialProviderRegistry)
+  val messagesApi: MessagesApi,
+  val env: Environment[Crew, JWTAuthenticator],
+  val socialProviderRegistry: SocialProviderRegistry)
   extends Silhouette[Crew, JWTAuthenticator]
 {
-
-
   val dbConfig = dbConfigProvider.get[JdbcProfile]
-
   import dbConfig.driver.api._
-
   val db = dbConfig.db
 
   type Id
   type Model
   type PersistedModel
 
-  def convertToPersistable: Model => PersistedModel
+  protected def convertToPersistable: Model => PersistedModel
 
-  def convertToDisplayable: PersistedModel => Model
+  protected def convertToDisplayable: PersistedModel => Model
 
   val repo: RepoFor[PersistedModel, Id]
 

@@ -1,7 +1,5 @@
 package models
 
-import com.mohiva.play.silhouette.api.Authorization
-import com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator
 import models.tenant.Crew
 import play.api.i18n._
 import play.api.mvc.RequestHeader
@@ -11,7 +9,7 @@ import play.api.mvc.RequestHeader
  */
 case class WithRole(role: Role)
 {
-  def isAuthorized(user: Crew)(implicit request: RequestHeader, lang: Lang) = user.roles match {
+  def isAuthorized(user: Crew)(implicit request: RequestHeader, lang: Lang): Boolean = user.roles match {
     case list: Set[Role] => list.contains(role)
     case _               => false
   }

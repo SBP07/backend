@@ -1,7 +1,6 @@
 package services.auth
 
-import java.util.UUID
-import javax.inject.Inject
+import javax.inject.{Singleton, Inject}
 
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.services.AvatarService
@@ -16,17 +15,20 @@ import play.api.{Configuration, Logger}
 
 import scala.concurrent.Future
 
+/**
+  * Injectable to set up the database
+  */
 trait DatabaseSetup {
 }
 
+@Singleton
 class DatabaseSetupImpl @Inject()(
   userService: UserService,
   authInfoRepository: AuthInfoRepository,
   avatarService: AvatarService,
   passwordHasher: PasswordHasher,
   configuration: Configuration)
-  extends DatabaseSetup
-{
+  extends DatabaseSetup {
   val email = configuration.getString("authBootstrapper.email").get
   val password = configuration.getString("authBootstrapper.password").get
   val firstName = configuration.getString("authBootstrapper.firstName").getOrElse("Global")

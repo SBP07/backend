@@ -1,6 +1,5 @@
 package services.auth
 
-import java.util.UUID
 import javax.inject.Inject
 
 import com.mohiva.play.silhouette.api.LoginInfo
@@ -14,36 +13,36 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import models.tenant.Crew
 
 /**
- * Handles actions to users.
- *
- * @param userDAO The user DAO implementation.
- */
-class UserServiceImpl @Inject() (userDAO: UserDAO) extends UserService {
+  * Handles actions to users.
+  *
+  * @param userDAO The user DAO implementation.
+  */
+class UserServiceImpl @Inject()(userDAO: UserDAO) extends UserService {
 
   /**
-   * Retrieves a user that matches the specified login info.
-   *
-   * @param loginInfo The login info to retrieve a user.
-   * @return The retrieved user or None if no user could be retrieved for the given login info.
-   */
+    * Retrieves a user that matches the specified login info.
+    *
+    * @param loginInfo The login info to retrieve a user.
+    * @return The retrieved user or None if no user could be retrieved for the given login info.
+    */
   def retrieve(loginInfo: LoginInfo): Future[Option[Crew]] = userDAO.find(loginInfo)
 
   /**
-   * Saves a user.
-   *
-   * @param user The user to save.
-   * @return The saved user.
-   */
-  def save(user: Crew) = userDAO.save(user)
+    * Saves a user.
+    *
+    * @param user The user to save.
+    * @return The saved user.
+    */
+  def save(user: Crew): Future[Crew] = userDAO.save(user)
 
   /**
-   * Saves the social profile for a user.
-   *
-   * If a user exists for this profile then update the user, otherwise create a new user with the given profile.
-   *
-   * @param profile The social profile to save.
-   * @return The user for whom the profile was saved.
-   */
+    * Saves the social profile for a user.
+    *
+    * If a user exists for this profile then update the user, otherwise create a new user with the given profile.
+    *
+    * @param profile The social profile to save.
+    * @return The user for whom the profile was saved.
+    */
   def save(profile: CommonSocialProfile, tenantCanonicalName: String): Future[Crew] = {
     userDAO.find(profile.loginInfo).flatMap {
       case Some(user) => // Update user with profile
