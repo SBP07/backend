@@ -25,7 +25,6 @@ class ChildController @Inject()(dbConfigProvider: DatabaseConfigProvider,
   override val repo: RepoFor[Child, Id] = dao.tenant.ChildRepo
 
   override def convertToDisplayable: Child => Child = identity
-
   override def convertToPersistable: Child => Child = identity
 
   override implicit val reads: Reads[Model] = models.tenant.json.ChildJson.childReads

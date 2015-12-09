@@ -37,14 +37,12 @@ object ChildRepo extends RepoFor[Child, UUID] {
     def id = column[Id]("id", O.PrimaryKey, O.AutoInc)
 
     def firstName = column[String]("first_name")
-
     def lastName = column[String]("last_name")
-
     def birthDate = column[Option[LocalDate]]("birth_date")
 
-    def tenantId = column[UUID]("tenant_id")
+    def tenantCanonicalName = column[String]("tenant_id")
 
-    def * : ProvenShape[Child] = (id.?, firstName, lastName, birthDate, tenantId) <> (Child.tupled, Child.unapply _)
+    def * : ProvenShape[Child] = (id.?, firstName, lastName, birthDate, tenantCanonicalName) <> (Child.tupled, Child.unapply _)
 
   }
 

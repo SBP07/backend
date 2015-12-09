@@ -73,13 +73,13 @@ CREATE TABLE tenant (
 );
 
 CREATE TABLE child (
-  id         UUID         NOT NULL DEFAULT uuid_generate_v1mc(),
-  first_name VARCHAR(255) NOT NULL,
-  last_name  VARCHAR(255) NOT NULL,
+  id                    UUID         NOT NULL DEFAULT uuid_generate_v1mc(),
+  first_name            VARCHAR(255) NOT NULL,
+  last_name             VARCHAR(255) NOT NULL,
 
-  birth_date DATE,
+  birth_date            DATE,
 
-  tenant_id  UUID,
+  tenant_canonical_name VARCHAR      NOT NULL REFERENCES tenant ("canonical_name"),
 
   PRIMARY KEY (id)
 );
@@ -120,7 +120,8 @@ CREATE TABLE crew (
   PRIMARY KEY (id)
 );
 
-INSERT INTO tenant(id, name, canonical_name) VALUES ('11111111-1111-1111-1111-111111111111', 'Platformadministratie', 'platform');
+INSERT INTO tenant (id, name, canonical_name)
+VALUES ('11111111-1111-1111-1111-111111111111', 'Platformadministratie', 'platform');
 
 # --- !Downs
 

@@ -6,12 +6,14 @@ import java.util.UUID
 import models.helpers.BelongsToTenant
 
 case class Child(
-                  id: Option[UUID],
-                  firstName: String,
-                  lastName: String,
+  id: Option[UUID],
+  firstName: String,
+  lastName: String,
 
-                  birthDate: Option[LocalDate],
+  birthDate: Option[LocalDate],
 
-                  tenantId: UUID
+  tenantCanonicalName: String
 
-                )
+) extends BelongsToTenant[Child] {
+  override def copyTenantCanonicalName(tenantCanonicalName: String): Child = copy(tenantCanonicalName = tenantCanonicalName)
+}

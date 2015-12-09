@@ -1,11 +1,8 @@
 package models.tenant.persistable
 
-import java.time.LocalDate
 import java.util.UUID
 
 import models.helpers.BelongsToTenant
-import models.tenant.Address
-import models.tenant.ContactPerson
 import models.tenant.{ContactPerson, Address}
 
 case class PersistableContactPerson(

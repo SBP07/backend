@@ -16,29 +16,8 @@ object AddressJson {
 }
 
 object ChildJson {
-  implicit val childReads: Reads[Child] = (
-    (JsPath \ "id").readNullable[UUID] and
-
-      (JsPath \ "firstName").read[String] and
-      (JsPath \ "lastName").read[String] and
-
-      (JsPath \ "birthDate").readNullable[LocalDate] and
-
-      (JsPath \ "tenantId").read[UUID]
-
-    ) (Child.apply _)
-
-  implicit val childWrites: Writes[Child] = (
-    (JsPath \ "id").write[Option[UUID]] and
-
-    (JsPath \ "firstName").write[String] and
-    (JsPath \ "lastName").write[String] and
-
-    (JsPath \ "birthDate").write[Option[LocalDate]] and
-
-    (JsPath \ "tenantId").write[UUID]
-
-    ) (unlift(Child.unapply))
+  implicit val childReads: Reads[Child] = Json.reads[Child]
+  implicit val childWrites: Writes[Child] = Json.writes[Child]
 
 }
 
