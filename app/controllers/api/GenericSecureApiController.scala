@@ -3,6 +3,8 @@ package controllers.api
 import com.mohiva.play.silhouette.api.{Silhouette, Environment}
 import com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator
 import com.mohiva.play.silhouette.impl.providers.SocialProviderRegistry
+import models.WithRole
+import models.helpers.GenericApiRequiredRoles
 import models.tenant.Crew
 import org.postgresql.util.PSQLException
 import play.api.db.slick.DatabaseConfigProvider

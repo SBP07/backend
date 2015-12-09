@@ -31,7 +31,6 @@ abstract class GenericApiController(val dbConfigProvider: DatabaseConfigProvider
   type PersistedModel
 
   protected def convertToPersistable: Model => PersistedModel
-
   protected def convertToDisplayable: PersistedModel => Model
 
   val repo: RepoFor[PersistedModel, Id]

@@ -7,7 +7,9 @@ import com.mohiva.play.silhouette.api.Environment
 import com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator
 import com.mohiva.play.silhouette.impl.providers.SocialProviderRegistry
 import dao.RepoFor
+import models.helpers.GenericApiRequiredRoles
 import models.tenant.{Crew, Child}
+import models.Role
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.i18n.MessagesApi
 import play.api.libs.json._
@@ -22,6 +24,8 @@ class ChildController @Inject()(dbConfigProvider: DatabaseConfigProvider,
   override type Model = Child
   override type PersistedModel = Child
 
+  override val requiredRoles: GenericApiRequiredRoles = GenericApiRequiredRoles(Role.NormalUser, Role.NormalUser,
+    Role.NormalUser, Role.TenantAdmin)
   override val repo: RepoFor[Child, Id] = dao.tenant.ChildRepo
 
   override def convertToDisplayable: Child => Child = identity

@@ -7,6 +7,8 @@ import com.mohiva.play.silhouette.api.Environment
 import com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator
 import com.mohiva.play.silhouette.impl.providers.SocialProviderRegistry
 import dao.RepoFor
+import models.helpers.GenericApiRequiredRoles
+import models.Role
 import models.tenant.persistable.PersistableContactPerson
 import models.tenant.{ContactPerson, Crew}
 import play.api.db.slick.DatabaseConfigProvider
@@ -23,8 +25,9 @@ class ContactPersonController @Inject()(dbConfigProvider: DatabaseConfigProvider
   override type Model = ContactPerson
   override type PersistedModel = PersistableContactPerson
 
+  override val requiredRoles: GenericApiRequiredRoles = GenericApiRequiredRoles(Role.NormalUser, Role.NormalUser,
+    Role.NormalUser, Role.TenantAdmin)
   override val repo: RepoFor[PersistedModel, Id] = dao.tenant.ContactPersonRepo
-
   override protected def convertToDisplayable: PersistedModel => Model = _.convert
   override protected def convertToPersistable: Model => PersistedModel = PersistableContactPerson.build
 

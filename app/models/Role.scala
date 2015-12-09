@@ -1,19 +1,22 @@
 package models
 
+import com.mohiva.play.silhouette.api.Authorization
+import com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator
 import models.tenant.Crew
 import play.api.i18n._
-import play.api.mvc.RequestHeader
+import play.api.mvc.Request
+
+import scala.concurrent.Future
 
 /**
  * Check for authorization
  */
-case class WithRole(role: Role)
+case class WithRole(role: Role) extends Authorization[Crew, JWTAuthenticator]
 {
-  def isAuthorized(user: Crew)(implicit request: RequestHeader, lang: Lang): Boolean = user.roles match {
-    case list: Set[Role] => list.contains(role)
-    case _               => false
+  def isAuthorized[B](user: Crew, authenticator: JWTAuthenticator)(implicit request: Request[B], messages: Messages): Future[Boolean] = user.roles match {
+    case list: Set[Role] => Future.successful(list.contains(role))
+    case _               => Future.successful(false)
   }
-
 }
 
 /**

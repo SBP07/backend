@@ -7,7 +7,9 @@ import com.mohiva.play.silhouette.api.Environment
 import com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator
 import com.mohiva.play.silhouette.impl.providers.SocialProviderRegistry
 import dao.RepoFor
+import models.Role
 import models.admin.Tenant
+import models.helpers.GenericApiRequiredRoles
 import models.tenant.Crew
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.i18n.MessagesApi
@@ -17,11 +19,13 @@ class TenantController @Inject()(dbConfigProvider: DatabaseConfigProvider,
   messagesApi: MessagesApi,
   env: Environment[Crew, JWTAuthenticator],
   socialProviderRegistry: SocialProviderRegistry)
-  extends GenericApiController(dbConfigProvider, messagesApi, env, socialProviderRegistry)
+  extends GenericSecureApiController(dbConfigProvider, messagesApi, env, socialProviderRegistry)
 {
   override type Id = UUID
   override type Model = Tenant
   override type PersistedModel = Tenant
+
+  override val requiredRoles = GenericApiRequiredRoles(Role.NormalUser, Role.GlobalAdmin, Role.GlobalAdmin, Role.GlobalAdmin)
 
   override protected def convertToPersistable = identity
   override protected def convertToDisplayable = identity
