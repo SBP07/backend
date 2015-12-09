@@ -66,7 +66,7 @@ abstract class GenericApiController(val dbConfigProvider: DatabaseConfigProvider
   def create: Action[Model] = Action.async(parse.json(reads)) {
     parsed =>
       db.run(convertToPersistable(parsed.body).save.asTry).map {
-        case Success(created) => Ok(Json.toJson(convertToDisplayable(created)))
+        case Success(created) => Created(Json.toJson(convertToDisplayable(created)))
         case Failure(e: PSQLException) if e.getSQLState == "23505" => InternalServerError(
           JsonStatus.error("message" -> "Unique key violation: unique key already exists in the database.")
         )
