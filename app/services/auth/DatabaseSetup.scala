@@ -9,7 +9,7 @@ import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import com.mohiva.play.silhouette.api._
 import models.bindmodels.SignUpData
 import play.api.libs.concurrent.Execution.Implicits._
-import models.Role.NormalUser
+import models.Role.{TenantAdmin, GlobalAdmin, NormalUser}
 import models.tenant.Crew
 import play.api.{Configuration, Logger}
 
@@ -53,7 +53,7 @@ class DatabaseSetupImpl @Inject()(
         avatarURL = None,
         birthDate = None,
         address = None,
-        roles = Set(NormalUser),
+        roles = Set(GlobalAdmin, TenantAdmin, NormalUser),
         tenantCanonicalName = tenantCanonicalName
       )
       for {
