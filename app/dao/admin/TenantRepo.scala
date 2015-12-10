@@ -2,21 +2,20 @@ package dao.admin
 
 import java.util.UUID
 
-import dao.RepoFor
 import io.strongtyped.active.slick.JdbcProfileProvider.PostgresProfileProvider
-import io.strongtyped.active.slick.Lens
+import io.strongtyped.active.slick.{EntityActions, Lens}
 import models.admin.Tenant
-import models.helpers.BelongsToTenantTable
 import slick.ast.BaseTypedType
 import io.strongtyped.active.slick.Lens._
 import slick.lifted.ProvenShape
 import scala.language.postfixOps
 
-object TenantRepo extends /*RepoFor[Tenant, UUID] */ PostgresProfileProvider{
+object TenantRepo extends EntityActions with PostgresProfileProvider{
   import jdbcProfile.api._
 
-  type Id = UUID // TODO
-  val baseTypedType: BaseTypedType[UUID] = implicitly[BaseTypedType[Id]]
+  type Id = UUID
+  type Entity = Tenant
+  val baseTypedType: BaseTypedType[Id] = implicitly[BaseTypedType[Id]]
 
   type EntityTable = TenantTable
 
@@ -24,7 +23,7 @@ object TenantRepo extends /*RepoFor[Tenant, UUID] */ PostgresProfileProvider{
 
   def $id(table: TenantTable): Rep[Id] = table.id
 
-  val idLens: Lens[Tenant, Option[UUID]] = lens { org: Tenant => org.id } { (org, id) => org.copy(id = id) }
+  val idLens/*: Lens[Tenant, Option[Id]]*/ = lens { org: Tenant => org.id } { (org, id) => org.copy(id = id) }
 
   class TenantTable(tag: Tag) extends Table[Tenant](tag, "tenant") {
     def id: Rep[Id] = column[Id]("id", O.PrimaryKey, O.AutoInc)
