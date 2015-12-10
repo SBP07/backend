@@ -3,56 +3,75 @@ package controllers.api
 import com.mohiva.play.silhouette.api.{Silhouette, Environment}
 import com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator
 import com.mohiva.play.silhouette.impl.providers.SocialProviderRegistry
+import dao.RepoFor
 import models.WithRole
-import models.helpers.GenericApiRequiredRoles
+import models.helpers.{BelongsToTenant, GenericApiRequiredRoles}
 import models.tenant.Crew
 import org.postgresql.util.PSQLException
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.i18n.MessagesApi
-import play.api.libs.json.Json
+import play.api.libs.json.{Writes, Reads, Json}
 import play.api.mvc.{AnyContent, Action}
+import slick.driver.JdbcProfile
 import utils.JsonStatus
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 import scala.util.{Failure, Success}
 
-abstract class GenericSecureApiController(dbConfigProvider: DatabaseConfigProvider,
-                                          messagesApi: MessagesApi,
-                                          env: Environment[Crew, JWTAuthenticator],
-                                          socialProviderRegistry: SocialProviderRegistry)
-  extends GenericApiController(dbConfigProvider, messagesApi, env, socialProviderRegistry)
-  with Silhouette[Crew, JWTAuthenticator]
+abstract class GenericSecureApiController(val dbConfigProvider: DatabaseConfigProvider,
+                                          val messagesApi: MessagesApi,
+                                          val env: Environment[Crew, JWTAuthenticator],
+                                          val socialProviderRegistry: SocialProviderRegistry)
+  extends Silhouette[Crew, JWTAuthenticator]
 {
+  val dbConfig = dbConfigProvider.get[JdbcProfile]
+  val db = dbConfig.db
   import dbConfig.driver.api._
+
+  def getTenantCanonicalNameFromModelRequest(implicit securedRequest: SecuredRequest[Model]): String = securedRequest.identity.tenantCanonicalName
+  def getTenantCanonicalNameFromAnyContentRequest(implicit securedRequest: SecuredRequest[AnyContent]): String = securedRequest.identity.tenantCanonicalName
+
+  implicit val reads: Reads[Model]
+  implicit val writes: Writes[Model]
+
+  type Id
+  type Model
+  type PersistedModel <: BelongsToTenant[PersistedModel]
+
+  protected def convertToPersistable: Model => PersistedModel
+  protected def convertToDisplayable: PersistedModel => Model
+
+  val repo: RepoFor[PersistedModel, Id]
 
   /** Roles required for the various actions */
   val requiredRoles: GenericApiRequiredRoles
 
-  override def update: Action[Model] = SecuredAction(WithRole(requiredRoles.requiredToUpdate)).async(parse.json(reads)) {
-    entity =>
-      db.run(convertToPersistable(entity.body).update).map(updated => Ok(Json.toJson(convertToDisplayable(updated))))
+  def update: Action[Model] = SecuredAction(WithRole(requiredRoles.requiredToUpdate)).async(parse.json(reads)) { implicit req =>
+      db.run(repo.update(getTenantCanonicalNameFromModelRequest, convertToPersistable(req.body)))
+      .map(updated => Ok(Json.toJson(convertToDisplayable(updated))))
   }
 
-  override def delete(id: Id): Action[AnyContent] = SecuredAction(WithRole(requiredRoles.requiredToDelete)).async {
-    db.run(repo.filterById(id).delete).map {
+  def delete(id: Id): Action[AnyContent] = SecuredAction(WithRole(requiredRoles.requiredToDelete)).async { implicit req =>
+    db.run(repo.deleteById(getTenantCanonicalNameFromAnyContentRequest, id)).map {
       i =>
         if (i == 0) NotFound else Ok
     }
   }
 
-  override def getById(id: Id): Action[AnyContent] = SecuredAction(WithRole(requiredRoles.requiredToGet)).async {
-    db.run(repo.findById(id)).map(entity => Ok(Json.toJson(convertToDisplayable(entity))))
+  def getById(id: Id): Action[AnyContent] = SecuredAction(WithRole(requiredRoles.requiredToGet)).async { implicit req =>
+    db.run(repo.findById(getTenantCanonicalNameFromAnyContentRequest, id)).map(entity => Ok(Json.toJson(convertToDisplayable(entity))))
   }
 
-  override def getAll: Action[AnyContent] = SecuredAction(WithRole(requiredRoles.requiredToGet)).async {
-    val all = db.run(repo.tableQuery.result)
+  def getAll: Action[AnyContent] = SecuredAction(WithRole(requiredRoles.requiredToGet)).async { implicit req =>
+    val all: Future[Seq[PersistedModel]] = db.run(repo.fetchAll(getTenantCanonicalNameFromAnyContentRequest, 100))
 
     all.map(all => Ok(Json.toJson(all.map(convertToDisplayable))))
   }
 
-  override def create: Action[Model] = SecuredAction(WithRole(requiredRoles.requiredToCreate)).async(parse.json(reads)) {
-    parsed =>
-      db.run(convertToPersistable(parsed.body).save.asTry).map {
+  def create: Action[Model] = SecuredAction(WithRole(requiredRoles.requiredToCreate)).async(parse.json(reads)) {
+    implicit parsed =>
+      db.run(repo.save(getTenantCanonicalNameFromModelRequest, convertToPersistable(parsed.body)).asTry).map {
         case Success(created) => Created(Json.toJson(convertToDisplayable(created)))
         case Failure(e: PSQLException) if e.getSQLState == "23505" => Conflict(
           JsonStatus.error("message" -> "Unique key violation: unique key already exists in the database.")

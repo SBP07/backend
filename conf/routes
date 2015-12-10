@@ -19,11 +19,11 @@ GET     /api/v0/contactPerson/id/:id      controllers.api.ContactPersonControlle
 PUT     /api/v0/contactPerson             controllers.api.ContactPersonController.update
 #DELETE  /api/v0/contactPerson/id/:id      controllers.api.ContactPersonController.delete(id: java.util.UUID)
 
-GET     /api/v0/tenant             controllers.api.TenantController.getAll
-POST    /api/v0/tenant             controllers.api.TenantController.create
-GET     /api/v0/tenant/id/:id      controllers.api.TenantController.getById(id: java.util.UUID)
-PUT     /api/v0/tenant             controllers.api.TenantController.update
-#DELETE  /api/v0/tenant/id/:id      controllers.api.TenantController.delete(id: java.util.UUID)
+#GET     /api/v0/tenant             controllers.api.TenantController.getAll
+#POST    /api/v0/tenant             controllers.api.TenantController.create
+#GET     /api/v0/tenant/id/:id      controllers.api.TenantController.getById(id: java.util.UUID)
+#PUT     /api/v0/tenant             controllers.api.TenantController.update
+##DELETE  /api/v0/tenant/id/:id      controllers.api.TenantController.delete(id: java.util.UUID)
 
 ### Authentication
 

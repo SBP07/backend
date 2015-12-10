@@ -11,10 +11,12 @@ import scala.language.{existentials, higherKinds, implicitConversions}
 import scala.util.{Failure, Success}
 
 abstract class TenantEntityActions extends JdbcProfileProvider {
+
   import jdbcProfile.api._
 
   type Id
   type Model = Entity
+
   def baseTypedType: BaseTypedType[Id]
 
   /** The type of the Entity */
@@ -39,10 +41,10 @@ abstract class TenantEntityActions extends JdbcProfileProvider {
     .head
 
   def findOptionById(tenantCanonicalName: String, id: Id): DBIO[Option[Entity]] = tableQuery
-      .filterById(id)
-      .filterByTenant(tenantCanonicalName)
-      .result
-      .headOption
+    .filterById(id)
+    .filterByTenant(tenantCanonicalName)
+    .result
+    .headOption
 
   def save(tenantCanonicalName: String, entity: Entity)(implicit exc: ExecutionContext): DBIO[Entity] = {
     // The following line is a safeguard. Without it, someone could accidentally/purposely save an entity with a wrong
@@ -144,7 +146,7 @@ abstract class TenantEntityActions extends JdbcProfileProvider {
 
   def fetchAll(tenantCanonicalName: String, fetchSize: Int /* = 100 commented out due to compiler restrictions TODO once this class is no longer a subclass, uncomment this */)(implicit exc: ExecutionContext): StreamingDBIO[Seq[Entity], Entity] = {
     tableQuery
-      .filterByTenant(tenantCanonicalName )
+      .filterByTenant(tenantCanonicalName)
       .result
       .transactionally
       .withStatementParameters(fetchSize = fetchSize)
@@ -181,8 +183,12 @@ abstract class TenantEntityActions extends JdbcProfileProvider {
 
   def delete(tenantCanonicalName: String, entity: Entity)(implicit exc: ExecutionContext): DBIO[Int] = {
     tryExtractId(entity).flatMap { id =>
-      tableQuery.deleteById(tenantCanonicalName, id) // TODO filter by tenant
+      tableQuery.deleteById(tenantCanonicalName, id)
     }
+  }
+
+  def deleteById(tenantCanonicalName: String, id: Id)(implicit exc: ExecutionContext): DBIO[Int] = {
+    tableQuery.deleteById(tenantCanonicalName, id)
   }
 
   private def tryExtractId(entity: Entity): DBIO[Id] = {
@@ -194,9 +200,11 @@ abstract class TenantEntityActions extends JdbcProfileProvider {
 
   class PimpedEntityQuery(query: Query[EntityTable, Entity, Seq]) {
     def filterByTenant(tenantCanonicalName: String): Query[EntityTable, Entity, Seq] = query.filter(_.tenantCanonicalName === tenantCanonicalName)
+
     def deleteById(tenantCanonicalName: String, id: Id)(implicit exc: ExecutionContext): DBIO[Int] = {
       filterById(id).filterByTenant(tenantCanonicalName).delete.mustAffectOneSingleRow
     }
+
     def filterById(id: Id) = query.filter($id(_) === id)
   }
 

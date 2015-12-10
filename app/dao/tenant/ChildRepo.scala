@@ -6,6 +6,7 @@ import java.util.UUID
 
 import dao.RepoFor
 import io.strongtyped.active.slick._
+import models.helpers.BelongsToTenantTable
 import slick.ast.BaseTypedType
 
 import io.strongtyped.active.slick.Lens._
@@ -33,7 +34,7 @@ object ChildRepo extends RepoFor[Child, UUID] {
     d => d.toLocalDate
   )
 
-  class ChildTable(tag: Tag) extends Table[Child](tag, "child") {
+  class ChildTable(tag: Tag) extends Table[Child](tag, "child") with BelongsToTenantTable {
     def id = column[Id]("id", O.PrimaryKey, O.AutoInc)
 
     def firstName = column[String]("first_name")

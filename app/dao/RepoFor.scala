@@ -1,8 +1,12 @@
 package dao
 
 import io.strongtyped.active.slick._
+import models.helpers.{BelongsToTenant, TenantEntityActions}
+import slick.dbio._
 
-trait RepoFor[M, I] extends EntityActions with PostgresProfileProvider {
+import scala.concurrent.ExecutionContext
+
+trait RepoFor[M <: BelongsToTenant[M], I] extends TenantEntityActions with PostgresProfileProvider {
   type Entity = M
   type Id = I
 }
