@@ -40,7 +40,7 @@ object ChildRepo extends RepoFor[Child, UUID] {
     def lastName = column[String]("last_name")
     def birthDate = column[Option[LocalDate]]("birth_date")
 
-    def tenantCanonicalName = column[String]("tenant_id")
+    def tenantCanonicalName = column[String]("tenant_canonical_name")
 
     def * : ProvenShape[Child] = (id.?, firstName, lastName, birthDate, tenantCanonicalName) <> (Child.tupled, Child.unapply _)
 
