@@ -4,9 +4,8 @@ import java.sql.Date
 import java.time.LocalDate
 import java.util.UUID
 
-import dao.RepoFor
 import io.strongtyped.active.slick._
-import models.helpers.BelongsToTenantTable
+import models.helpers.{TenantEntityActions, BelongsToTenantTable}
 import models.tenant.persistable.PersistableContactPerson
 import slick.ast.BaseTypedType
 
@@ -15,7 +14,7 @@ import slick.lifted.ProvenShape
 import scala.language.postfixOps
 import scala.concurrent.ExecutionContext.Implicits.global
 
-object ContactPersonRepo extends RepoFor[PersistableContactPerson, UUID] {
+class ContactPersonRepo extends TenantEntityActions[PersistableContactPerson, UUID] {
   import jdbcProfile.api._
 
   val baseTypedType = implicitly[BaseTypedType[Id]]

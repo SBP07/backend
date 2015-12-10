@@ -4,9 +4,8 @@ import java.sql.Date
 import java.time.LocalDate
 import java.util.UUID
 
-import dao.RepoFor
 import io.strongtyped.active.slick._
-import models.helpers.BelongsToTenantTable
+import models.helpers.{TenantEntityActions, BelongsToTenantTable}
 import slick.ast.BaseTypedType
 
 import io.strongtyped.active.slick.Lens._
@@ -15,8 +14,7 @@ import scala.language.postfixOps
 import scala.concurrent.ExecutionContext.Implicits.global
 import models.tenant.Child
 
-object ChildRepo extends RepoFor[Child, UUID] {
-
+class ChildRepo extends TenantEntityActions[Child, UUID] {
   import jdbcProfile.api._
 
   val baseTypedType = implicitly[BaseTypedType[Id]]

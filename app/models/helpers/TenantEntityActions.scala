@@ -10,17 +10,16 @@ import scala.concurrent.ExecutionContext
 import scala.language.{existentials, higherKinds, implicitConversions}
 import scala.util.{Failure, Success}
 
-abstract class TenantEntityActions extends JdbcProfileProvider {
+abstract class TenantEntityActions[M <: BelongsToTenant[M], I] extends JdbcProfileProvider with PostgresProfileProvider {
 
   import jdbcProfile.api._
 
-  type Id
-  type Model = Entity
+  /** The type of the entity being persisted */
+  type Entity = M
+  type Id = I
+  type Model = M // TODO unify Model and Entity
 
   def baseTypedType: BaseTypedType[Id]
-
-  /** The type of the Entity */
-  type Entity <: BelongsToTenant[Entity]
 
   protected implicit lazy val btt: BaseTypedType[Id] = baseTypedType
 

@@ -6,7 +6,7 @@ import com.google.inject.Inject
 import com.mohiva.play.silhouette.api.Environment
 import com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator
 import com.mohiva.play.silhouette.impl.providers.SocialProviderRegistry
-import dao.RepoFor
+import dao.tenant.ChildRepo
 import models.helpers.GenericApiRequiredRoles
 import models.tenant.{Crew, Child}
 import models.Role
@@ -17,7 +17,8 @@ import play.api.libs.json._
 class ChildController @Inject()(dbConfigProvider: DatabaseConfigProvider,
   messagesApi: MessagesApi,
   env: Environment[Crew, JWTAuthenticator],
-  socialProviderRegistry: SocialProviderRegistry)
+  socialProviderRegistry: SocialProviderRegistry,
+  override val repo: ChildRepo)
   extends GenericSecureApiController(dbConfigProvider, messagesApi, env, socialProviderRegistry)
 {
   override type Id = UUID
@@ -26,7 +27,6 @@ class ChildController @Inject()(dbConfigProvider: DatabaseConfigProvider,
 
   override val requiredRoles: GenericApiRequiredRoles = GenericApiRequiredRoles(Role.NormalUser, Role.NormalUser,
     Role.NormalUser, Role.TenantAdmin)
-  override val repo: RepoFor[Child, Id] = dao.tenant.ChildRepo
 
   override def convertToDisplayable: Child => Child = identity
   override def convertToPersistable: Child => Child = identity

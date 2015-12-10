@@ -3,9 +3,8 @@ package controllers.api
 import com.mohiva.play.silhouette.api.{Silhouette, Environment}
 import com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator
 import com.mohiva.play.silhouette.impl.providers.SocialProviderRegistry
-import dao.RepoFor
 import models.WithRole
-import models.helpers.{BelongsToTenant, GenericApiRequiredRoles}
+import models.helpers.{TenantEntityActions, BelongsToTenant, GenericApiRequiredRoles}
 import models.tenant.Crew
 import org.postgresql.util.PSQLException
 import play.api.db.slick.DatabaseConfigProvider
@@ -42,7 +41,7 @@ abstract class GenericSecureApiController(val dbConfigProvider: DatabaseConfigPr
   protected def convertToPersistable: Model => PersistedModel
   protected def convertToDisplayable: PersistedModel => Model
 
-  val repo: RepoFor[PersistedModel, Id]
+  val repo: TenantEntityActions[PersistedModel, Id]
 
   /** Roles required for the various actions */
   val requiredRoles: GenericApiRequiredRoles

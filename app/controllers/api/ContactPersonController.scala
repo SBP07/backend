@@ -6,7 +6,7 @@ import com.google.inject.Inject
 import com.mohiva.play.silhouette.api.Environment
 import com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator
 import com.mohiva.play.silhouette.impl.providers.SocialProviderRegistry
-import dao.RepoFor
+import dao.tenant.ContactPersonRepo
 import models.helpers.GenericApiRequiredRoles
 import models.Role
 import models.tenant.persistable.PersistableContactPerson
@@ -18,7 +18,8 @@ import play.api.libs.json._
 class ContactPersonController @Inject()(dbConfigProvider: DatabaseConfigProvider,
   messagesApi: MessagesApi,
   env: Environment[Crew, JWTAuthenticator],
-  socialProviderRegistry: SocialProviderRegistry)
+  socialProviderRegistry: SocialProviderRegistry,
+  override val repo: ContactPersonRepo)
   extends GenericSecureApiController(dbConfigProvider, messagesApi, env, socialProviderRegistry)
 {
   override type Id = UUID
@@ -27,7 +28,6 @@ class ContactPersonController @Inject()(dbConfigProvider: DatabaseConfigProvider
 
   override val requiredRoles: GenericApiRequiredRoles = GenericApiRequiredRoles(Role.NormalUser, Role.NormalUser,
     Role.NormalUser, Role.TenantAdmin)
-  override val repo: RepoFor[PersistedModel, Id] = dao.tenant.ContactPersonRepo
   override protected def convertToDisplayable: PersistedModel => Model = _.convert
   override protected def convertToPersistable: Model => PersistedModel = PersistableContactPerson.build
 
