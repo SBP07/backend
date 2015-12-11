@@ -25,6 +25,13 @@ GET     /api/v0/tenant/id/:id      controllers.api.TenantController.getById(id: 
 PUT     /api/v0/tenant             controllers.api.TenantController.update
 #DELETE  /api/v0/tenant/id/:id      controllers.api.TenantController.delete(id: java.util.UUID)
 
+# Many to many relation between child and contact person
+GET     /api/v0/child/id/:id/contactPeople                          controllers.api.ChildToContactPersonController.contactPeopleForChild(id: java.util.UUID)
+GET     /api/v0/contactPerson/id/:id/children                       controllers.api.ChildToContactPersonController.childrenForContactPerson(id: java.util.UUID)
+POST    /api/v0/child/id/:id/contactPeople                          controllers.api.ChildToContactPersonController.addPersonForChild(id: java.util.UUID)
+DELETE  /api/v0/child/id/:childId/contactPeople/:contactPersonId    controllers.api.ChildToContactPersonController.deletePersonForChild(childId: java.util.UUID, contactPersonId: java.util.UUID)
+
+
 ### Authentication
 
 POST    /api/v0/auth/signUp                  controllers.authentication.SignUpController.signUp
