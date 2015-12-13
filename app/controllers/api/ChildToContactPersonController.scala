@@ -5,6 +5,7 @@ import javax.inject.Inject
 
 import com.mohiva.play.silhouette.api.{Silhouette, Environment}
 import com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator
+import dao.NonExistantChildOrContactPersonOrDontBelongToTenant
 import dao.tenant.ChildToContactPersonDao
 import models.tenant.Crew
 import play.api.i18n.MessagesApi
@@ -44,11 +45,15 @@ class ChildToContactPersonController @Inject()(
       ChildToContactPersonRelationship(childId, req.body.contactPersonId, req.body.relationship)
     ).map { numInserted =>
       Ok(JsonStatus.success("message" -> "Successfully registered"))
+    } recover {
+      case e: NonExistantChildOrContactPersonOrDontBelongToTenant => Conflict(JsonStatus.error("message" ->
+        "Non-existant child or contact person, or child/contact person does not belong to the current tenant"))
     }
   }
 
   def deletePersonForChild(childId: UUID, contactPersonId: UUID): Action[AnyContent] = SecuredAction.async { req =>
-    childToContactPersonDao.deleteRelationship(req.identity.tenantCanonicalName, childId, contactPersonId).map { numDeleted =>
+    childToContactPersonDao.deleteRelationship(req.identity.tenantCanonicalName, childId, contactPersonId).
+      map { numDeleted =>
       Ok(JsonStatus.success("message" -> s"Deleted $numDeleted rows"))
     }
   }

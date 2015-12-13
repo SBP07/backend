@@ -8,6 +8,7 @@ import slick.driver.JdbcProfile
 import slick.lifted.ProvenShape
 import scala.language.postfixOps
 import models.tenant.{ChildToContactPersonRelationship, ContactPerson, Child}
+import dao.NonExistantChildOrContactPersonOrDontBelongToTenant
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -60,10 +61,10 @@ class ChildToContactPersonDao @Inject()(
         contactPerson.tenantCanonicalName === tenantCanonicalName
       } yield (child, contactPerson)).length.result
     }.flatMap { numRows =>
-      if(numRows == 1) {
+      if(numRows == 0) {
         db.run(childToContactPersonTable += relationship)
       } else {
-        Future.failed(new RuntimeException(s"Non-existant child or contact person, or child/contact person does not belong to $tenantCanonicalName"))
+        Future.failed(new NonExistantChildOrContactPersonOrDontBelongToTenant(tenantCanonicalName))
       }
     }
   }
@@ -76,8 +77,19 @@ class ChildToContactPersonDao @Inject()(
         contactPerson <- childToContact.contactPersonFk if contactPerson.tenantCanonicalName === tenantCanonicalName
       } yield {
         childToContact
-      }).delete
-    }
+      }).result
+    }.flatMap { numFound =>
+      if (numFound == 0)
+        Future.failed(new NonExistantChildOrContactPersonOrDontBelongToTenant(tenantCanonicalName))
+        else {
+          db.run {
+            childToContactPersonTable
+              .filter(_.childId === childId)
+              .filter(_.contactPersonId === contactPersionId)
+              .delete
+          }
+        }
+   }
   }
 
   // does not extend BelongsToTenant because there is no need
