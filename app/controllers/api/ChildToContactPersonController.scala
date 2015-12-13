@@ -7,9 +7,10 @@ import com.mohiva.play.silhouette.api.{Silhouette, Environment}
 import com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator
 import dao.NonExistantChildOrContactPersonOrDontBelongToTenant
 import dao.tenant.ChildToContactPersonDao
-import models.tenant.Crew
+import models.tenant.{Crew, ContactPerson}
 import play.api.i18n.MessagesApi
-import play.api.libs.json.{Reads, Json}
+import play.api.libs.json._
+import play.api.libs.functional.syntax._
 import play.api.mvc._
 import models.tenant.json.ChildJson.childWrites
 import models.tenant.json.ContactPersonJson.contactPersonWrites
@@ -27,6 +28,11 @@ class ChildToContactPersonController @Inject()(
 
   case class ContactPersonIdBindModel(contactPersonId: UUID, relationship: String)
   val bindmodelReads: Reads[ContactPersonIdBindModel] = Json.reads[ContactPersonIdBindModel]
+
+  implicit val jsonWrites: Writes[(String, ContactPerson)] = (
+      (JsPath \ "relationship").write[String] and
+      (JsPath \ "contactPerson").write[ContactPerson]
+    )(unlift((tuple: (String, ContactPerson)) => Some(tuple)))
 
   def contactPeopleForChild(id: UUID): Action[AnyContent] = SecuredAction.async { req =>
     childToContactPersonDao.contactPeopleForChild(req.identity.tenantCanonicalName, id).map { contactPeople =>

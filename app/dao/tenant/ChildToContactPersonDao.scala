@@ -29,16 +29,14 @@ class ChildToContactPersonDao @Inject()(
   val contactPeople = contactPersonRepo.tableQuery
   val children = childRepo.tableQuery
 
-  def contactPeopleForChild(tenantCanonicalName: String, childId: UUID): Future[Seq[ContactPerson]] = {
+  def contactPeopleForChild(tenantCanonicalName: String, childId: UUID): Future[Seq[(String, ContactPerson)]] = {
     val query = for {
       childToContact <- childToContactPersonTable if childToContact.childId === childId
       contactPerson <- contactPeople if contactPerson.id === childToContact.contactPersonId &&
       contactPerson.tenantCanonicalName === tenantCanonicalName // Just to be sure
-    } yield {
-        contactPerson
-      }
+    } yield { (childToContact.relationship, contactPerson) }
 
-    db.run(query.result).map(_.map(_.convert))
+    db.run(query.result).map(_.map(tuple => (tuple._1, tuple._2.convert)))
   }
 
   def childrenForContactPerson(tenantCanonicalName: String, contactPersonId: UUID): Future[Seq[Child]] = {
