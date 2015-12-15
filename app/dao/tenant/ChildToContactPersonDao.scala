@@ -8,7 +8,7 @@ import slick.driver.JdbcProfile
 import slick.lifted.ProvenShape
 import scala.language.postfixOps
 import models.tenant.{ChildToContactPersonRelationship, ContactPerson, Child}
-import dao.NonExistantChildOrContactPersonOrDontBelongToTenant
+import dao.{NonExistantChildOrContactPersonOrDontBelongToTenantException, RowAlreadyExistsException}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -59,10 +59,20 @@ class ChildToContactPersonDao @Inject()(
         contactPerson.tenantCanonicalName === tenantCanonicalName
       } yield (child, contactPerson)).length.result
     }.flatMap { numRows =>
-      if(numRows == 0) {
-        db.run(childToContactPersonTable += relationship)
+      if(numRows == 1) {
+        db.run {
+          (for {
+            childToContact <- childToContactPersonTable if childToContact.childId === relationship.childId &&
+              childToContact.contactPersonId === relationship.contactPersonId
+          } yield (childToContact)).length.result
+        }.flatMap { numRows =>
+          if(numRows == 0)
+            db.run(childToContactPersonTable += relationship)
+          else
+            Future.failed(new RowAlreadyExistsException(tenantCanonicalName))
+        }
       } else {
-        Future.failed(new NonExistantChildOrContactPersonOrDontBelongToTenant(tenantCanonicalName))
+        Future.failed(new NonExistantChildOrContactPersonOrDontBelongToTenantException(tenantCanonicalName))
       }
     }
   }
@@ -78,7 +88,7 @@ class ChildToContactPersonDao @Inject()(
       }).result
     }.flatMap { numFound =>
       if (numFound == 0)
-        Future.failed(new NonExistantChildOrContactPersonOrDontBelongToTenant(tenantCanonicalName))
+        Future.failed(new NonExistantChildOrContactPersonOrDontBelongToTenantException(tenantCanonicalName))
         else {
           db.run {
             childToContactPersonTable

@@ -5,7 +5,7 @@ import javax.inject.Inject
 
 import com.mohiva.play.silhouette.api.{Silhouette, Environment}
 import com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator
-import dao.NonExistantChildOrContactPersonOrDontBelongToTenant
+import dao.{RowAlreadyExistsException, NonExistantChildOrContactPersonOrDontBelongToTenantException}
 import dao.tenant.ChildToContactPersonDao
 import models.tenant.{Crew, ContactPerson}
 import play.api.i18n.MessagesApi
@@ -52,8 +52,10 @@ class ChildToContactPersonController @Inject()(
     ).map { numInserted =>
       Ok(JsonStatus.success("message" -> "Successfully registered"))
     } recover {
-      case e: NonExistantChildOrContactPersonOrDontBelongToTenant => Conflict(JsonStatus.error("message" ->
+      case e: NonExistantChildOrContactPersonOrDontBelongToTenantException => BadRequest(JsonStatus.error("message" ->
         "Non-existant child or contact person, or child/contact person does not belong to the current tenant"))
+      case e: RowAlreadyExistsException => Conflict(JsonStatus.error("message" ->
+        "This contact person is already registered for this child."))
     }
   }
 

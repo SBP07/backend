@@ -1,8 +1,11 @@
 package controllers.api
 
+import java.util.NoSuchElementException
+
 import com.mohiva.play.silhouette.api.{Silhouette, Environment}
 import com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator
 import com.mohiva.play.silhouette.impl.providers.SocialProviderRegistry
+import io.strongtyped.active.slick.exceptions.RowNotFoundException
 import models.WithRole
 import models.helpers.{TenantEntityActions, BelongsToTenant, GenericApiRequiredRoles}
 import models.tenant.Crew
@@ -49,6 +52,7 @@ abstract class GenericSecureApiController(val dbConfigProvider: DatabaseConfigPr
   def update: Action[Model] = SecuredAction(WithRole(requiredRoles.requiredToUpdate)).async(parse.json(reads)) { implicit req =>
       db.run(repo.update(getTenantCanonicalNameFromModelRequest, convertToPersistable(req.body)))
       .map(updated => Ok(Json.toJson(convertToDisplayable(updated))))
+        .recover(_ match {case e: RowNotFoundException[_] => NotFound(JsonStatus.error("message" -> "Not found")) })
   }
 
   def delete(id: Id): Action[AnyContent] = SecuredAction(WithRole(requiredRoles.requiredToDelete)).async { implicit req =>
@@ -59,7 +63,9 @@ abstract class GenericSecureApiController(val dbConfigProvider: DatabaseConfigPr
   }
 
   def getById(id: Id): Action[AnyContent] = SecuredAction(WithRole(requiredRoles.requiredToGet)).async { implicit req =>
-    db.run(repo.findById(getTenantCanonicalNameFromAnyContentRequest, id)).map(entity => Ok(Json.toJson(convertToDisplayable(entity))))
+    db.run(repo.findById(getTenantCanonicalNameFromAnyContentRequest, id))
+      .map(entity => Ok(Json.toJson(convertToDisplayable(entity))))
+      .recover(_ match {case e: NoSuchElementException => NotFound(JsonStatus.error("message" -> "Not found")) })
   }
 
   def getAll: Action[AnyContent] = SecuredAction(WithRole(requiredRoles.requiredToGet)).async { implicit req =>
