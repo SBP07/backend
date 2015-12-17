@@ -5,7 +5,7 @@ import java.util.NoSuchElementException
 import com.mohiva.play.silhouette.api.{Silhouette, Environment}
 import com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator
 import com.mohiva.play.silhouette.impl.providers.SocialProviderRegistry
-import io.strongtyped.active.slick.exceptions.RowNotFoundException
+import io.strongtyped.active.slick.exceptions.{ActiveSlickException, RowNotFoundException}
 import models.WithRole
 import models.helpers.{TenantEntityActions, BelongsToTenant, GenericApiRequiredRoles}
 import models.tenant.Crew
@@ -56,11 +56,13 @@ abstract class GenericSecureApiController(val dbConfigProvider: DatabaseConfigPr
   }
 
   def delete(id: Id): Action[AnyContent] = SecuredAction(WithRole(requiredRoles.requiredToDelete)).async { implicit req =>
-    db.run(repo.deleteById(getTenantCanonicalNameFromAnyContentRequest, id)).map {
-      i =>
-        if (i == 0) NotFound else Ok
+    db.run(repo.deleteById(getTenantCanonicalNameFromAnyContentRequest, id)).map { i =>
+      Ok(JsonStatus.success())
     }.recover(_ match {
       case e: PSQLException => BadRequest(JsonStatus.error("message" -> "Database exception", "details" -> e.getServerErrorMessage.toString))
+      case e: ActiveSlickException => NotFound(
+        JsonStatus.error("message" -> s"No child found with id $id, or child does not belong to the current tenant")
+      )
     })
 
   }
