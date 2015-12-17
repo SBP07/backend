@@ -59,7 +59,10 @@ abstract class GenericSecureApiController(val dbConfigProvider: DatabaseConfigPr
     db.run(repo.deleteById(getTenantCanonicalNameFromAnyContentRequest, id)).map {
       i =>
         if (i == 0) NotFound else Ok
-    }
+    }.recover(_ match {
+      case e: PSQLException => BadRequest(JsonStatus.error("message" -> "Database exception", "details" -> e.getServerErrorMessage.toString))
+    })
+
   }
 
   def getById(id: Id): Action[AnyContent] = SecuredAction(WithRole(requiredRoles.requiredToGet)).async { implicit req =>

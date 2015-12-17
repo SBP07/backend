@@ -11,7 +11,7 @@ GET     /api/v0/child             controllers.api.ChildController.getAll
 POST    /api/v0/child             controllers.api.ChildController.create
 GET     /api/v0/child/id/:id      controllers.api.ChildController.getById(id: java.util.UUID)
 PUT     /api/v0/child             controllers.api.ChildController.update
-#DELETE  /api/v0/child/id/:id      controllers.api.ChildController.delete(id: java.util.UUID)
+DELETE  /api/v0/child/id/:id      controllers.api.ChildController.delete(id: java.util.UUID)
 
 GET     /api/v0/contactPerson             controllers.api.ContactPersonController.getAll
 POST    /api/v0/contactPerson             controllers.api.ContactPersonController.create
