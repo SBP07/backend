@@ -1,6 +1,9 @@
 # --- !Ups
 
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+-- The following extension should be created by the root user on the Postgres server
+-- Non-root users cannot create extensions (except through the white-list extension, but that's not supported on
+--  Amazon RDS)
+--CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- Authentication tables
 CREATE TABLE "auth_user" (
