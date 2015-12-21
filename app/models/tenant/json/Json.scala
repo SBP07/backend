@@ -61,12 +61,12 @@ object MedicalIncidentJson {
   implicit val medicalIncidentWrites: Writes[MedicalIncident] = Json.writes[MedicalIncident]
 }
 
-object ShiftJson {
-  implicit val shiftReads: Reads[Shift] = Json.reads[Shift]
-  implicit val shiftWrites: Writes[Shift] = Json.writes[Shift]
+object ActivityJson {
+  implicit val activityReads: Reads[Activity] = Json.reads[Activity]
+  implicit val activityWrites: Writes[Activity] = Json.writes[Activity]
 }
 
-object ShiftTypeJson {
-  implicit val shiftTypeReads: Reads[ShiftType] = Json.reads[ShiftType]
-  implicit val shiftTypeWrites: Writes[ShiftType] = Json.writes[ShiftType]
+object ActivityTypeJson {
+  implicit val activityTypeReads: Reads[ActivityType] = Json.reads[ActivityType]
+  implicit val activityTypeWrites: Writes[ActivityType] = Json.writes[ActivityType]
 }

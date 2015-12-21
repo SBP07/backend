@@ -1,5 +1,5 @@
 package controllers.api
 
-class ShiftType {
+class ActivityType {
 
 }
