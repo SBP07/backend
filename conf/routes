@@ -37,6 +37,13 @@ GET     /api/v0/activity/type/id/:id      controllers.api.ActivityTypeController
 PUT     /api/v0/activity/type             controllers.api.ActivityTypeController.update
 DELETE  /api/v0/activity/type/id/:id      controllers.api.ActivityTypeController.delete(id: java.util.UUID)
 
+GET     /api/v0/activity             controllers.api.ActivityController.getAll
+POST    /api/v0/activity             controllers.api.ActivityController.create
+GET     /api/v0/activity/id/:id      controllers.api.ActivityController.getById(id: java.util.UUID)
+PUT     /api/v0/activity             controllers.api.ActivityController.update
+DELETE  /api/v0/activity/id/:id      controllers.api.ActivityController.delete(id: java.util.UUID)
+
+
 ### Authentication
 
 POST    /api/v0/auth/signUp                  controllers.authentication.SignUpController.signUp
