@@ -85,7 +85,7 @@ class ChildToContactPersonDao @Inject()(
         contactPerson <- childToContact.contactPersonFk if contactPerson.tenantCanonicalName === tenantCanonicalName
       } yield {
         childToContact
-      }).result
+      }).length.result
     }.flatMap { numFound =>
       if (numFound == 0)
         Future.failed(new NonExistantChildOrContactPersonOrDontBelongToTenantException(tenantCanonicalName))
