@@ -24,10 +24,10 @@ class ChildToActivityController @Inject()(
   val messagesApi: MessagesApi,
   val env: Environment[Crew, JWTAuthenticator],
   val childToActivityDao: ChildToActivityDao)
-  extends Silhouette[Crew, JWTAuthenticator]
-{
+  extends Silhouette[Crew, JWTAuthenticator] {
 
   case class ActivityIdBindModel(activityId: UUID, checkInTime: Option[Instant], checkOutTime: Option[Instant])
+
   val bindmodelReads: Reads[ActivityIdBindModel] = Json.reads[ActivityIdBindModel]
 
   def activitiesForChild(id: UUID): Action[AnyContent] = SecuredAction.async { req =>
@@ -35,11 +35,12 @@ class ChildToActivityController @Inject()(
       implicit val relationshipWrites = childToActivityRelationshipWrites
       implicit val jsonWrites: Writes[(Activity, ChildToActivityRelationship)] = (
         (JsPath \ "activity").write[Activity] and
-        (JsPath \ "relationship").write[ChildToActivityRelationship]
-        )(unlift((tuple: (Activity, ChildToActivityRelationship)) => Some(tuple)))
+          (JsPath \ "relationship").write[ChildToActivityRelationship]
+        ) (unlift((tuple: (Activity, ChildToActivityRelationship)) => Some(tuple)))
       Ok(Json.toJson(activities))
     }
   }
+
   def childrenForActivity(id: UUID): Action[AnyContent] = SecuredAction.async { req =>
     childToActivityDao.childrenForActivity(req.identity.tenantCanonicalName, id).map { children =>
       Ok(Json.toJson(children))
@@ -64,6 +65,9 @@ class ChildToActivityController @Inject()(
     childToActivityDao.deleteRelationship(req.identity.tenantCanonicalName, childId, activityId).
       map { numDeleted =>
         Ok(JsonStatus.success("message" -> s"Deleted $numDeleted rows"))
+      }.recover {
+      case e: NonExistantChildOrActivityOrDontBelongToTenantException => BadRequest(JsonStatus.error("message" ->
+        "Non-existant child or activity, or child/activity does not belong to the current tenant"))
       }
   }
 }
