@@ -3,63 +3,63 @@
 # ~~~~
 
 # Home page
-GET     /                           controllers.Application.index
+GET           /                                                               controllers.Application.index
 
 ### API
 
-GET     /api/v0/child             controllers.api.ChildController.getAll
-POST    /api/v0/child             controllers.api.ChildController.create
-GET     /api/v0/child/id/:id      controllers.api.ChildController.getById(id: java.util.UUID)
-PUT     /api/v0/child             controllers.api.ChildController.update
-DELETE  /api/v0/child/id/:id      controllers.api.ChildController.delete(id: java.util.UUID)
+GET           /api/v0/child                                                   controllers.api.ChildController.getAll
+POST          /api/v0/child                                                   controllers.api.ChildController.create
+GET           /api/v0/child/id/:id                                            controllers.api.ChildController.getById(id: java.util.UUID)
+PUT           /api/v0/child                                                   controllers.api.ChildController.update
+DELETE        /api/v0/child/id/:id                                            controllers.api.ChildController.delete(id: java.util.UUID)
 
-GET     /api/v0/contactPerson             controllers.api.ContactPersonController.getAll
-POST    /api/v0/contactPerson             controllers.api.ContactPersonController.create
-GET     /api/v0/contactPerson/id/:id      controllers.api.ContactPersonController.getById(id: java.util.UUID)
-PUT     /api/v0/contactPerson             controllers.api.ContactPersonController.update
+GET           /api/v0/contactPerson                                           controllers.api.ContactPersonController.getAll
+POST          /api/v0/contactPerson                                           controllers.api.ContactPersonController.create
+GET           /api/v0/contactPerson/id/:id                                    controllers.api.ContactPersonController.getById(id: java.util.UUID)
+PUT           /api/v0/contactPerson                                           controllers.api.ContactPersonController.update
 #DELETE  /api/v0/contactPerson/id/:id      controllers.api.ContactPersonController.delete(id: java.util.UUID)
 
-GET     /api/v0/tenant             controllers.api.TenantController.getAll
-POST    /api/v0/tenant             controllers.api.TenantController.create
-GET     /api/v0/tenant/id/:id      controllers.api.TenantController.getById(id: java.util.UUID)
-PUT     /api/v0/tenant             controllers.api.TenantController.update
+GET           /api/v0/tenant                                                  controllers.api.TenantController.getAll
+POST          /api/v0/tenant                                                  controllers.api.TenantController.create
+GET           /api/v0/tenant/id/:id                                           controllers.api.TenantController.getById(id: java.util.UUID)
+PUT           /api/v0/tenant                                                  controllers.api.TenantController.update
 #DELETE  /api/v0/tenant/id/:id      controllers.api.TenantController.delete(id: java.util.UUID)
 
 # Many to many relation between child and contact person
-GET     /api/v0/child/id/:id/contactPeople                          controllers.api.ChildToContactPersonController.contactPeopleForChild(id: java.util.UUID)
-GET     /api/v0/contactPerson/id/:id/children                       controllers.api.ChildToContactPersonController.childrenForContactPerson(id: java.util.UUID)
-POST    /api/v0/child/id/:id/contactPeople                          controllers.api.ChildToContactPersonController.addPersonForChild(id: java.util.UUID)
-DELETE  /api/v0/child/id/:childId/contactPeople/:contactPersonId    controllers.api.ChildToContactPersonController.deletePersonForChild(childId: java.util.UUID, contactPersonId: java.util.UUID)
+GET           /api/v0/child/id/:id/contactPeople                              controllers.api.ChildToContactPersonController.contactPeopleForChild(id: java.util.UUID)
+GET           /api/v0/contactPerson/id/:id/children                           controllers.api.ChildToContactPersonController.childrenForContactPerson(id: java.util.UUID)
+POST          /api/v0/child/id/:id/contactPeople                              controllers.api.ChildToContactPersonController.addPersonForChild(id: java.util.UUID)
+DELETE        /api/v0/child/id/:childId/contactPeople/:contactPersonId        controllers.api.ChildToContactPersonController.deletePersonForChild(childId: java.util.UUID, contactPersonId: java.util.UUID)
 
-GET     /api/v0/activity/type             controllers.api.ActivityTypeController.getAll
-POST    /api/v0/activity/type             controllers.api.ActivityTypeController.create
-GET     /api/v0/activity/type/id/:id      controllers.api.ActivityTypeController.getById(id: java.util.UUID)
-PUT     /api/v0/activity/type             controllers.api.ActivityTypeController.update
-DELETE  /api/v0/activity/type/id/:id      controllers.api.ActivityTypeController.delete(id: java.util.UUID)
+GET           /api/v0/activity/type                                           controllers.api.ActivityTypeController.getAll
+POST          /api/v0/activity/type                                           controllers.api.ActivityTypeController.create
+GET           /api/v0/activity/type/id/:id                                    controllers.api.ActivityTypeController.getById(id: java.util.UUID)
+PUT           /api/v0/activity/type                                           controllers.api.ActivityTypeController.update
+DELETE        /api/v0/activity/type/id/:id                                    controllers.api.ActivityTypeController.delete(id: java.util.UUID)
 
-GET     /api/v0/activity             controllers.api.ActivityController.getAll
-POST    /api/v0/activity             controllers.api.ActivityController.create
-GET     /api/v0/activity/id/:id      controllers.api.ActivityController.getById(id: java.util.UUID)
-PUT     /api/v0/activity             controllers.api.ActivityController.update
-DELETE  /api/v0/activity/id/:id      controllers.api.ActivityController.delete(id: java.util.UUID)
+GET           /api/v0/activity                                                controllers.api.ActivityController.getAll
+POST          /api/v0/activity                                                controllers.api.ActivityController.create
+GET           /api/v0/activity/id/:id                                         controllers.api.ActivityController.getById(id: java.util.UUID)
+PUT           /api/v0/activity                                                controllers.api.ActivityController.update
+DELETE        /api/v0/activity/id/:id                                         controllers.api.ActivityController.delete(id: java.util.UUID)
 
 # Many to many relation between child and activity
-GET     /api/v0/child/id/:childId/activities              controllers.api.ChildToActivityController.activitiesForChild(childId: java.util.UUID)
-GET     /api/v0/activity/id/:id/children                  controllers.api.ChildToActivityController.childrenForActivity(id: java.util.UUID)
-POST    /api/v0/child/id/:childId/activities              controllers.api.ChildToActivityController.registerActivityForChild(childId: java.util.UUID)
-DELETE  /api/v0/child/id/:childId/activities/:activityId  controllers.api.ChildToActivityController.unregisterActivityForChild(childId: java.util.UUID, activityId: java.util.UUID)
+GET           /api/v0/child/id/:childId/activities                            controllers.api.ChildToActivityController.activitiesForChild(childId: java.util.UUID)
+GET           /api/v0/activity/id/:id/children                                controllers.api.ChildToActivityController.childrenForActivity(id: java.util.UUID)
+POST          /api/v0/child/id/:childId/activities                            controllers.api.ChildToActivityController.registerActivityForChild(childId: java.util.UUID)
+DELETE        /api/v0/child/id/:childId/activities/:activityId                controllers.api.ChildToActivityController.unregisterActivityForChild(childId: java.util.UUID, activityId: java.util.UUID)
 
 ### Authentication
 
-POST    /api/v0/auth/signUp                  controllers.authentication.SignUpController.signUp
-POST    /api/v0/auth/cookie/signIn           controllers.authentication.CookieCredentialsAuthController.authenticate
-GET     /api/v0/auth/cookie/test             controllers.authentication.CookieCredentialsTestController.index
+POST          /api/v0/auth/signUp                                             controllers.authentication.SignUpController.signUp
+POST          /api/v0/auth/cookie/signIn                                      controllers.authentication.CookieCredentialsAuthController.authenticate
+GET           /api/v0/auth/cookie/test                                        controllers.authentication.CookieCredentialsTestController.index
 
-POST    /api/v0/auth/jwt/signIn           controllers.authentication.JWTCredentialsAuthController.authenticate
-GET     /api/v0/auth/jwt/test             controllers.authentication.JWTCredentialsTestController.index
+POST          /api/v0/auth/jwt/signIn                                         controllers.authentication.JWTCredentialsAuthController.authenticate
+GET           /api/v0/auth/jwt/test                                           controllers.authentication.JWTCredentialsTestController.index
 
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /favicon.ico                     controllers.Assets.at(path="/public", file = "favicon.ico")
-GET         /assets/*file                    controllers.Assets.at(path="/public", file)
-GET         /webjars/*file                   controllers.WebJarAssets.at(file)
+GET           /favicon.ico                                                    controllers.Assets.at(path="/public", file = "favicon.ico")
+GET           /assets/*file                                                   controllers.Assets.at(path="/public", file)
+GET           /webjars/*file                                                  controllers.WebJarAssets.at(file)
