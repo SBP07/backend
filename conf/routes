@@ -44,10 +44,10 @@ PUT     /api/v0/activity             controllers.api.ActivityController.update
 DELETE  /api/v0/activity/id/:id      controllers.api.ActivityController.delete(id: java.util.UUID)
 
 # Many to many relation between child and activity
-GET     /api/v0/child/id/:childId/activities                   controllers.api.ChildToActivityController.activitiesForChild(childId: java.util.UUID)
-GET     /api/v0/activity/id/:id/children                       controllers.api.ChildToActivityController.childrenForActivity(id: java.util.UUID)
-POST    /api/v0/child/id/:childId/activities                   controllers.api.ChildToActivityController.registerActivityForChild(childId: java.util.UUID)
-DELETE  /api/v0/child/id/:childId/activities/:contactPersonId  controllers.api.ChildToActivityController.unregisterActivityForChild(childId: java.util.UUID, contactPersonId: java.util.UUID)
+GET     /api/v0/child/id/:childId/activities              controllers.api.ChildToActivityController.activitiesForChild(childId: java.util.UUID)
+GET     /api/v0/activity/id/:id/children                  controllers.api.ChildToActivityController.childrenForActivity(id: java.util.UUID)
+POST    /api/v0/child/id/:childId/activities              controllers.api.ChildToActivityController.registerActivityForChild(childId: java.util.UUID)
+DELETE  /api/v0/child/id/:childId/activities/:activityId  controllers.api.ChildToActivityController.unregisterActivityForChild(childId: java.util.UUID, activityId: java.util.UUID)
 
 ### Authentication
 
