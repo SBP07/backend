@@ -4,6 +4,7 @@ import java.sql.Date
 import java.time.LocalDate
 import java.util.UUID
 
+import play.api.libs.json._
 import com.mohiva.play.silhouette.api.LoginInfo
 import dao.admin.TenantRepo
 import slick.driver.JdbcProfile
@@ -31,6 +32,8 @@ trait DBTableDefinitions {
     birthDate: Option[LocalDate],
     tenantCanonicalName: String
   )
+
+  implicit val dbUserJsonWrites = Json.writes[DBUser]
 
   case class DBUserRole(userId: UUID, roleId: String)
 

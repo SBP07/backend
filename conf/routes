@@ -49,6 +49,12 @@ GET           /api/v0/activity/id/:id/children                                co
 POST          /api/v0/child/id/:childId/activities                            controllers.api.ChildToActivityController.registerActivityForChild(childId: java.util.UUID)
 DELETE        /api/v0/child/id/:childId/activities/:activityId                controllers.api.ChildToActivityController.unregisterActivityForChild(childId: java.util.UUID, activityId: java.util.UUID)
 
+# Many to many relation between crew member and activity
+GET           /api/v0/crew/id/:childId/activities                            controllers.api.CrewToActivityController.activitiesForCrew(childId: java.util.UUID)
+GET           /api/v0/activity/id/:id/crew                                   controllers.api.CrewToActivityController.crewForActivity(id: java.util.UUID)
+POST          /api/v0/crew/id/:crewId/activities                             controllers.api.CrewToActivityController.registerActivityForCrew(crewId: java.util.UUID)
+DELETE        /api/v0/crew/id/:crewId/activities/:activityId                 controllers.api.CrewToActivityController.unregisterActivityForCrew(crewId: java.util.UUID, activityId: java.util.UUID)
+
 ### Authentication
 
 POST          /api/v0/auth/signUp                                             controllers.authentication.SignUpController.signUp
