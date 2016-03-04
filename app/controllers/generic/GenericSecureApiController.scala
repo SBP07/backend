@@ -1,19 +1,19 @@
-package controllers.api
+package controllers.generic
 
 import java.util.NoSuchElementException
 
-import com.mohiva.play.silhouette.api.{Silhouette, Environment}
+import com.mohiva.play.silhouette.api.{Environment, Silhouette}
 import com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator
 import com.mohiva.play.silhouette.impl.providers.SocialProviderRegistry
 import io.strongtyped.active.slick.exceptions.{ActiveSlickException, RowNotFoundException}
 import models.WithRole
-import models.helpers.{TenantEntityActions, BelongsToTenant, GenericApiRequiredRoles}
+import models.helpers.{BelongsToTenant, GenericApiRequiredRoles, TenantEntityActions}
 import models.tenant.Crew
 import org.postgresql.util.PSQLException
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.i18n.MessagesApi
-import play.api.libs.json.{Writes, Reads, Json}
-import play.api.mvc.{AnyContent, Action}
+import play.api.libs.json.{Json, Reads, Writes}
+import play.api.mvc.{Action, AnyContent}
 import slick.driver.JdbcProfile
 import utils.JsonStatus
 
@@ -29,7 +29,6 @@ abstract class GenericSecureApiController(val dbConfigProvider: DatabaseConfigPr
 {
   val dbConfig = dbConfigProvider.get[JdbcProfile]
   val db = dbConfig.db
-  import dbConfig.driver.api._
 
   def getTenantCanonicalNameFromModelRequest(implicit securedRequest: SecuredRequest[Model]): String = securedRequest.identity.tenantCanonicalName
   def getTenantCanonicalNameFromAnyContentRequest(implicit securedRequest: SecuredRequest[AnyContent]): String = securedRequest.identity.tenantCanonicalName

@@ -6,6 +6,7 @@ import com.google.inject.Inject
 import com.mohiva.play.silhouette.api.Environment
 import com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator
 import com.mohiva.play.silhouette.impl.providers.SocialProviderRegistry
+import controllers.generic.GenericSecureApiController
 import dao.tenant.ContactPersonRepo
 import models.helpers.GenericApiRequiredRoles
 import models.Role
