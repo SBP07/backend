@@ -23,7 +23,7 @@ case class Animator(
 )
 
 private[models] class AnimatorRepository(tag: Tag) extends Table[Animator](tag, "animator") {
-  import helpers.Db.jodaDatetimeToSqldateMapper
+  import _root_.helpers.Db.jodaDatetimeToSqldateMapper
 
   private[models] def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
   private[models] def firstName = column[String]("first_name")

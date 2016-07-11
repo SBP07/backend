@@ -29,7 +29,7 @@ object Global extends GlobalSettings {
 
   private def insertAnimators(implicit s: Session) {
     if (AnimatorRepository.count == 0) {
-      helpers.CsvImporters
+      CsvImporters
         .animators("conf/initial_data/animators.csv")
         .foreach(AnimatorRepository.insert)
     }

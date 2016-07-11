@@ -21,7 +21,7 @@ case class Child(
 )
 
 private[models] class ChildRepository(tag: Tag) extends Table[Child](tag, "child") {
-  import helpers.Db.jodaDatetimeToSqldateMapper
+  import _root_.helpers.Db.jodaDatetimeToSqldateMapper
 
   private[models] def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
   private[models] def firstName = column[String]("first_name")

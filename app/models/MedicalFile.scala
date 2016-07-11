@@ -36,7 +36,7 @@ case class MedicalFile(
 )
 
 private[models] class MedicalFileRepository(tag: Tag) extends Table[MedicalFile](tag, "medical_file") {
-  import helpers.Db.jodaDatetimeToSqldateMapper
+  import _root_.helpers.Db.jodaDatetimeToSqldateMapper
 
   private[models] def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
 

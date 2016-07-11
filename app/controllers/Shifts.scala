@@ -1,6 +1,6 @@
 package controllers
 
-import models.{ShiftRepository, Shift, ShiftTypeRepository}
+import models.{ChildPresenceRepository, Shift, ShiftRepository, ShiftTypeRepository}
 import org.joda.time.LocalDate
 import play.api.mvc._
 import play.api.db.slick._

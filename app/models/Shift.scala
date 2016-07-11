@@ -10,7 +10,7 @@ case class ShiftType(id: Option[Long], mnemonic: String, description: String)
 
 
 private[models] class ShiftRepository(tag: Tag) extends Table[Shift](tag, "shift") {
-  import helpers.Db.jodaDatetimeToSqldateMapper
+  import _root_.helpers.Db.jodaDatetimeToSqldateMapper
 
   private[models] def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
   private[models] def date = column[LocalDate]("date", O.Nullable)
@@ -45,7 +45,7 @@ private[models] class ShiftTypeRepository(tag: Tag) extends Table[ShiftType](tag
 }
 
 object ShiftRepository {
-  import helpers.Db.jodaDatetimeToSqldateMapper
+  import _root_.helpers.Db.jodaDatetimeToSqldateMapper
 
   val shifts = TableQuery[ShiftRepository]
 
