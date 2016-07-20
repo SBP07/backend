@@ -7,7 +7,8 @@ import play.api.data.format.Formats._
 import play.api.db.slick._
 
 import views._
-import models.{AnimatorRepository, AnimatorConstants, Animator}
+import models.{AnimatorConstants, Animator}
+import models.repositories.slick.AnimatorRepository
 
 object Animators extends Controller {
 

@@ -1,12 +1,14 @@
 package controllers
 
-import models.{ChildPresenceRepository, Shift, ShiftRepository, ShiftTypeRepository}
+import models.Shift
 import org.joda.time.LocalDate
 import play.api.mvc._
 import play.api.db.slick._
 import play.api.data.Forms._
 import play.api.data._
 import helpers.DateTime._
+import models.repositories.slick
+import models.repositories.slick.{ChildPresenceRepository, ShiftRepository, ShiftTypeRepository}
 
 object Shifts extends Controller {
   case class ShiftsPost(date: LocalDate, shiftTypes: List[Long], externalLocation: String)
@@ -44,7 +46,7 @@ object Shifts extends Controller {
       post => {
         val shiftTypes = post.shiftTypes.map(ShiftTypeRepository.findById).flatten.toSet
         val alreadyPersisted: Set[Long] = shiftTypes.map { t =>
-          models.ShiftRepository.findByDateAndType(post.date, t)
+          ShiftRepository.findByDateAndType(post.date, t)
         }.flatten.map(_.shiftId)
 
         val notPersistedYet = shiftTypes.filterNot(_.id.map(a =>
@@ -55,7 +57,7 @@ object Shifts extends Controller {
 
         notPersistedYet.map(_.id).flatten foreach { id =>
           val place = if(id == externalActivityId) post.externalLocation else "Speelplein"
-          models.ShiftRepository insert Shift(None, post.date, place, id)
+          slick.ShiftRepository insert Shift(None, post.date, place, id)
         }
 
         Redirect(routes.Shifts.list).flashing("success" -> s"${notPersistedYet.size} dagdelen toegevoegd")
@@ -66,7 +68,7 @@ object Shifts extends Controller {
   def updateShift(dateString: String): Action[AnyContent] = DBAction { implicit req =>
     try{
       val date: LocalDate = LocalDate.parse(dateString, fmt)
-      val shift = models.ShiftRepository.findByDate(date)
+      val shift = slick.ShiftRepository.findByDate(date)
       val extPlace = "Test"
       val fill = ShiftsPost(date, shift.map(_.shiftId).toList, extPlace)
       val types = ShiftTypeRepository.findAll
@@ -77,7 +79,7 @@ object Shifts extends Controller {
   }
 
   def deleteShift(id: Long): Action[AnyContent] = DBAction { implicit req =>
-    val found = models.ShiftRepository.findByIdWithTypeAndNumberOfPresences(id)
+    val found = slick.ShiftRepository.findByIdWithTypeAndNumberOfPresences(id)
 
     found.map { found =>
       Ok(views.html.shifts.confirm_delete(found._3, found._1, found._2))
@@ -89,10 +91,10 @@ object Shifts extends Controller {
     deleteForm.bindFromRequest.fold(
       errorForm => BadRequest("Bad id"),
       deleteShift => {
-        val shift = models.ShiftRepository.findById(deleteShift.id)
+        val shift = slick.ShiftRepository.findById(deleteShift.id)
 
         shift.map { act =>
-          models.ShiftRepository.delete(act)
+          slick.ShiftRepository.delete(act)
           Redirect(routes.Shifts.list()).flashing("success" -> "Dagdeel verwijderd")
         }.getOrElse(BadRequest("Dagdeel niet gevonden"))
       }

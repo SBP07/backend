@@ -1,6 +1,7 @@
 package controllers
 
 import models._
+import models.repositories.slick.{ChildPresenceRepository, ChildRepository}
 import play.api.data.Forms._
 import play.api.data._
 import play.api.data.format.Formats._

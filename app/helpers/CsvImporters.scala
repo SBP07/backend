@@ -5,6 +5,7 @@ import java.io.File
 import com.github.tototoshi.csv._
 import helpers.DateTime.fmt
 import models._
+import models.repositories.slick.{ChildRepository, ShiftRepository, ShiftTypeRepository}
 import play.api.db.slick.Config.driver.simple.Session
 
 object CsvImporters {

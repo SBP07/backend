@@ -8,6 +8,7 @@ import play.api.data.Forms._
 import play.api.data.format.Formats._
 import play.api.db.slick._
 import models._
+import models.repositories.slick.{ChildPresenceRepository, ChildRepository, ShiftRepository}
 import play.api.Play.current
 import views.html.presences
 
