@@ -4,10 +4,6 @@ GET     /                      controllers.Application.home
 # For continuous delivery
 GET     /heartbeat              controllers.Application.heartbeat
 
-# Medical files
-GET     /medischefiche              controllers.MedicalFiles.form
-POST    /medischefiche              controllers.MedicalFiles.postForm
-
 # Presences
 GET     /aanwezigheden              controllers.Presences.presentToday
 POST    /aanwezigheden/update       controllers.Presences.saveUpdate
