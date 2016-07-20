@@ -24,6 +24,6 @@ libraryDependencies ++= Seq(
   "joda-time" % "joda-time" % "2.7",
   "postgresql" % "postgresql" % "9.1-901.jdbc4",
   "com.github.tototoshi" %% "scala-csv" % "1.2.1",
-  "com.github.nscala-time" %% "nscala-time" % "1.8.0"
-)     
-
+  "com.github.nscala-time" %% "nscala-time" % "1.8.0",
+  "com.ibm" %% "couchdb-scala" % "0.7.2"
+)
