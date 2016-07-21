@@ -43,7 +43,7 @@ class SlickAnimatorRepository @Inject()(dbConfigProvider: DatabaseConfigProvider
   val animators = TableQuery[AnimatorTable]
 
   override def findById(id: Long): Future[Option[Animator]] = db.run(animators.filter(_.id === id).result.headOption)
-  override def findAll: Future[Seq[Animator]] = db.run(animators.result)
+  override def findAll: Future[Seq[Animator]] = db.run(animators.sortBy(s => (s.lastName, s.firstName)).result)
   override def insert(animator: Animator): Future[Unit] = db.run(animators += animator).map(_ => ())
   override def count: Future[Int] = db.run(animators.length.result)
   override def update(animator: Animator): Future[Unit] = {

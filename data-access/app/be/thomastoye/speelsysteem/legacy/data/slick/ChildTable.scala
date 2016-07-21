@@ -43,7 +43,7 @@ class SlickChildRepository @Inject()(dbConfigProvider: DatabaseConfigProvider) e
   val children = TableQuery[ChildTable]
 
   override def findById(id: Long): Future[Option[Child]] = db.run(children.filter(_.id === id).result.headOption)
-  override def findAll: Future[Seq[Child]] = db.run(children.result)
+  override def findAll: Future[Seq[Child]] = db.run(children.sortBy(s => (s.lastName, s.firstName)).result)
   override def insert(child: Child): Future[Long] = db.run {
     (children returning children.map(_.id)) += child
   }
