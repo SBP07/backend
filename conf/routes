@@ -1,46 +1,46 @@
 # Home page
-GET     /                      controllers.Application.home
+GET     /                      controllers.ApplicationController.home
 
 # For continuous delivery
-GET     /heartbeat              controllers.Application.heartbeat
+GET     /heartbeat              controllers.ApplicationController.heartbeat
 
 # Presences
-GET     /aanwezigheden              controllers.Presences.presentToday
-POST    /aanwezigheden/update       controllers.Presences.saveUpdate
-GET     /aanwezigheden/update/:id   controllers.Presences.updateWithId(id: Long)
-GET     /aanwezigheden/nieuw        controllers.Presences.register
-GET     /aanwezigheden/nieuw/:id    controllers.Presences.registerWithId(id: Long)
-POST    /aanwezigheden/nieuw        controllers.Presences.savePresence
+GET     /aanwezigheden              controllers.PresencesController.presentToday
+POST    /aanwezigheden/update       controllers.PresencesController.saveUpdate
+GET     /aanwezigheden/update/:id   controllers.PresencesController.updateWithId(id: Long)
+GET     /aanwezigheden/nieuw        controllers.PresencesController.register
+GET     /aanwezigheden/nieuw/:id    controllers.PresencesController.registerWithId(id: Long)
+POST    /aanwezigheden/nieuw        controllers.PresencesController.savePresence
 
 
 # Shifts
-GET     /dagdelen                 controllers.Shifts.list
-GET     /dagdelen/                controllers.Shifts.list
-GET     /dagdelen/lijst           controllers.Shifts.list
-GET     /dagdelen/nieuw           controllers.Shifts.newShift
-POST    /dagdelen/nieuw           controllers.Shifts.saveShift
-GET     /dagdelen/update/:date    controllers.Shifts.updateShift(date: String)
-GET     /dagdelen/details/:id     controllers.Shifts.detailsShifts(id: Long)
-GET     /dagdelen/delete/:id      controllers.Shifts.deleteShift(id: Long)
-POST    /dagdelen/delete          controllers.Shifts.reallyDeleteShift
+GET     /dagdelen                 controllers.ShiftController.list
+GET     /dagdelen/                controllers.ShiftController.list
+GET     /dagdelen/lijst           controllers.ShiftController.list
+GET     /dagdelen/nieuw           controllers.ShiftController.newShift
+POST    /dagdelen/nieuw           controllers.ShiftController.saveShift
+GET     /dagdelen/update/:date    controllers.ShiftController.updateShift(date: String)
+GET     /dagdelen/details/:id     controllers.ShiftController.detailsShifts(id: Long)
+GET     /dagdelen/delete/:id      controllers.ShiftController.deleteShift(id: Long)
+POST    /dagdelen/delete          controllers.ShiftController.reallyDeleteShift
 
 # Animators
-GET     /animator              controllers.Animators.list
-GET     /animator/             controllers.Animators.list
-GET     /animator/lijst        controllers.Animators.list
-GET     /animator/details/:id  controllers.Animators.details(id: Long)
-GET     /animator/nieuw        controllers.Animators.newAnimator
-POST    /animator/nieuw        controllers.Animators.saveAnimator
-GET     /animator/edit/:id     controllers.Animators.editAnimator(id: Long)
+GET     /animator              controllers.AnimatorController.list
+GET     /animator/             controllers.AnimatorController.list
+GET     /animator/lijst        controllers.AnimatorController.list
+GET     /animator/details/:id  controllers.AnimatorController.details(id: Long)
+GET     /animator/nieuw        controllers.AnimatorController.newAnimator
+POST    /animator/nieuw        controllers.AnimatorController.saveAnimator
+GET     /animator/edit/:id     controllers.AnimatorController.editAnimator(id: Long)
 
 # Children
-GET     /kind               controllers.Children.showList
-GET     /kind/              controllers.Children.showList
-GET     /kind/lijst         controllers.Children.showList
-GET     /kind/nieuw         controllers.Children.newChild
-POST    /kind/nieuw         controllers.Children.saveChild
-GET     /kind/edit/:id      controllers.Children.editChild(id: Long)
-GET     /kind/details/:id   controllers.Children.details(id: Long)
+GET     /kind               controllers.ChildController.showList
+GET     /kind/              controllers.ChildController.showList
+GET     /kind/lijst         controllers.ChildController.showList
+GET     /kind/nieuw         controllers.ChildController.newChild
+POST    /kind/nieuw         controllers.ChildController.saveChild
+GET     /kind/edit/:id      controllers.ChildController.editChild(id: Long)
+GET     /kind/details/:id   controllers.ChildController.details(id: Long)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

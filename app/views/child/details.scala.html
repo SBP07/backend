@@ -9,13 +9,13 @@
 @main("Details voor " + child.firstName + " " + child.lastName) {
 
         
-        <a href="@routes.Children.showList">
+        <a href="@routes.ChildController.showList">
             <span class="glyphicon glyphicon-chevron-left"></span> Terug naar lijst
         </a>
 
 	<h2>Gegevens</h2>
 	<p>
-		<a href="@routes.Children.editChild(child.id.get)">
+		<a href="@routes.ChildController.editChild(child.id.get)">
 			<button type="button" class="btn btn-default">
 		  		<span class="glyphicon glyphicon-pencil"></span> Details bewerken
 			</button>
@@ -23,7 +23,7 @@
 		<a href="
 		    @{
                 child.id match {
-                    case Some(id) => routes.Presences.updateWithId(id)
+                    case Some(id) => routes.PresencesController.updateWithId(id)
                     case _ => "#"
                 }
 		    }

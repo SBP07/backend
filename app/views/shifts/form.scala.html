@@ -8,7 +8,7 @@
 @implicitField = @{ FieldConstructor(bootstrap3FieldConstructorTemplate.f) }
 
 @main("Nieuw dagedeel") {
-	@helper.form(action = routes.Shifts.saveShift, 'class -> "form-horizontal") {
+	@helper.form(action = routes.ShiftController.saveShift, 'class -> "form-horizontal") {
 		<fieldset>
 			<legend>Dagdeel</legend>
             @shiftForm("id").value.map { id =>

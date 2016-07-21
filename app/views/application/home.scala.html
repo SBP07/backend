@@ -10,8 +10,8 @@
 <div class="row">
     <div class="col-xs-6">
         <h2>Aanwezigheden van kinderen</h2>
-        @linklist(Map("Een kind inschrijven voor een dagdeel/activiteit" -> routes.Presences.register,
-        "Een lijst van alle momenteel aanwezige kinderen weergeven" -> routes.Presences.presentToday)
+        @linklist(Map("Een kind inschrijven voor een dagdeel/activiteit" -> routes.PresencesController.register,
+        "Een lijst van alle momenteel aanwezige kinderen weergeven" -> routes.PresencesController.presentToday)
         )
     </div>
     <div class="col-xs-6">
@@ -21,15 +21,15 @@
 <div class="row">
     <div class="col-xs-4">
         <h2>Kinderen</h2>
-        @linklist(Map("Lijst van alle kinderen" -> routes.Children.showList, "Nieuw kind registreren" -> routes.Children.newChild))
+        @linklist(Map("Lijst van alle kinderen" -> routes.ChildController.showList, "Nieuw kind registreren" -> routes.ChildController.newChild))
     </div>
     <div class="col-xs-4">
         <h2>Animatoren</h2>
-        @linklist(Map("Lijst van alle animatoren" -> routes.Animators.list, "Nieuwe animator registreren" -> routes.Animators.newAnimator))
+        @linklist(Map("Lijst van alle animatoren" -> routes.AnimatorController.list, "Nieuwe animator registreren" -> routes.AnimatorController.newAnimator))
     </div>
     <div class="col-xs-4">
         <h2>Dagdelen</h2>
-        @linklist(Map("Lijst van alle dagdelen" -> routes.Shifts.list, "Nieuw dagdeel toevoegen" -> routes.Shifts.newShift))
+        @linklist(Map("Lijst van alle dagdelen" -> routes.ShiftController.list, "Nieuw dagdeel toevoegen" -> routes.ShiftController.newShift))
     </div>
 </div>
 }

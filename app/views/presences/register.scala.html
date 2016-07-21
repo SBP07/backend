@@ -19,7 +19,7 @@
     <h2>Nieuwe registratie</h2>
     <p></p><em>Enkel activiteiten voor vandaag (@today.toString(fmt)).</em></p>
 
-    @helper.form(action = routes.Presences.savePresence, 'class -> "form-horizontal") {
+    @helper.form(action = routes.PresencesController.savePresence, 'class -> "form-horizontal") {
         @select(field = childForm("childId"),
             options = (children.map(c => {
                 c.id.getOrElse(-1).toString -> {c.firstName + " " + c.lastName}

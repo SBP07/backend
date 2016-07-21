@@ -8,13 +8,13 @@
 @implicitField = @{ FieldConstructor(bootstrap3FieldConstructorTemplate.f) }
 
 @main(s"Details voor ${shift.date.toString(fmt)} ${shiftType.mnemonic}") {
-    <a href="@routes.Shifts.list">
+    <a href="@routes.ShiftController.list">
         <span class="glyphicon glyphicon-chevron-left"></span> Terug naar lijst
     </a>
 
     <h2>Details voor @shift.date.toString(fmt) @shiftType.mnemonic</h2>
     <p>
-        <a href="@routes.Shifts.updateShift(shift.date.toString(fmt))">
+        <a href="@routes.ShiftController.updateShift(shift.date.toString(fmt))">
             <button type="button" class="btn btn-default">
                 <span class="glyphicon glyphicon-pencil"></span> Aanpassen
             </button>
@@ -51,7 +51,7 @@
         @for(child <- presentChildren) {
             <li>
                 @child.id.map { id =>
-                    <a href="@routes.Children.details(id)">
+                    <a href="@routes.ChildController.details(id)">
                 }
                         @child.firstName @child.lastName
 

@@ -2,7 +2,7 @@ package controllers
 
 import javax.inject.Inject
 
-import be.thomastoye.speelsysteem.legacy.data.slick.{ChildPresenceRepository, ShiftRepository, ShiftTypeRepository}
+import be.thomastoye.speelsysteem.legacy.data.slick.{SlickChildPresenceRepository, SlickShiftRepository, SlickShiftTypeRepository}
 import be.thomastoye.speelsysteem.legacy.models.Shift
 import org.joda.time.LocalDate
 import play.api.mvc._
@@ -18,8 +18,8 @@ object Shifts {
   case class ShiftDelete(id: Long)
 }
 
-class Shifts @Inject() (shiftRepository: ShiftRepository, shiftTypeRepository: ShiftTypeRepository,
-  childPresenceRepository: ChildPresenceRepository) extends Controller
+class ShiftController @Inject() (shiftRepository: SlickShiftRepository, shiftTypeRepository: SlickShiftTypeRepository,
+  childPresenceRepository: SlickChildPresenceRepository) extends Controller
 {
   import Shifts._
 
@@ -71,7 +71,7 @@ class Shifts @Inject() (shiftRepository: ShiftRepository, shiftTypeRepository: S
                 val place = if (id == externalActivityId) post.externalLocation else "Speelplein"
                 shiftRepository insert Shift(None, post.date, place, id)
               }) map { _ =>
-                Redirect(routes.Shifts.list).flashing("success" -> s"${notPersistedYet.size} dagdelen toegevoegd")
+                Redirect(routes.ShiftController.list).flashing("success" -> s"${notPersistedYet.size} dagdelen toegevoegd")
               }
             }
           }
@@ -110,7 +110,7 @@ class Shifts @Inject() (shiftRepository: ShiftRepository, shiftTypeRepository: S
         shiftRepository.findById(deleteShift.id) flatMap { shift =>
           shift.map { act =>
             shiftRepository.delete(act) map { _ =>
-              Redirect(routes.Shifts.list()).flashing("success" -> "Dagdeel verwijderd")
+              Redirect(routes.ShiftController.list()).flashing("success" -> "Dagdeel verwijderd")
             }
           }.getOrElse(Future.successful(BadRequest("Dagdeel niet gevonden")))
         }

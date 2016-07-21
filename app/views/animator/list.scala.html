@@ -4,7 +4,7 @@
 
 @main("Animatoren") {
     <h2 class="sub-header">Lijst van alle animatoren</h2>
-    <a href="@routes.Animators.newAnimator">
+    <a href="@routes.AnimatorController.newAnimator">
             <button type="button" class="btn btn-default">
                     <span class="glyphicon glyphicon-pencil"></span> Nieuwe animator
             </button>
@@ -27,7 +27,7 @@
                     <td>@animator.id.getOrElse("/")</td>
                     <td>
                         @animator.id.map { id =>
-                            <a href="@routes.Animators.details(id)">
+                            <a href="@routes.AnimatorController.details(id)">
                         }
                         @animator.firstName @animator.lastName
                         @animator.id.map { id =>

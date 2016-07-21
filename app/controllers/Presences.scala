@@ -2,7 +2,7 @@ package controllers
 
 import javax.inject.Inject
 
-import be.thomastoye.speelsysteem.legacy.data.slick.{ChildPresenceRepository, ChildRepository, ShiftRepository}
+import be.thomastoye.speelsysteem.legacy.data.slick.{SlickChildPresenceRepository, SlickChildRepository, SlickShiftRepository}
 import be.thomastoye.speelsysteem.legacy.models.{Child, ChildPresence, Shift}
 import org.joda.time.{DateTimeZone, LocalDate}
 import play.api.mvc._
@@ -17,8 +17,8 @@ import views.html.presences
 import scala.concurrent.{Await, Future}
 import scala.concurrent.duration._
 
-class Presences @Inject() (childRepository: ChildRepository, shiftRepository: ShiftRepository,
-  childPresenceRepository: ChildPresenceRepository) extends Controller
+class PresencesController @Inject() (childRepository: SlickChildRepository, shiftRepository: SlickShiftRepository,
+  childPresenceRepository: SlickChildPresenceRepository) extends Controller
 {
   val registerForm: Form[PresencesPost] = Form(
     mapping(
@@ -85,7 +85,7 @@ class Presences @Inject() (childRepository: ChildRepository, shiftRepository: Sh
                   childPresenceRepository.register(toPersist.map(_.id).flatten.map(ChildPresence(id, _))),
                   childPresenceRepository.unregister(toDelete.map(_.id).flatten.map(ChildPresence(id, _)))
                 )) map { _ =>
-                  Redirect(routes.Children.details(id)).flashing("success" -> "Aanwezigheden upgedated")
+                  Redirect(routes.ChildController.details(id)).flashing("success" -> "Aanwezigheden upgedated")
                 }
               }
             case _ => Future.successful(BadRequest("Ongeldig kind"))
@@ -144,7 +144,7 @@ class Presences @Inject() (childRepository: ChildRepository, shiftRepository: Sh
             childPresenceRepository.findAllForChild(id) map (_.map(_._1).toList) flatMap { alreadyPersisted =>
               val toPersist = PresencesPost.presencesToInsert(selectedShifts, possibleShifts, alreadyPersisted)
               childPresenceRepository.register(toPersist.flatMap(_.id).map(ChildPresence(id, _))) map { _ =>
-                Redirect(routes.Children.details(id)).flashing("success" -> s"${toPersist.size} aanwezigheden toegevoegd")
+                Redirect(routes.ChildController.details(id)).flashing("success" -> s"${toPersist.size} aanwezigheden toegevoegd")
               }
             }
           case _ => Future.successful(BadRequest("Ongeldig kind"))

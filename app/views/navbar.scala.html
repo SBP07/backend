@@ -9,34 +9,34 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="@routes.Application.home">speelsysteem</a>
+          <a class="navbar-brand" href="@routes.ApplicationController.home">speelsysteem</a>
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li><a href="@routes.Application.home">Home</a></li>
+            <li><a href="@routes.ApplicationController.home">Home</a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Kinderen <b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <li><a href="@routes.Children.newChild">Nieuw</a></li>
-                <li><a href="@routes.Children.showList">Lijst</a></li>
+                <li><a href="@routes.ChildController.newChild">Nieuw</a></li>
+                <li><a href="@routes.ChildController.showList">Lijst</a></li>
               </ul>
             </li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Animatoren <b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <li><a href="@routes.Animators.newAnimator">Nieuw</a></li>
-                <li><a href="@routes.Animators.list">Lijst</a></li>
+                <li><a href="@routes.AnimatorController.newAnimator">Nieuw</a></li>
+                <li><a href="@routes.AnimatorController.list">Lijst</a></li>
               </ul>
             </li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dagdelen <b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <li><a href="@routes.Shifts.newShift">Nieuw</a></li>
-                <li><a href="@routes.Shifts.list">Lijst</a></li>
+                <li><a href="@routes.ShiftController.newShift">Nieuw</a></li>
+                <li><a href="@routes.ShiftController.list">Lijst</a></li>
               </ul>
             </li>
             <li>
-                <a href="@routes.Presences.register">Aanwezigheden</a>
+                <a href="@routes.PresencesController.register">Aanwezigheden</a>
             </li>
           </ul>
         </div><!--/.nav-collapse -->

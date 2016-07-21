@@ -2,7 +2,7 @@ package controllers
 
 import javax.inject.Inject
 
-import be.thomastoye.speelsysteem.legacy.data.slick.AnimatorRepository
+import be.thomastoye.speelsysteem.legacy.data.slick.SlickAnimatorRepository
 import be.thomastoye.speelsysteem.legacy.models.{Animator, AnimatorConstants}
 import play.api.mvc._
 import play.api.data._
@@ -13,7 +13,7 @@ import views._
 
 import scala.concurrent.Future
 
-class Animators @Inject() (animatorRepository: AnimatorRepository) extends Controller {
+class AnimatorController @Inject() (animatorRepository: SlickAnimatorRepository) extends Controller {
 
   val animatorForm = Form(
     mapping(
@@ -59,11 +59,11 @@ class Animators @Inject() (animatorRepository: AnimatorRepository) extends Contr
           case Some(id) =>
             animatorRepository
               .update(animator)
-              .map(_ => Redirect(routes.Animators.details(id)).flashing("success" -> "Animator upgedated"))
+              .map(_ => Redirect(routes.AnimatorController.details(id)).flashing("success" -> "Animator upgedated"))
           case _ =>
             animatorRepository
               .insert(animator)
-              .map(_ => Redirect(routes.Animators.list()).flashing("success" -> "Animator toegevoegd"))
+              .map(_ => Redirect(routes.AnimatorController.list()).flashing("success" -> "Animator toegevoegd"))
         }
       }
     )

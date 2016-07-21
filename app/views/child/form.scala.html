@@ -7,7 +7,7 @@
 @implicitField = @{ FieldConstructor(bootstrap3FieldConstructorTemplate.f) }
 
 @main("Nieuw kind") {
-	@helper.form(action = routes.Children.saveChild, 'class -> "form-horizontal") {
+	@helper.form(action = routes.ChildController.saveChild, 'class -> "form-horizontal") {
 		<fieldset>
 			<legend>Kind (@childForm("firstName").value.getOrElse("nieuw") @childForm("lastName").value.getOrElse(""))</legend>
             @childForm("id").value.map { id =>

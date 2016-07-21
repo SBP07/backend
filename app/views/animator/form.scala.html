@@ -7,7 +7,7 @@
 @implicitField = @{ FieldConstructor(bootstrap3FieldConstructorTemplate.f) }
 
 @main("Animator opslaan") {
-	@helper.form(action = routes.Animators.saveAnimator, 'class -> "form-horizontal") {
+	@helper.form(action = routes.AnimatorController.saveAnimator, 'class -> "form-horizontal") {
 		<fieldset>
 			<legend>Animator (@animatorForm("firstName").value.getOrElse("nieuw") @animatorForm("lastName").value.getOrElse(""))</legend>
             @animatorForm("id").value.map { id =>

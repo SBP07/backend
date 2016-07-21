@@ -2,7 +2,7 @@ package controllers
 
 import javax.inject.Inject
 
-import be.thomastoye.speelsysteem.legacy.data.slick.{ChildPresenceRepository, ChildRepository}
+import be.thomastoye.speelsysteem.legacy.data.slick.{SlickChildPresenceRepository, SlickChildRepository}
 import be.thomastoye.speelsysteem.legacy.models.Child
 import models._
 import play.api.libs.concurrent.Execution.Implicits._
@@ -14,7 +14,7 @@ import views._
 
 import scala.concurrent.Future
 
-class Children @Inject() (childRepository: ChildRepository, childPresenceRepository: ChildPresenceRepository) extends Controller {
+class ChildController @Inject() (childRepository: SlickChildRepository, childPresenceRepository: SlickChildPresenceRepository) extends Controller {
 
   val childForm = Form(
     mapping(
@@ -53,9 +53,9 @@ class Children @Inject() (childRepository: ChildRepository, childPresenceReposit
       child => {
         child.id match {
           case Some(id) =>
-            childRepository.update(child).map(_ => Redirect(routes.Children.details(id)).flashing("success" -> "Kind upgedated"))
+            childRepository.update(child).map(_ => Redirect(routes.ChildController.details(id)).flashing("success" -> "Kind upgedated"))
           case _ =>
-            childRepository.insert(child).map(_ => Redirect(routes.Children.showList()).flashing("success" -> "Kind toegevoegd"))
+            childRepository.insert(child).map(_ => Redirect(routes.ChildController.showList()).flashing("success" -> "Kind toegevoegd"))
         }
       }
     )
