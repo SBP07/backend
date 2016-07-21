@@ -1,34 +1,35 @@
-package models.repositories.slick
+package be.thomastoye.speelsysteem.legacy.data.slick
 
 import javax.inject.Inject
 
-import helpers.Db.jodaDatetimeToSqldateMapper
-import models.Animator
-import slick.driver.PostgresDriver.api._
-import scala.concurrent.Future
+import be.thomastoye.speelsysteem.legacy.models.Animator
 import org.joda.time.LocalDate
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.db.slick.DatabaseConfigProvider
+import play.api.libs.concurrent.Execution.Implicits._
 import slick.driver.JdbcProfile
+import slick.driver.PostgresDriver.api._
 import slick.lifted.ProvenShape
+import Helpers.jodaDatetimeToSqldateMapper
 
-private[models] class AnimatorTable(tag: Tag) extends Table[Animator](tag, "animator") {
+import scala.concurrent.Future
 
-  private[models] def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
-  private[models] def firstName = column[String]("first_name")
-  private[models] def lastName = column[String]("last_name")
-  private[models] def mobilePhone = column[String]("mobile_phone")
-  private[models] def landline = column[String]("landline")
-  private[models] def email = column[String]("email")
+class AnimatorTable(tag: Tag) extends Table[Animator](tag, "animator") {
 
-  private[models] def street = column[String]("street")
-  private[models] def city = column[String]("city")
+  def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
+  def firstName = column[String]("first_name")
+  def lastName = column[String]("last_name")
+  def mobilePhone = column[String]("mobile_phone")
+  def landline = column[String]("landline")
+  def email = column[String]("email")
 
-  private[models] def bankAccount = column[String]("bank_account")
-  private[models] def yearStartedVolunteering = column[Int]("year_started_volunteering")
-  private[models] def isPartOfCore = column[Boolean]("is_core")
+  def street = column[String]("street")
+  def city = column[String]("city")
 
-  private[models] def birthDate = column[LocalDate]("birthdate")
+  def bankAccount = column[String]("bank_account")
+  def yearStartedVolunteering = column[Int]("year_started_volunteering")
+  def isPartOfCore = column[Boolean]("is_core")
+
+  def birthDate = column[LocalDate]("birthdate")
 
   def * : ProvenShape[Animator] = (id.?, firstName, lastName, mobilePhone.?, landline.?, email.?,
     street.?, city.?, bankAccount.?, yearStartedVolunteering.?, isPartOfCore, birthDate.?) <>

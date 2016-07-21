@@ -2,14 +2,14 @@ package controllers
 
 import javax.inject.Inject
 
+import be.thomastoye.speelsysteem.legacy.data.slick.AnimatorRepository
+import be.thomastoye.speelsysteem.legacy.models.{Animator, AnimatorConstants}
 import play.api.mvc._
 import play.api.data._
 import play.api.data.Forms._
 import play.api.data.format.Formats._
 import play.api.libs.concurrent.Execution.Implicits._
 import views._
-import models.{Animator, AnimatorConstants}
-import models.repositories.slick.AnimatorRepository
 
 import scala.concurrent.Future
 

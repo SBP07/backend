@@ -1,10 +1,10 @@
-package models.repositories.slick
+package be.thomastoye.speelsysteem.legacy.data.slick
 
 import javax.inject.Inject
 
-import models.ShiftType
-import play.api.libs.concurrent.Execution.Implicits._
+import be.thomastoye.speelsysteem.legacy.models.ShiftType
 import play.api.db.slick.DatabaseConfigProvider
+import play.api.libs.concurrent.Execution.Implicits._
 import slick.driver.JdbcProfile
 import slick.driver.PostgresDriver.api._
 import slick.lifted.ProvenShape
@@ -25,10 +25,10 @@ class ShiftTypeRepository @Inject()(dbConfigProvider: DatabaseConfigProvider) {
   def count: Future[Int] = db.run(types.length.result)
 }
 
-private[models] class ShiftTypeTable(tag: Tag) extends Table[ShiftType](tag, "shift_type") {
-  private[models] def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
-  private[models] def mnemonic = column[String]("mnemonic")
-  private[models] def description = column[String]("description")
+class ShiftTypeTable(tag: Tag) extends Table[ShiftType](tag, "shift_type") {
+  def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
+  def mnemonic = column[String]("mnemonic")
+  def description = column[String]("description")
 
   def * : ProvenShape[ShiftType] = (id.?, mnemonic, description) <>
     (ShiftType.tupled, ShiftType.unapply)

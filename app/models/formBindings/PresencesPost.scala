@@ -1,6 +1,6 @@
 package models.formBindings
 
-import models.{ChildPresence, Shift, Child}
+import be.thomastoye.speelsysteem.legacy.models.{Child, Shift}
 
 case class PresencesPost(child: Option[Child], selectedShifts: List[Shift], possibleShifts: List[Shift])
 

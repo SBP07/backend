@@ -2,7 +2,8 @@ package controllers
 
 import javax.inject.Inject
 
-import models.formBindings.PresencesPost
+import be.thomastoye.speelsysteem.legacy.data.slick.{ChildPresenceRepository, ChildRepository, ShiftRepository}
+import be.thomastoye.speelsysteem.legacy.models.{Child, ChildPresence, Shift}
 import org.joda.time.{DateTimeZone, LocalDate}
 import play.api.mvc._
 import play.api.libs.concurrent.Execution.Implicits._
@@ -10,7 +11,7 @@ import play.api.data._
 import play.api.data.Forms._
 import play.api.data.format.Formats._
 import models._
-import models.repositories.slick._
+import models.formBindings.PresencesPost
 import views.html.presences
 
 import scala.concurrent.{Await, Future}

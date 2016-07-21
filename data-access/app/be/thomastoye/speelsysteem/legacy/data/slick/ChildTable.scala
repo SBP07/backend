@@ -1,32 +1,32 @@
-package models.repositories.slick
+package be.thomastoye.speelsysteem.legacy.data.slick
 
 import javax.inject.Inject
 
-import helpers.Db.jodaDatetimeToSqldateMapper
-import slick.driver.PostgresDriver.api._
-import models.{Child, Shift}
+import be.thomastoye.speelsysteem.legacy.models.{Child, Shift}
 import org.joda.time.LocalDate
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.db.slick.DatabaseConfigProvider
+import play.api.libs.concurrent.Execution.Implicits._
 import slick.driver.JdbcProfile
+import slick.driver.PostgresDriver.api._
 import slick.lifted.ProvenShape
+import Helpers.jodaDatetimeToSqldateMapper
 
 import scala.concurrent.Future
 
-private[models] class ChildTable(tag: Tag) extends Table[Child](tag, "child") {
+class ChildTable(tag: Tag) extends Table[Child](tag, "child") {
 
-  private[models] def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
-  private[models] def firstName = column[String]("first_name")
-  private[models] def lastName = column[String]("last_name")
-  private[models] def mobilePhone = column[String]("mobile_phone")
-  private[models] def landline = column[String]("landline")
+  def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
+  def firstName = column[String]("first_name")
+  def lastName = column[String]("last_name")
+  def mobilePhone = column[String]("mobile_phone")
+  def landline = column[String]("landline")
 
-  private[models] def street = column[String]("street")
-  private[models] def city = column[String]("city")
+  def street = column[String]("street")
+  def city = column[String]("city")
 
-  private[models] def birthDate = column[LocalDate]("birth_date")
+  def birthDate = column[LocalDate]("birth_date")
 
-  private[models] def medicalRecordChecked = column[LocalDate]("medical_file_checked")
+  def medicalRecordChecked = column[LocalDate]("medical_file_checked")
 
   def * : ProvenShape[Child] = (id.?, firstName, lastName, mobilePhone.?, landline.?, street.?,
     city.?, birthDate.?, medicalRecordChecked.?) <> (Child.tupled, Child.unapply)

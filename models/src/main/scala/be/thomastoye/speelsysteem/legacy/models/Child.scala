@@ -1,4 +1,4 @@
-package models
+package be.thomastoye.speelsysteem.legacy.models
 
 import org.joda.time.LocalDate
 

@@ -1,15 +1,15 @@
-package models.repositories.slick
+package be.thomastoye.speelsysteem.legacy.data.slick
 
 import javax.inject.Inject
 
-import models.{Child, Shift, ShiftType}
-import slick.driver.PostgresDriver.api._
-import helpers.Db.jodaDatetimeToSqldateMapper
+import be.thomastoye.speelsysteem.legacy.models.{Child, Shift, ShiftType}
 import org.joda.time.LocalDate
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.db.slick.DatabaseConfigProvider
+import play.api.libs.concurrent.Execution.Implicits._
 import slick.driver.JdbcProfile
+import slick.driver.PostgresDriver.api._
 import slick.lifted.{ForeignKeyQuery, ProvenShape}
+import Helpers.jodaDatetimeToSqldateMapper
 
 import scala.concurrent.Future
 
@@ -72,12 +72,12 @@ class ShiftRepository @Inject()(dbConfigProvider: DatabaseConfigProvider) {
   def delete(shift: Shift): Future[Int] = db.run(shifts.filter(_.id === shift.id).delete)
 }
 
-private[models] class ShiftTable(tag: Tag) extends Table[Shift](tag, "shift") {
+class ShiftTable(tag: Tag) extends Table[Shift](tag, "shift") {
 
-  private[models] def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
-  private[models] def date = column[LocalDate]("date")
-  private[models] def place = column[String]("place")
-  private[models] def shiftId = column[Long]("shift_type")
+  def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
+  def date = column[LocalDate]("date")
+  def place = column[String]("place")
+  def shiftId = column[Long]("shift_type")
 
   def * : ProvenShape[Shift] = (id.?, date, place, shiftId) <> (Shift.tupled, Shift.unapply)
 

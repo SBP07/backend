@@ -2,8 +2,9 @@ package controllers
 
 import javax.inject.Inject
 
+import be.thomastoye.speelsysteem.legacy.data.slick.{ChildPresenceRepository, ChildRepository}
+import be.thomastoye.speelsysteem.legacy.models.Child
 import models._
-import models.repositories.slick.{ChildPresenceRepository, ChildRepository}
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.data.Forms._
 import play.api.data._

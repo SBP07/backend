@@ -1,12 +1,12 @@
-package models.repositories.slick
+package be.thomastoye.speelsysteem.legacy.data.slick
 
 import javax.inject.Inject
 
-import slick.driver.PostgresDriver.api._
-import models._
-import play.api.libs.concurrent.Execution.Implicits._
+import be.thomastoye.speelsysteem.legacy.models.{Child, ChildPresence, Shift, ShiftType}
 import play.api.db.slick.DatabaseConfigProvider
+import play.api.libs.concurrent.Execution.Implicits._
 import slick.driver.JdbcProfile
+import slick.driver.PostgresDriver.api._
 
 import scala.concurrent.Future
 

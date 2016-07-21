@@ -2,14 +2,14 @@ package controllers
 
 import javax.inject.Inject
 
-import models.Shift
+import be.thomastoye.speelsysteem.legacy.data.slick.{ChildPresenceRepository, ShiftRepository, ShiftTypeRepository}
+import be.thomastoye.speelsysteem.legacy.models.Shift
 import org.joda.time.LocalDate
 import play.api.mvc._
 import play.api.data.Forms._
 import play.api.data._
 import play.api.libs.concurrent.Execution.Implicits._
 import helpers.DateTime._
-import models.repositories.slick.{ChildPresenceRepository, ShiftRepository, ShiftTypeRepository}
 
 import scala.concurrent.Future
 

@@ -1,4 +1,7 @@
-@(childForm: Form[models.formBindings.PresencesPost],
+@import be.thomastoye.speelsysteem.legacy.models.Child
+@import be.thomastoye.speelsysteem.legacy.models.Shift
+@import be.thomastoye.speelsysteem.legacy.models.ShiftType
+@(childForm: Form[formBindings.PresencesPost],
     children: List[Child],
     today: org.joda.time.LocalDate,
     shiftsToday: List[(ShiftType, Shift)]
