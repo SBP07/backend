@@ -10,6 +10,7 @@ import slick.driver.JdbcProfile
 import slick.driver.PostgresDriver.api._
 import slick.lifted.ProvenShape
 import Helpers.jodaDatetimeToSqldateMapper
+import be.thomastoye.speelsysteem.legacy.data.AnimatorRepository
 
 import scala.concurrent.Future
 
@@ -36,16 +37,16 @@ class AnimatorTable(tag: Tag) extends Table[Animator](tag, "animator") {
     (Animator.tupled, Animator.unapply)
 }
 
-class AnimatorRepository @Inject()(dbConfigProvider: DatabaseConfigProvider) {
+class SlickAnimatorRepository @Inject()(dbConfigProvider: DatabaseConfigProvider) extends AnimatorRepository {
   val dbConfig = dbConfigProvider.get[JdbcProfile]
   val db = dbConfig.db
   val animators = TableQuery[AnimatorTable]
 
-  def findById(id: Long): Future[Option[Animator]] = db.run(animators.filter(_.id === id).result.headOption)
-  def findAll: Future[Seq[Animator]] = db.run(animators.result)
-  def insert(animator: Animator): Future[Unit] = db.run(animators += animator).map(_ => ())
-  def count: Future[Int] = db.run(animators.length.result)
-  def update(animator: Animator): Future[Unit] = {
+  override def findById(id: Long): Future[Option[Animator]] = db.run(animators.filter(_.id === id).result.headOption)
+  override def findAll: Future[Seq[Animator]] = db.run(animators.result)
+  override def insert(animator: Animator): Future[Unit] = db.run(animators += animator).map(_ => ())
+  override def count: Future[Int] = db.run(animators.length.result)
+  override def update(animator: Animator): Future[Unit] = {
     animator.id match {
       case Some(id) => db.run(animators.filter(_.id === id).update(animator)).map(_ => ())
       case _ => Future.successful(())

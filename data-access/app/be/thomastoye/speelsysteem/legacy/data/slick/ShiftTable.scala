@@ -10,21 +10,22 @@ import slick.driver.JdbcProfile
 import slick.driver.PostgresDriver.api._
 import slick.lifted.{ForeignKeyQuery, ProvenShape}
 import Helpers.jodaDatetimeToSqldateMapper
+import be.thomastoye.speelsysteem.legacy.data.ShiftRepository
 
 import scala.concurrent.Future
 
-class ShiftRepository @Inject()(dbConfigProvider: DatabaseConfigProvider) {
+class SlickShiftRepository @Inject()(dbConfigProvider: DatabaseConfigProvider) extends ShiftRepository {
   val dbConfig = dbConfigProvider.get[JdbcProfile]
   val db = dbConfig.db
 
   val shifts = TableQuery[ShiftTable]
 
-  def findAll: Future[Seq[Shift]] = db.run(shifts.sortBy(_.date).result)
-  def findById(id: Long): Future[Option[Shift]] = db.run(shifts.filter(_.id === id).result.headOption)
-  def insert(shift: Shift): Future[Unit] = db.run(shifts += shift).map(_ => ())
-  def count: Future[Int] = db.run(shifts.length.result)
+  override def findAll: Future[Seq[Shift]] = db.run(shifts.sortBy(_.date).result)
+  override def findById(id: Long): Future[Option[Shift]] = db.run(shifts.filter(_.id === id).result.headOption)
+  override def insert(shift: Shift): Future[Unit] = db.run(shifts += shift).map(_ => ())
+  override def count: Future[Int] = db.run(shifts.length.result)
 
-  def findByIdWithTypeAndNumberOfPresences(id: Long): Future[Option[(Shift, ShiftType, Int)]] = db.run {
+  override def findByIdWithTypeAndNumberOfPresences(id: Long): Future[Option[(Shift, ShiftType, Int)]] = db.run {
     (for {
       shift <- shifts.filter(_.id === id)
       shiftType <- shift.shiftTypeJoin
@@ -33,9 +34,9 @@ class ShiftRepository @Inject()(dbConfigProvider: DatabaseConfigProvider) {
     }).result.headOption
   }
 
-  def findByDate(date: LocalDate): Future[Seq[Shift]] = db.run(shifts.filter(_.date === date).result)
+  override def findByDate(date: LocalDate): Future[Seq[Shift]] = db.run(shifts.filter(_.date === date).result)
 
-  def findAllWithType: Future[Seq[(ShiftType, Shift)]] = db.run {
+  override def findAllWithType: Future[Seq[(ShiftType, Shift)]] = db.run {
     (for {
       shift <- shifts.sortBy(_.date.desc)
       t <- shift.shiftTypeJoin.sortBy(_.id)
@@ -44,7 +45,7 @@ class ShiftRepository @Inject()(dbConfigProvider: DatabaseConfigProvider) {
     }).result
   }
 
-  def findAllWithTypeToday(today: LocalDate): Future[Seq[(ShiftType, Shift)]] = db.run {
+  override def findAllWithTypeToday(today: LocalDate): Future[Seq[(ShiftType, Shift)]] = db.run {
     (for {
       shift <- shifts.filter(_.date === today).sortBy(_.date.desc)
       t <- shift.shiftTypeJoin.sortBy(_.id)
@@ -53,7 +54,7 @@ class ShiftRepository @Inject()(dbConfigProvider: DatabaseConfigProvider) {
     }).result
   }
 
-  def findAllWithTypeAndNumberOfPresences: Future[Seq[(ShiftType, Shift, Int)]] = db.run{
+  override def findAllWithTypeAndNumberOfPresences: Future[Seq[(ShiftType, Shift, Int)]] = db.run{
     (for {
       shift <- shifts.sortBy(_.date.desc)
       t <- shift.shiftTypeJoin.sortBy(_.id)
@@ -62,14 +63,14 @@ class ShiftRepository @Inject()(dbConfigProvider: DatabaseConfigProvider) {
     }).result
   }
 
-  def findByIds(ids: List[Long]): Future[Seq[Shift]] = db.run(shifts.filter(_.id inSet ids).result)
+  override def findByIds(ids: List[Long]): Future[Seq[Shift]] = db.run(shifts.filter(_.id inSet ids).result)
 
-  def findByDateAndType(date: LocalDate, shiftType: ShiftType): Future[Option[Shift]] = {
+  override def findByDateAndType(date: LocalDate, shiftType: ShiftType): Future[Option[Shift]] = {
     shiftType.id.map { shiftType =>
       db.run(shifts.filter(_.shiftId === shiftType).filter(_.date === date).result.headOption)
     } getOrElse Future.successful(None)
   }
-  def delete(shift: Shift): Future[Int] = db.run(shifts.filter(_.id === shift.id).delete)
+  override def delete(shift: Shift): Future[Int] = db.run(shifts.filter(_.id === shift.id).delete)
 }
 
 class ShiftTable(tag: Tag) extends Table[Shift](tag, "shift") {

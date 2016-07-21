@@ -10,6 +10,7 @@ import slick.driver.JdbcProfile
 import slick.driver.PostgresDriver.api._
 import slick.lifted.ProvenShape
 import Helpers.jodaDatetimeToSqldateMapper
+import be.thomastoye.speelsysteem.legacy.data.ChildRepository
 
 import scala.concurrent.Future
 
@@ -36,23 +37,23 @@ class ChildTable(tag: Tag) extends Table[Child](tag, "child") {
   }
 }
 
-class ChildRepository @Inject()(dbConfigProvider: DatabaseConfigProvider) {
+class SlickChildRepository @Inject()(dbConfigProvider: DatabaseConfigProvider) extends ChildRepository {
   val dbConfig = dbConfigProvider.get[JdbcProfile]
   val db = dbConfig.db
   val children = TableQuery[ChildTable]
 
-  def findById(id: Long): Future[Option[Child]] = db.run(children.filter(_.id === id).result.headOption)
-  def findAll: Future[Seq[Child]] = db.run(children.result)
-  def insert(child: Child): Future[Long] = db.run {
+  override def findById(id: Long): Future[Option[Child]] = db.run(children.filter(_.id === id).result.headOption)
+  override def findAll: Future[Seq[Child]] = db.run(children.result)
+  override def insert(child: Child): Future[Long] = db.run {
     (children returning children.map(_.id)) += child
   }
-  def count: Future[Int] = db.run(children.length.result)
-  def update(child: Child): Future[Unit] = child.id match {
+  override def count: Future[Int] = db.run(children.length.result)
+  override def update(child: Child): Future[Unit] = child.id match {
     case Some(id) => db.run(children.filter(_.id === id).update(child)).map(_ => ())
     case _ => Future.successful(())
   }
 
-  def findByFirstAndLastname(firstName: String, lastName: String): Future[Option[Child]] = db.run {
+  override def findByFirstAndLastname(firstName: String, lastName: String): Future[Option[Child]] = db.run {
     children.filter(_.firstName === firstName).filter(_.lastName === lastName).result.headOption
   }
 }
