@@ -21,9 +21,7 @@ libraryDependencies ++= Seq(
   "org.webjars" % "bootstrap" % "3.1.1-2",
   "org.webjars" % "bootstrap-select" % "1.6.3",
   "org.webjars" % "bootstrap-datepicker" % "1.3.1",
-  "org.webjars" % "jquery" % "1.11.3",
-  //  "joda-time" % "joda-time" % "2.7",
-  "com.ibm" %% "couchdb-scala" % "0.7.2"
+  "org.webjars" % "jquery" % "1.11.3"
 )
 
 routesGenerator := InjectedRoutesGenerator
@@ -44,7 +42,8 @@ lazy val dataAccess = Project("data-access", file("data-access"))
     libraryDependencies ++= Seq(
       "org.postgresql" % "postgresql" % "9.4-1206-jdbc41",
       "com.typesafe.slick" %% "slick" % "3.0.3",
-      "com.typesafe.play" %% "play-slick" % "1.0.1"
+      "com.typesafe.play" %% "play-slick" % "1.0.1",
+      "com.ibm" %% "couchdb-scala" % "0.7.2"
     )
   )
   .dependsOn(models)
