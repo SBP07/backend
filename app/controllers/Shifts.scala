@@ -1,18 +1,27 @@
 package controllers
 
+import javax.inject.Inject
+
 import models.Shift
 import org.joda.time.LocalDate
 import play.api.mvc._
-import play.api.db.slick._
 import play.api.data.Forms._
 import play.api.data._
+import play.api.libs.concurrent.Execution.Implicits._
 import helpers.DateTime._
-import models.repositories.slick
 import models.repositories.slick.{ChildPresenceRepository, ShiftRepository, ShiftTypeRepository}
 
-object Shifts extends Controller {
+import scala.concurrent.Future
+
+object Shifts {
   case class ShiftsPost(date: LocalDate, shiftTypes: List[Long], externalLocation: String)
   case class ShiftDelete(id: Long)
+}
+
+class Shifts @Inject() (shiftRepository: ShiftRepository, shiftTypeRepository: ShiftTypeRepository,
+  childPresenceRepository: ChildPresenceRepository) extends Controller
+{
+  import Shifts._
 
   val deleteForm = Form(
       mapping(
@@ -28,89 +37,100 @@ object Shifts extends Controller {
     )(ShiftsPost.apply)(ShiftsPost.unapply)
   )
 
-  def list: Action[AnyContent] = DBAction { implicit req =>
-    Ok(views.html.shifts.list.render(ShiftRepository.findAllWithTypeAndNumberOfPresences, req.flash))
-  }
-
-  def newShift: Action[AnyContent] = DBAction { implicit req =>
-    val types = ShiftTypeRepository.findAll
-    Ok(views.html.shifts.form.render(shiftsForm, types, req.flash))
-  }
-
-  def saveShift: Action[AnyContent] = DBAction { implicit req =>
-    shiftsForm.bindFromRequest.fold(
-      formWithErrors => {
-        val types = ShiftTypeRepository.findAll
-        BadRequest(views.html.shifts.form.render(formWithErrors, types, req.flash))
-      },
-      post => {
-        val shiftTypes = post.shiftTypes.map(ShiftTypeRepository.findById).flatten.toSet
-        val alreadyPersisted: Set[Long] = shiftTypes.map { t =>
-          ShiftRepository.findByDateAndType(post.date, t)
-        }.flatten.map(_.shiftId)
-
-        val notPersistedYet = shiftTypes.filterNot(_.id.map(a =>
-          alreadyPersisted.contains(a)
-        ).get)
-
-        val externalActivityId: Long = ShiftTypeRepository.findByMnemonic("EXT").flatMap(_.id).getOrElse(-1)
-
-        notPersistedYet.map(_.id).flatten foreach { id =>
-          val place = if(id == externalActivityId) post.externalLocation else "Speelplein"
-          slick.ShiftRepository insert Shift(None, post.date, place, id)
-        }
-
-        Redirect(routes.Shifts.list).flashing("success" -> s"${notPersistedYet.size} dagdelen toegevoegd")
-      }
-    )
-  }
-
-  def updateShift(dateString: String): Action[AnyContent] = DBAction { implicit req =>
-    try{
-      val date: LocalDate = LocalDate.parse(dateString, fmt)
-      val shift = slick.ShiftRepository.findByDate(date)
-      val extPlace = "Test"
-      val fill = ShiftsPost(date, shift.map(_.shiftId).toList, extPlace)
-      val types = ShiftTypeRepository.findAll
-      Ok(views.html.shifts.form.render(shiftsForm.fill(fill), types, req.flash))
-    } catch {
-      case e: IllegalArgumentException => BadRequest("Could not parse date")
+  def list: Action[AnyContent] = Action.async { implicit req =>
+    shiftRepository.findAllWithTypeAndNumberOfPresences map { all =>
+      Ok(views.html.shifts.list.render(all, req.flash))
     }
   }
 
-  def deleteShift(id: Long): Action[AnyContent] = DBAction { implicit req =>
-    val found = slick.ShiftRepository.findByIdWithTypeAndNumberOfPresences(id)
-
-    found.map { found =>
-      Ok(views.html.shifts.confirm_delete(found._3, found._1, found._2))
-    }.getOrElse(BadRequest("Dagdeel niet gevonden"))
-
+  def newShift: Action[AnyContent] = Action.async { implicit req =>
+    shiftTypeRepository.findAll map { types => Ok(views.html.shifts.form.render(shiftsForm, types, req.flash)) }
   }
 
-  def reallyDeleteShift(): Action[AnyContent] = DBAction { implicit req =>
-    deleteForm.bindFromRequest.fold(
-      errorForm => BadRequest("Bad id"),
-      deleteShift => {
-        val shift = slick.ShiftRepository.findById(deleteShift.id)
+  // TODO replace method body with for comprehension
+  def saveShift: Action[AnyContent] = Action.async { implicit req =>
+    shiftsForm.bindFromRequest.fold(
+      formWithErrors => {
+        shiftTypeRepository.findAll.map(all => BadRequest(views.html.shifts.form.render(formWithErrors, all, req.flash)))
+      },
+      post => {
 
-        shift.map { act =>
-          slick.ShiftRepository.delete(act)
-          Redirect(routes.Shifts.list()).flashing("success" -> "Dagdeel verwijderd")
-        }.getOrElse(BadRequest("Dagdeel niet gevonden"))
+        Future.sequence(post.shiftTypes.map(shiftTypeRepository.findById)).map(_.flatten.toSet) flatMap { shiftTypes =>
+
+          val alreadyPersistedFut: Future[Set[Long]] = Future.sequence(shiftTypes.map { t =>
+            shiftRepository.findByDateAndType(post.date, t)
+          }).map(_.flatten.map(_.shiftId))
+
+          alreadyPersistedFut.flatMap { alreadyPersisted =>
+            val notPersistedYet = shiftTypes.filterNot(_.id.map(a =>
+              alreadyPersisted.contains(a)
+            ).get)
+
+            shiftTypeRepository.findByMnemonic("EXT") map(_.flatMap(_.id).getOrElse(-1)) flatMap { externalActivityId =>
+              Future.sequence(notPersistedYet.map(_.id).flatten map { id =>
+                val place = if (id == externalActivityId) post.externalLocation else "Speelplein"
+                shiftRepository insert Shift(None, post.date, place, id)
+              }) map { _ =>
+                Redirect(routes.Shifts.list).flashing("success" -> s"${notPersistedYet.size} dagdelen toegevoegd")
+              }
+            }
+          }
+        }
       }
     )
   }
 
-  def detailsShifts(id: Long): Action[AnyContent] = DBAction { implicit req =>
-    val a = for {
-      shift <- ShiftRepository.findByIdWithTypeAndNumberOfPresences(id).map(_._1)
-      shiftType <- ShiftRepository.findByIdWithTypeAndNumberOfPresences(id).map(_._2)
-      shiftId <- shift.id
-    } yield {
-        val presentChildren = ChildPresenceRepository.findAllForShift(shiftId).map(_._1)
-        Ok(views.html.shifts.details.render(shift, shiftType, presentChildren, req.flash))
-      } //.getOrElse(BadRequest("Dagdeel niet gevonden"))
+  def updateShift(dateString: String): Action[AnyContent] = Action.async { implicit req =>
+    try{
+      val date: LocalDate = LocalDate.parse(dateString, fmt)
+      val extPlace = "Test"
+      shiftRepository.findByDate(date) flatMap { shift =>
+        val fill = ShiftsPost(date, shift.map(_.shiftId).toList, extPlace)
+        shiftTypeRepository.findAll map { types =>
+          Ok(views.html.shifts.form.render(shiftsForm.fill(fill), types, req.flash))
+        }
+      }
+    } catch {
+      case e: IllegalArgumentException => Future.successful(BadRequest("Could not parse date"))
+    }
+  }
 
-    a.getOrElse(BadRequest("Dagdeel niet gevonden"))
+  def deleteShift(id: Long): Action[AnyContent] = Action.async { implicit req =>
+    shiftRepository.findByIdWithTypeAndNumberOfPresences(id) map { found =>
+      found.map { found =>
+        Ok(views.html.shifts.confirm_delete(found._3, found._1, found._2))
+      }.getOrElse(BadRequest("Dagdeel niet gevonden"))
+    }
+  }
+
+  def reallyDeleteShift(): Action[AnyContent] = Action.async { implicit req =>
+    deleteForm.bindFromRequest.fold(
+      errorForm => Future.successful(BadRequest("Bad id")),
+      deleteShift => {
+        shiftRepository.findById(deleteShift.id) flatMap { shift =>
+          shift.map { act =>
+            shiftRepository.delete(act) map { _ =>
+              Redirect(routes.Shifts.list()).flashing("success" -> "Dagdeel verwijderd")
+            }
+          }.getOrElse(Future.successful(BadRequest("Dagdeel niet gevonden")))
+        }
+      }
+    )
+  }
+
+  def detailsShifts(id: Long): Action[AnyContent] = Action.async { implicit req =>
+    shiftRepository.findByIdWithTypeAndNumberOfPresences(id) map (_.map(_._1)) flatMap {
+      _.map { shift =>
+        shiftRepository.findByIdWithTypeAndNumberOfPresences(id) map (_.map(_._2)) flatMap { shiftTypeOpt =>
+          shiftTypeOpt map { shiftType =>
+            shift.id map { shiftId =>
+              childPresenceRepository.findAllForShift(shiftId) map (_.map(_._1)) map { presentChildren =>
+                Ok(views.html.shifts.details.render(shift, shiftType, presentChildren, req.flash))
+              }
+            } getOrElse Future.successful(BadRequest("Dagdeel niet gevonden"))
+          } getOrElse Future.successful(BadRequest("Dagdeel niet gevonden"))
+        }
+      }.getOrElse(Future.successful(BadRequest("Dagdeel niet gevonden")))
+    }
   }
 }

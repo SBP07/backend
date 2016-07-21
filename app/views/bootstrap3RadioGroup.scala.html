@@ -1,4 +1,6 @@
 @(field: Field, options: Seq[(String, String)], args: (Symbol, Any)*)(implicit handler: views.html.helper.FieldConstructor, lang: Lang)
+@import play.api.Play.current
+@import play.api.i18n.Messages.Implicits._
 @import play.api.templates.PlayMagic._
 @import views.html.helper.input
 

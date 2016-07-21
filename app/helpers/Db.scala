@@ -4,7 +4,7 @@ import java.sql.{Date => Sqldate, Timestamp}
 import java.util.Date
 import org.joda.time.DateTimeZone
 import org.joda.time.LocalDate
-import play.api.db.slick.Config.driver.simple._
+import slick.driver.PostgresDriver.api._
 
 object Db {
   implicit val dateToTimestampMapper = MappedColumnType.base[Date, Timestamp](

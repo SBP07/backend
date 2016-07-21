@@ -1,4 +1,6 @@
 @(childForm: Form[Child])(implicit flash: Flash)
+@import play.api.Play.current
+@import play.api.i18n.Messages.Implicits._
 @import helper._
 
 @implicitField = @{ FieldConstructor(bootstrap3FieldConstructorTemplate.f) }

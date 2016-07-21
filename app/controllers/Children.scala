@@ -1,15 +1,19 @@
 package controllers
 
+import javax.inject.Inject
+
 import models._
 import models.repositories.slick.{ChildPresenceRepository, ChildRepository}
+import play.api.libs.concurrent.Execution.Implicits._
 import play.api.data.Forms._
 import play.api.data._
 import play.api.data.format.Formats._
-import play.api.db.slick._
 import play.api.mvc._
 import views._
 
-object Children extends Controller {
+import scala.concurrent.Future
+
+class Children @Inject() (childRepository: ChildRepository, childPresenceRepository: ChildPresenceRepository) extends Controller {
 
   val childForm = Form(
     mapping(
@@ -36,42 +40,37 @@ object Children extends Controller {
       )
   )
 
-  def showList: Action[AnyContent] = DBAction { implicit req => Ok(html.child.list.render(ChildRepository.findAll, req.flash))}
+  def showList: Action[AnyContent] = Action.async { implicit req =>
+    childRepository.findAll.map(all => Ok(html.child.list.render(all.toList, req.flash)))
+  }
 
   def newChild: Action[AnyContent] = Action { implicit req => Ok(html.child.form.render(childForm, req.flash))}
 
-  def saveChild: Action[AnyContent] = DBAction { implicit req =>
+  def saveChild: Action[AnyContent] = Action.async { implicit req =>
     childForm.bindFromRequest.fold(
-      formWithErrors => BadRequest(html.child.form.render(formWithErrors, req.flash)),
+      formWithErrors => Future.successful(BadRequest(html.child.form.render(formWithErrors, req.flash))),
       child => {
         child.id match {
-          case Some(id) => {
-            ChildRepository.update(child)
-            Redirect(routes.Children.details(id)).flashing("success" -> "Kind upgedated")
-          }
-          case _ => {
-            ChildRepository.insert(child)
-            Redirect(routes.Children.showList).flashing("success" -> "Kind toegevoegd")
-          }
+          case Some(id) =>
+            childRepository.update(child).map(_ => Redirect(routes.Children.details(id)).flashing("success" -> "Kind upgedated"))
+          case _ =>
+            childRepository.insert(child).map(_ => Redirect(routes.Children.showList()).flashing("success" -> "Kind toegevoegd"))
         }
       }
     )
-
   }
 
-  def editChild(id: Long): Action[AnyContent] = DBAction { implicit req =>
-    val child = ChildRepository.findById(id)
-    child match {
+  def editChild(id: Long): Action[AnyContent] = Action.async { implicit req =>
+    childRepository.findById(id) map {
       case Some(ch) => Ok(html.child.form.render(childForm.fill(ch), req.flash))
       case _ => BadRequest("Geen geldige id")
     }
   }
 
-  def details(id: Long): Action[AnyContent] = DBAction { implicit req =>
-    val child = ChildRepository.findById(id)
-    child match {
-      case Some(x) => Ok(html.child.details(x, ChildPresenceRepository.findAllForChild(id).toList))
-      case None => BadRequest("Geen kind met die ID")
+  def details(id: Long): Action[AnyContent] = Action.async { implicit req =>
+    childRepository.findById(id) flatMap  {
+      case Some(x) => childPresenceRepository.findAllForChild(id).map(all => Ok(html.child.details(x, all.toList)))
+      case None => Future.successful(BadRequest("Geen kind met die ID"))
     }
   }
 }

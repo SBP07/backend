@@ -1,16 +1,19 @@
 package controllers
 
+import javax.inject.Inject
+
 import play.api.mvc._
 import play.api.data._
 import play.api.data.Forms._
 import play.api.data.format.Formats._
-import play.api.db.slick._
-
+import play.api.libs.concurrent.Execution.Implicits._
 import views._
-import models.{AnimatorConstants, Animator}
+import models.{Animator, AnimatorConstants}
 import models.repositories.slick.AnimatorRepository
 
-object Animators extends Controller {
+import scala.concurrent.Future
+
+class Animators @Inject() (animatorRepository: AnimatorRepository) extends Controller {
 
   val animatorForm = Form(
     mapping(
@@ -33,39 +36,41 @@ object Animators extends Controller {
     )(Animator.apply)(Animator.unapply)
   )
 
-  def list: Action[AnyContent] = DBAction { implicit req => Ok(html.animator.list.render(AnimatorRepository.findAll, req.flash))}
+  def list: Action[AnyContent] = Action.async { implicit req =>
+    animatorRepository.findAll.map { all =>
+      Ok(html.animator.list.render(all.toList, req.flash))
+    }
+  }
 
-  def details(id: Long): Action[AnyContent] = DBAction { implicit req =>
-    val animator = AnimatorRepository.findById(id)
-    animator match {
-      case Some(x) => Ok(html.animator.details(x))
+  def details(id: Long): Action[AnyContent] = Action.async { implicit req =>
+    animatorRepository.findById(id) map {
+      case Some(animator) => Ok(html.animator.details(animator))
       case None => BadRequest("Geen animator met die ID")
     }
   }
 
   def newAnimator: Action[AnyContent] = Action { implicit req => Ok(html.animator.form.render(animatorForm, req.flash))}
 
-  def saveAnimator: Action[AnyContent] = DBAction { implicit req =>
+  def saveAnimator: Action[AnyContent] = Action.async { implicit req =>
     animatorForm.bindFromRequest.fold(
-      formWithErrors => BadRequest(html.animator.form.render(formWithErrors, req.flash)),
+      formWithErrors => Future.successful(BadRequest(html.animator.form.render(formWithErrors, req.flash))),
       animator => {
         animator.id match {
-          case Some(id) => {
-            AnimatorRepository.update(animator)
-            Redirect(routes.Animators.details(id)).flashing("success" -> "Animator upgedated")
-          }
-          case _ => {
-            AnimatorRepository.insert(animator)
-            Redirect(routes.Animators.list).flashing("success" -> "Animator toegevoegd")
-          }
+          case Some(id) =>
+            animatorRepository
+              .update(animator)
+              .map(_ => Redirect(routes.Animators.details(id)).flashing("success" -> "Animator upgedated"))
+          case _ =>
+            animatorRepository
+              .insert(animator)
+              .map(_ => Redirect(routes.Animators.list()).flashing("success" -> "Animator toegevoegd"))
         }
       }
     )
   }
 
-  def editAnimator(id: Long): Action[AnyContent] = DBAction { implicit req =>
-    val animator = AnimatorRepository.findById(id)
-    animator match {
+  def editAnimator(id: Long): Action[AnyContent] = Action.async { implicit req =>
+    animatorRepository.findById(id) map {
       case Some(ch) => Ok(html.animator.form.render(animatorForm.fill(ch), req.flash))
       case _ => BadRequest("Geen geldige id")
     }

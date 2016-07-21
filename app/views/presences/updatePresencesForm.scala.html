@@ -2,6 +2,8 @@
     child: Child,
     today: org.joda.time.LocalDate,
     shiftsToday: List[(ShiftType, Shift)])(implicit flash: Flash)
+@import play.api.Play.current
+@import play.api.i18n.Messages.Implicits._
 @import org.joda.time.LocalDate
 @import helper._
 @import _root_.helpers.DateTime.fmt
@@ -40,7 +42,7 @@
                 'value -> act.id.getOrElse(-1)
             ) { (id, name, value, args) =>
                 <input type="hidden" name="@name" id="@id" @toHtmlArgs(args)>
-            }(FieldConstructor(hiddenFieldConstructorTemplate.f), Lang.defaultLang)
+            }(FieldConstructor(hiddenFieldConstructorTemplate.f), applicationMessages)
         }
 
         <button type="submit" class="btn btn-primary">Opslaan</button>

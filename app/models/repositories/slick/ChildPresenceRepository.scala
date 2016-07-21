@@ -1,43 +1,60 @@
 package models.repositories.slick
 
-import play.api.db.slick.Config.driver.simple._
+import javax.inject.Inject
+
+import slick.driver.PostgresDriver.api._
 import models._
+import play.api.libs.concurrent.Execution.Implicits._
+import play.api.db.slick.DatabaseConfigProvider
+import slick.driver.JdbcProfile
 
-object ChildPresenceRepository {
-  private val children = TableQuery[ChildRepository]
-  private val shifts = TableQuery[ShiftRepository]
-  private val presences = TableQuery[ChildrenToShifts]
+import scala.concurrent.Future
 
-  def all(implicit s: Session): Seq[(Child, Shift)] = (for {
-    child <- children
-    act <- child.shifts
-  } yield (child, act)).run
+class ChildPresenceRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)
+{
+  val dbConfig = dbConfigProvider.get[JdbcProfile]
+  val db = dbConfig.db
 
-  def findAllForChild(id: Long)(implicit s: Session): Seq[(Shift, ShiftType)] = (for {
-    child <- children if child.id === id
-    act <- child.shifts
-    actType <- act.shiftType
-  } yield (act, actType)).run
+  private val children = TableQuery[ChildTable]
+  private val shifts = TableQuery[ShiftTable]
+  private val presences = TableQuery[ChildrenToShiftsTable]
 
-  def findAllForShift(id: Long)(implicit s: Session): Seq[(Child, Shift)] = (for {
-    child <- children
-    act <- child.shifts if act.id === id
-  } yield (child, act)).run
+  def all: Future[Seq[(Child, Shift)]] = db.run {
+    (for {
+      child <- children
+      act <- child.shifts
+    } yield (child, act)).result
+  }
 
-  def register(presence: ChildPresence)(implicit s: Session): Unit = presences += presence
-  def register(presence: List[ChildPresence])(implicit s: Session): Unit = presences ++= presence
+  def findAllForChild(id: Long): Future[Seq[(Shift, ShiftType)]] = db.run {
+    (for {
+      child <- children if child.id === id
+      act <- child.shifts
+      actType <- act.shiftType
+    } yield (act, actType)).result
+  }
 
-  def unregister(presence: ChildPresence)(implicit s: Session): Unit =
+  def findAllForShift(id: Long): Future[Seq[(Child, Shift)]] = db.run {
+    (for {
+      child <- children
+      act <- child.shifts if act.id === id
+    } yield (child, act)).result
+  }
+
+  def register(presence: ChildPresence): Future[Unit] = db.run(presences += presence).map(_ => ())
+  def register(presence: List[ChildPresence]): Future[Unit] = db.run(presences ++= presence).map(_ => ())
+
+  def unregister(presence: ChildPresence): Future[Unit] = db.run {
     presences.filter(_.shiftId === presence.shiftId)
-              .filter(_.childId === presence.childId)
-              .delete
-              .run
+      .filter(_.childId === presence.childId)
+      .delete
+  } map(_ => ())
 
-  def unregister(presence: List[ChildPresence])(implicit s: Session): Unit =
+  def unregister(presence: List[ChildPresence]): Future[Unit] = db.run {
     presences.filter(_.shiftId inSet presence.map(_.shiftId))
-              .filter(_.childId inSet presence.map(_.childId))
-              .delete
-              .run
+      .filter(_.childId inSet presence.map(_.childId))
+      .delete
+  } map(_ => ())
 
-  def count(implicit s: Session): Int = presences.length.run
+  def count: Future[Int] = db.run(presences.length.result)
 }
