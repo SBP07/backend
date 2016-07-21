@@ -2,7 +2,7 @@ package controllers
 
 import javax.inject.Inject
 
-import be.thomastoye.speelsysteem.legacy.data.slick.{SlickChildPresenceRepository, SlickShiftRepository, SlickShiftTypeRepository}
+import be.thomastoye.speelsysteem.legacy.data.{ChildPresenceRepository, ShiftRepository, ShiftTypeRepository}
 import be.thomastoye.speelsysteem.legacy.models.Shift
 import org.joda.time.LocalDate
 import play.api.mvc._
@@ -18,8 +18,8 @@ object Shifts {
   case class ShiftDelete(id: Long)
 }
 
-class ShiftController @Inject() (shiftRepository: SlickShiftRepository, shiftTypeRepository: SlickShiftTypeRepository,
-  childPresenceRepository: SlickChildPresenceRepository) extends Controller
+class ShiftController @Inject() (shiftRepository: ShiftRepository, shiftTypeRepository: ShiftTypeRepository,
+  childPresenceRepository: ChildPresenceRepository) extends Controller
 {
   import Shifts._
 

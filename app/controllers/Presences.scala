@@ -2,7 +2,7 @@ package controllers
 
 import javax.inject.Inject
 
-import be.thomastoye.speelsysteem.legacy.data.slick.{SlickChildPresenceRepository, SlickChildRepository, SlickShiftRepository}
+import be.thomastoye.speelsysteem.legacy.data.{ChildPresenceRepository, ChildRepository, ShiftRepository}
 import be.thomastoye.speelsysteem.legacy.models.{Child, ChildPresence, Shift}
 import org.joda.time.{DateTimeZone, LocalDate}
 import play.api.mvc._
@@ -17,8 +17,8 @@ import views.html.presences
 import scala.concurrent.{Await, Future}
 import scala.concurrent.duration._
 
-class PresencesController @Inject() (childRepository: SlickChildRepository, shiftRepository: SlickShiftRepository,
-  childPresenceRepository: SlickChildPresenceRepository) extends Controller
+class PresencesController @Inject() (childRepository: ChildRepository, shiftRepository: ShiftRepository,
+  childPresenceRepository: ChildPresenceRepository) extends Controller
 {
   val registerForm: Form[PresencesPost] = Form(
     mapping(

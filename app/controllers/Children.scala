@@ -2,7 +2,7 @@ package controllers
 
 import javax.inject.Inject
 
-import be.thomastoye.speelsysteem.legacy.data.slick.{SlickChildPresenceRepository, SlickChildRepository}
+import be.thomastoye.speelsysteem.legacy.data.{ChildPresenceRepository, ChildRepository}
 import be.thomastoye.speelsysteem.legacy.models.Child
 import models._
 import play.api.libs.concurrent.Execution.Implicits._
@@ -14,7 +14,7 @@ import views._
 
 import scala.concurrent.Future
 
-class ChildController @Inject() (childRepository: SlickChildRepository, childPresenceRepository: SlickChildPresenceRepository) extends Controller {
+class ChildController @Inject() (childRepository: ChildRepository, childPresenceRepository: ChildPresenceRepository) extends Controller {
 
   val childForm = Form(
     mapping(
