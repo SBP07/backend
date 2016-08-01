@@ -3,6 +3,8 @@ package controllers
 import javax.inject.Inject
 
 import be.thomastoye.speelsysteem.legacy.data.AnimatorRepository
+import be.thomastoye.speelsysteem.legacy.data.comparing.ComparingAnimatorRepository
+import be.thomastoye.speelsysteem.legacy.data.couchdb.{CouchAnimatorRepository, CouchDatabase}
 import be.thomastoye.speelsysteem.legacy.models.{Animator, AnimatorConstants}
 import play.api.mvc._
 import play.api.data._
@@ -13,7 +15,7 @@ import views._
 
 import scala.concurrent.Future
 
-class AnimatorController @Inject() (animatorRepository: AnimatorRepository) extends Controller {
+class AnimatorController @Inject() (animatorRepository: ComparingAnimatorRepository) extends Controller {
 
   val animatorForm = Form(
     mapping(

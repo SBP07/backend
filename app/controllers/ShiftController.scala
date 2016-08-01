@@ -13,7 +13,7 @@ import helpers.DateTime._
 
 import scala.concurrent.Future
 
-object Shifts {
+object ShiftController {
   case class ShiftsPost(date: LocalDate, shiftTypes: List[Long], externalLocation: String)
   case class ShiftDelete(id: Long)
 }
@@ -21,7 +21,7 @@ object Shifts {
 class ShiftController @Inject() (shiftRepository: ShiftRepository, shiftTypeRepository: ShiftTypeRepository,
   childPresenceRepository: ChildPresenceRepository) extends Controller
 {
-  import Shifts._
+  import ShiftController._
 
   val deleteForm = Form(
       mapping(
