@@ -10,9 +10,9 @@ case class Child(
   landline: Option[String],
 
   street: Option[String],
+  streetNumber: Option[String],
+  zipCode: Option[Int],
   city: Option[String],
 
-  birthDate: Option[LocalDate],
-
-  medicalRecordChecked: Option[LocalDate] = None // None means not ok
+  birthDate: Option[LocalDate]
 )

@@ -23,14 +23,14 @@ class ChildTable(tag: Tag) extends Table[Child](tag, "child") {
   def landline = column[String]("landline")
 
   def street = column[String]("street")
+  def streetNumber = column[String]("street_number")
+  def zipCode = column[Int]("zip_code")
   def city = column[String]("city")
 
   def birthDate = column[LocalDate]("birth_date")
 
-  def medicalRecordChecked = column[LocalDate]("medical_file_checked")
-
-  def * : ProvenShape[Child] = (id.?, firstName, lastName, mobilePhone.?, landline.?, street.?,
-    city.?, birthDate.?, medicalRecordChecked.?) <> (Child.tupled, Child.unapply)
+  def * : ProvenShape[Child] = (id.?, firstName, lastName, mobilePhone.?, landline.?, street.?, streetNumber.?,
+    zipCode.?, city.?, birthDate.?) <> (Child.tupled, Child.unapply)
 
   def shifts: Query[ShiftTable, Shift, Seq] = {
     TableQuery[ChildrenToShiftsTable].filter(_.childId === id).flatMap(_.shiftFK)

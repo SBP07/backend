@@ -37,8 +37,8 @@
                 <td>
                     @child.birthDate.map(_.toString(fmt))
                 </td>
-                <td>@child.street</td>
-                <td>@child.city</td>
+                <td>@child.street @child.streetNumber</td>
+                <td>@child.zipCode @child.city</td>
             </tr>
             }
         </tbody>

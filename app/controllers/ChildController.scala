@@ -25,20 +25,20 @@ class ChildController @Inject() (childRepository: ChildRepository, childPresence
       "landline" -> optional(text),
 
       "street" -> optional(text),
+      "streetNumber" -> optional(text),
+      "zipCode" -> optional(number),
       "city" -> optional(text),
 
-      "birthDate" -> optional(jodaLocalDate("dd-MM-yyyy")),
-      "medicalRecordChecked" -> optional(jodaLocalDate("dd-MM-yyyy"))
+      "birthDate" -> optional(jodaLocalDate("dd-MM-yyyy"))
     )((id: Option[Long], firstName: String, lastName: String, mobilePhone: Option[String], landline: Option[String],
-       street: Option[String], city: Option[String], birthDate,
-       medRecChecked) => Child.apply(id, firstName, lastName, mobilePhone, landline, street,
-      city, birthDate, medRecChecked)
-      )(_ match {
-          case Child(id, firstName, lastName, mobilePhone, landline, street, city, birthDate, medRecChecked) =>
-            Some((id, firstName, lastName, mobilePhone, landline, street, city, birthDate, medRecChecked))
-          case _ => None
-        }
-      )
+       street: Option[String], streetNumber: Option[String], zipCode: Option[Int], city: Option[String], birthDate) =>
+      Child.apply(id, firstName, lastName, mobilePhone, landline, street, streetNumber, zipCode,
+      city, birthDate)
+    )(unapply = {
+      case Child(id, firstName, lastName, mobilePhone, landline, street, streetNumber, zipCode, city, birthDate) =>
+        Some((id, firstName, lastName, mobilePhone, landline, street, streetNumber, zipCode, city, birthDate))
+      case _ => None
+    })
   )
 
   def showList: Action[AnyContent] = Action.async { implicit req =>
