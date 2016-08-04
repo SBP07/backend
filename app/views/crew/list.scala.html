@@ -1,10 +1,10 @@
-@import be.thomastoye.speelsysteem.legacy.models.Animator
-@(animators: List[Animator])(implicit flash: Flash)
+@import be.thomastoye.speelsysteem.legacy.models.LegacyCrew
+@(crewMembers: List[LegacyCrew])(implicit flash: Flash)
 @import _root_.helpers.DateTime._
 
 @main("Animatoren") {
     <h2 class="sub-header">Lijst van alle animatoren</h2>
-    <a href="@routes.AnimatorController.newAnimator">
+    <a href="@routes.CrewController.newCrewMember">
             <button type="button" class="btn btn-default">
                     <span class="glyphicon glyphicon-pencil"></span> Nieuwe animator
             </button>
@@ -21,22 +21,22 @@
             </thead>
             <tbody>
 
-                @for(animator <- animators) {
+                @for(crewMember <- crewMembers) {
                 <tr>
                     <td>
-                        @animator.id.map { id =>
-                            <a href="@routes.AnimatorController.details(id)">
+                        @crewMember.id.map { id =>
+                            <a href="@routes.CrewController.details(id)">
                         }
-                        @animator.firstName @animator.lastName
-                        @animator.id.map { id =>
+                        @crewMember.firstName @crewMember.lastName
+                        @crewMember.id.map { id =>
                             </a>
                         }
                     </td>
                     <td>
-                    @animator.birthDate.map(_.toString(fmt))
+                    @crewMember.birthDate.map(_.toString(fmt))
                     </td>
-                    <td>@animator.street @animator.streetNumber</td>
-                    <td>@animator.city</td>
+                    <td>@crewMember.street @crewMember.streetNumber</td>
+                    <td>@crewMember.city</td>
                 </tr>
                 }
             </tbody>

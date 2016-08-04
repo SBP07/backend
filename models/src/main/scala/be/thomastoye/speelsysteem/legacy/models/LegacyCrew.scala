@@ -2,7 +2,7 @@ package be.thomastoye.speelsysteem.legacy.models
 
 import org.joda.time.LocalDate
 
-case class Animator(
+case class LegacyCrew(
   id: Option[String] = None,
   firstName: String,
   lastName: String,
@@ -21,7 +21,7 @@ case class Animator(
   birthDate: Option[LocalDate]
 )
 
-object AnimatorConstants {
+object LegacyCrewConstants {
   val minimumYearStartedVolunteering: Int = 2000
   val maximumYearStartedVolunteering: Int = 2030
 }

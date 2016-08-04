@@ -1,18 +1,18 @@
-@import be.thomastoye.speelsysteem.legacy.models.Animator
-@(animator: Animator)(implicit flash: Flash)
+@import be.thomastoye.speelsysteem.legacy.models.LegacyCrew
+@(crew: LegacyCrew)(implicit flash: Flash)
 @import helper._
 @import java.text.SimpleDateFormat
 @import _root_.helpers.DateTime._
 
-@main("Details voor " + animator.firstName + " " + animator.lastName) {
+@main("Details voor " + crew.firstName + " " + crew.lastName) {
 
-    <a href="@routes.AnimatorController.list">
+    <a href="@routes.CrewController.list">
         <span class="glyphicon glyphicon-chevron-left"></span> Terug naar lijst
     </a>
 
     <h2>Gegevens</h2>
     <p>
-        <a href="@routes.AnimatorController.editAnimator(animator.id.get)">
+        <a href="@routes.CrewController.editCrewMember(crew.id.get)">
             <button type="button" class="btn btn-default">
                 <span class="glyphicon glyphicon-pencil"></span> Details bewerken
             </button>
@@ -28,22 +28,22 @@
             <table class="table table-striped">
                 <tr>
                     <td>Voornaam</td>
-                    <td>@animator.firstName</td>
+                    <td>@crew.firstName</td>
                 </tr>
                 <tr>
                     <td>Achternaam</td>
-                    <td>@animator.lastName</td>
+                    <td>@crew.lastName</td>
                 </tr>
                 <tr>
                     <td>Geboortedatum</td>
                     <td>
-                        @animator.birthDate.map(_.toString(fmt))
+                        @crew.birthDate.map(_.toString(fmt))
                     </td>
                 </tr>
                 <tr>
                     <td>Kern</td>
                     <td>
-                        @if(animator.isPartOfCore) {
+                        @if(crew.isPartOfCore) {
                             <span class="glyphicon glyphicon-ok-sign"></span> Ja
                         } else {
                             <span class="glyphicon glyphicon-remove-sign"></span> Nee
@@ -53,7 +53,7 @@
                 <tr>
                     <td>Gestart in</td>
                     <td>
-                        @animator.yearStartedVolunteering
+                        @crew.yearStartedVolunteering
                     </td>
                 </tr>
                 <tr>
@@ -66,30 +66,30 @@
             <table class="table table-striped">
                 <tr>
                     <td>Straat</td>
-                    <td>@animator.street @animator.streetNumber</td>
+                    <td>@crew.street @crew.streetNumber</td>
                 </tr>
                 <tr>
                     <td>Gemeente</td>
-                    <td>@animator.city</td>
+                    <td>@crew.city</td>
                 </tr>
                 <tr>
                     <td>GSM-nummer</td>
-                    <td>@animator.mobilePhone</td>
+                    <td>@crew.mobilePhone</td>
                 </tr>
                 <tr>
                     <td>Thuistelefoon</td>
-                    <td>@animator.landline</td>
+                    <td>@crew.landline</td>
                 </tr>
                 <tr>
                     <td>Email-adres</td>
                     <td>
-                        <a href="mailto:@animator.email">@animator.email</a>
+                        <a href="mailto:@crew.email">@crew.email</a>
                     </td>
                 </tr>
                 <tr>
                     <td>Rekeningnummer</td>
                     <td>
-                        @animator.bankAccount
+                        @crew.bankAccount
                     </td>
                 </tr>
             </table>

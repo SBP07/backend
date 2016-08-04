@@ -25,13 +25,13 @@ GET     /dagdelen/delete/:id      controllers.ShiftController.deleteShift(id: Lo
 POST    /dagdelen/delete          controllers.ShiftController.reallyDeleteShift
 
 # Animators
-GET     /animator              controllers.AnimatorController.list
-GET     /animator/             controllers.AnimatorController.list
-GET     /animator/lijst        controllers.AnimatorController.list
-GET     /animator/details/:id  controllers.AnimatorController.details(id: String)
-GET     /animator/nieuw        controllers.AnimatorController.newAnimator
-POST    /animator/nieuw        controllers.AnimatorController.saveAnimator
-GET     /animator/edit/:id     controllers.AnimatorController.editAnimator(id: String)
+GET     /animator              controllers.CrewController.list
+GET     /animator/             controllers.CrewController.list
+GET     /animator/lijst        controllers.CrewController.list
+GET     /animator/details/:id  controllers.CrewController.details(id: String)
+GET     /animator/nieuw        controllers.CrewController.newCrewMember
+POST    /animator/nieuw        controllers.CrewController.saveCrewMember
+GET     /animator/edit/:id     controllers.CrewController.editCrewMember(id: String)
 
 # Children
 GET     /kind               controllers.ChildController.showList
