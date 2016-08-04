@@ -78,7 +78,6 @@ class CouchCrewRepository @Inject() (couchDatabase: CouchDatabase) extends CrewR
       crew.address.city,
       crew.bankAccount,
       crew.yearStarted,
-      isPartOfCore = false,
       crew.birthDate.map(day => new LocalDate(day.year, day.month, day.day))
     )
   }

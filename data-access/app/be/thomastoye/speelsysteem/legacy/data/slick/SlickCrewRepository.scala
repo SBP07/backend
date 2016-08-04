@@ -31,12 +31,11 @@ class LegacyCrewTable(tag: Tag) extends Table[LegacyCrew](tag, "animator") {
 
   def bankAccount = column[String]("bank_account")
   def yearStartedVolunteering = column[Int]("year_started_volunteering")
-  def isPartOfCore = column[Boolean]("is_core")
 
   def birthDate = column[LocalDate]("birthdate")
 
   def * : ProvenShape[LegacyCrew] = (id.?, firstName, lastName, mobilePhone.?, landline.?, email.?,
-    street.?, streetNumber.?, zipCode.?, city.?, bankAccount.?, yearStartedVolunteering.?, isPartOfCore, birthDate.?) <>
+    street.?, streetNumber.?, zipCode.?, city.?, bankAccount.?, yearStartedVolunteering.?, birthDate.?) <>
     (LegacyCrew.tupled, LegacyCrew.unapply)
 }
 

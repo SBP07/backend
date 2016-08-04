@@ -35,7 +35,6 @@ class CrewController @Inject() (crewRepository: ComparingCrewRepository) extends
       "yearStartedVolunteering" -> optional(
         number(LegacyCrewConstants.minimumYearStartedVolunteering, LegacyCrewConstants.maximumYearStartedVolunteering)
       ),
-      "isPartOfCore" -> boolean,
 
       "birthDate" -> optional(jodaLocalDate("dd-MM-yyyy"))
     )(LegacyCrew.apply)(LegacyCrew.unapply)

@@ -16,8 +16,6 @@ case class LegacyCrew(
   city: Option[String],
   bankAccount: Option[String],
   yearStartedVolunteering: Option[Int],
-  isPartOfCore: Boolean = false,
-  //attest: Option[Attest] = None,
   birthDate: Option[LocalDate]
 )
 
