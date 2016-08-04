@@ -13,7 +13,6 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>#</th>
                     <th>Naam</th>
                     <th>Geboortedatum</th>
                     <th>Straat, nummer</th>
@@ -24,7 +23,6 @@
 
                 @for(animator <- animators) {
                 <tr>
-                    <td>@animator.id.getOrElse("/")</td>
                     <td>
                         @animator.id.map { id =>
                             <a href="@routes.AnimatorController.details(id)">
@@ -37,7 +35,7 @@
                     <td>
                     @animator.birthDate.map(_.toString(fmt))
                     </td>
-                    <td>@animator.street</td>
+                    <td>@animator.street @animator.streetNumber</td>
                     <td>@animator.city</td>
                 </tr>
                 }
