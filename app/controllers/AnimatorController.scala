@@ -1,5 +1,6 @@
 package controllers
 
+import java.util.UUID
 import javax.inject.Inject
 
 import be.thomastoye.speelsysteem.legacy.data.AnimatorRepository
@@ -19,7 +20,7 @@ class AnimatorController @Inject() (animatorRepository: ComparingAnimatorReposit
 
   val animatorForm = Form(
     mapping(
-      "id" -> optional(of[Long]),
+      "id" -> optional(of[String]),
       "firstName" -> nonEmptyText,
       "lastName" -> nonEmptyText,
       "mobilePhone" -> optional(text),
@@ -27,6 +28,8 @@ class AnimatorController @Inject() (animatorRepository: ComparingAnimatorReposit
       "email" -> optional(text),
 
       "street" -> optional(text),
+      "streetNumber" -> optional(text),
+      "zipCode" -> optional(number),
       "city" -> optional(text),
       "bankAccount" -> optional(text),
       "yearStartedVolunteering" -> optional(
@@ -44,7 +47,7 @@ class AnimatorController @Inject() (animatorRepository: ComparingAnimatorReposit
     }
   }
 
-  def details(id: Long): Action[AnyContent] = Action.async { implicit req =>
+  def details(id: String): Action[AnyContent] = Action.async { implicit req =>
     animatorRepository.findById(id) map {
       case Some(animator) => Ok(html.animator.details(animator))
       case None => BadRequest("Geen animator met die ID")
@@ -64,14 +67,14 @@ class AnimatorController @Inject() (animatorRepository: ComparingAnimatorReposit
               .map(_ => Redirect(routes.AnimatorController.details(id)).flashing("success" -> "Animator upgedated"))
           case _ =>
             animatorRepository
-              .insert(animator)
+              .insert(animator.copy(id = Some(UUID.randomUUID().toString)))
               .map(_ => Redirect(routes.AnimatorController.list()).flashing("success" -> "Animator toegevoegd"))
         }
       }
     )
   }
 
-  def editAnimator(id: Long): Action[AnyContent] = Action.async { implicit req =>
+  def editAnimator(id: String): Action[AnyContent] = Action.async { implicit req =>
     animatorRepository.findById(id) map {
       case Some(ch) => Ok(html.animator.form.render(animatorForm.fill(ch), req.flash))
       case _ => BadRequest("Geen geldige id")

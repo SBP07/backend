@@ -28,10 +28,10 @@ POST    /dagdelen/delete          controllers.ShiftController.reallyDeleteShift
 GET     /animator              controllers.AnimatorController.list
 GET     /animator/             controllers.AnimatorController.list
 GET     /animator/lijst        controllers.AnimatorController.list
-GET     /animator/details/:id  controllers.AnimatorController.details(id: Long)
+GET     /animator/details/:id  controllers.AnimatorController.details(id: String)
 GET     /animator/nieuw        controllers.AnimatorController.newAnimator
 POST    /animator/nieuw        controllers.AnimatorController.saveAnimator
-GET     /animator/edit/:id     controllers.AnimatorController.editAnimator(id: Long)
+GET     /animator/edit/:id     controllers.AnimatorController.editAnimator(id: String)
 
 # Children
 GET     /kind               controllers.ChildController.showList

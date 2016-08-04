@@ -13,13 +13,13 @@ class ComparingAnimatorRepository @Inject() (couchAnimatorRepository: CouchAnima
   slickAnimatorRepository: SlickAnimatorRepository)
 extends AnimatorRepository with ComparingRepository
 {
-  override def findById(id: Long): Future[Option[Animator]] = doCompare("AnimatorRepository#findById", slickAnimatorRepository.findById(id), couchAnimatorRepository.findById(id))
+  override def findById(id: String): Future[Option[Animator]] = doCompare("AnimatorRepository#findById", slickAnimatorRepository.findById(id), couchAnimatorRepository.findById(id))
 
-  override def findAll: Future[Seq[Animator]] = doCompare("AnimatorRepository#findAll", slickAnimatorRepository.findAll, couchAnimatorRepository.findAll)
+  override def findAll: Future[Seq[Animator]] = doCompare("AnimatorRepository#findAll", slickAnimatorRepository.findAll, couchAnimatorRepository.findAll, Some("Animator"))
 
   override def insert(animator: Animator): Future[Unit] = doCompare("AnimatorRepository#insert", slickAnimatorRepository.insert(animator), couchAnimatorRepository.insert(animator))
 
   override def count: Future[Int] = doCompare("AnimatorRepository#count", slickAnimatorRepository.count, couchAnimatorRepository.count)
 
-  override def update(animator: Animator): Future[Unit] = ???
+  override def update(animator: Animator): Future[Unit] = doCompare("AnimatorRepository#update", slickAnimatorRepository.update(animator), couchAnimatorRepository.update(animator))
 }

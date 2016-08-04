@@ -11,12 +11,13 @@ import slick.driver.PostgresDriver.api._
 import slick.lifted.ProvenShape
 import Helpers.jodaDatetimeToSqldateMapper
 import be.thomastoye.speelsysteem.legacy.data.AnimatorRepository
+import com.typesafe.scalalogging.StrictLogging
 
 import scala.concurrent.Future
 
 class AnimatorTable(tag: Tag) extends Table[Animator](tag, "animator") {
 
-  def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
+  def id = column[String]("id")
   def firstName = column[String]("first_name")
   def lastName = column[String]("last_name")
   def mobilePhone = column[String]("mobile_phone")
@@ -24,6 +25,8 @@ class AnimatorTable(tag: Tag) extends Table[Animator](tag, "animator") {
   def email = column[String]("email")
 
   def street = column[String]("street")
+  def streetNumber = column[String]("street_number")
+  def zipCode = column[Int]("zip_code")
   def city = column[String]("city")
 
   def bankAccount = column[String]("bank_account")
@@ -33,23 +36,27 @@ class AnimatorTable(tag: Tag) extends Table[Animator](tag, "animator") {
   def birthDate = column[LocalDate]("birthdate")
 
   def * : ProvenShape[Animator] = (id.?, firstName, lastName, mobilePhone.?, landline.?, email.?,
-    street.?, city.?, bankAccount.?, yearStartedVolunteering.?, isPartOfCore, birthDate.?) <>
+    street.?, streetNumber.?, zipCode.?, city.?, bankAccount.?, yearStartedVolunteering.?, isPartOfCore, birthDate.?) <>
     (Animator.tupled, Animator.unapply)
 }
 
-class SlickAnimatorRepository @Inject()(dbConfigProvider: DatabaseConfigProvider) extends AnimatorRepository {
+class SlickAnimatorRepository @Inject()(dbConfigProvider: DatabaseConfigProvider) extends AnimatorRepository with StrictLogging {
   val dbConfig = dbConfigProvider.get[JdbcProfile]
   val db = dbConfig.db
   val animators = TableQuery[AnimatorTable]
 
-  override def findById(id: Long): Future[Option[Animator]] = db.run(animators.filter(_.id === id).result.headOption)
-  override def findAll: Future[Seq[Animator]] = db.run(animators.sortBy(s => (s.lastName, s.firstName)).result)
+  override def findById(id: String): Future[Option[Animator]] = db.run(animators.filter(_.id === id).result.headOption)
+  override def findAll: Future[Seq[Animator]] = db.run(animators.result).map(_.sortBy(s => (s.lastName, s.firstName)))
   override def insert(animator: Animator): Future[Unit] = db.run(animators += animator).map(_ => ())
   override def count: Future[Int] = db.run(animators.length.result)
   override def update(animator: Animator): Future[Unit] = {
     animator.id match {
-      case Some(id) => db.run(animators.filter(_.id === id).update(animator)).map(_ => ())
-      case _ => Future.successful(())
+      case Some(id) =>
+        logger.debug("Updating animator")
+        db.run(animators.filter(_.id === id).update(animator)).map(_ => ())
+      case _ =>
+        logger.warn("No id, not updating")
+        Future.successful(())
     }
   }
 }

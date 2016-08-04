@@ -3,7 +3,7 @@ package be.thomastoye.speelsysteem.legacy.models
 import org.joda.time.LocalDate
 
 case class Animator(
-  id: Option[Long] = None,
+  id: Option[String] = None,
   firstName: String,
   lastName: String,
   mobilePhone: Option[String],
@@ -11,6 +11,8 @@ case class Animator(
   email: Option[String],
 
   street: Option[String],
+  streetNumber: Option[String],
+  zipCode: Option[Int],
   city: Option[String],
   bankAccount: Option[String],
   yearStartedVolunteering: Option[Int],

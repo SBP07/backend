@@ -15,7 +15,7 @@ trait ComparingRepository extends StrictLogging {
     * @tparam T The type, e.g. Seq[Child]
     * @return The result from Slick/Postgres
     */
-  def doCompare[T](methodName: String, slickFut: Future[T], couchFut: Future[T]): Future[T] = {
+  def doCompare[T](methodName: String, slickFut: Future[T], couchFut: Future[T], splitOutputOn: Option[String] = None): Future[T] = {
     for {
       slickRes <- slickFut
       couchRes <- couchFut
@@ -24,8 +24,10 @@ trait ComparingRepository extends StrictLogging {
         logger.debug(s"Method [$methodName]: result from Slick == result from CouchDB")
       } else {
         logger.warn(s"Method [$methodName]: result from Slick != result from CouchDB")
-        logger.warn(s" --> result from Slick  : $slickRes")
-        logger.warn(s" --> result from CouchDB: $couchRes")
+        val slickOut = splitOutputOn map { x => slickRes.toString.split(x).mkString("\n" + x) } getOrElse slickRes
+        val couchOut = splitOutputOn map { x => couchRes.toString.split(x).mkString("\n" + x) } getOrElse couchRes
+        logger.warn(s" --> result from Slick  : $slickOut")
+        logger.warn(s" --> result from CouchDB: $couchOut")
       }
     }
 

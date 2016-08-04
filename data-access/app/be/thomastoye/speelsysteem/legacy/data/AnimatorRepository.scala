@@ -5,7 +5,7 @@ import scala.concurrent.Future
 
 trait AnimatorRepository {
 
-  def findById(id: Long): Future[Option[Animator]]
+  def findById(id: String): Future[Option[Animator]]
 
   def findAll: Future[Seq[Animator]]
 

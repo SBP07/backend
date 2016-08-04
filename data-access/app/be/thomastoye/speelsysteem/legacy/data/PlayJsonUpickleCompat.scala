@@ -7,7 +7,7 @@ import upickle.Js.Value
 import upickle.{json => upicklejson}
 import upickle.json.FastRenderer
 
-class PlayJsonReaderUpickleCompat[T](reads: Reads[T]) extends Reader[T] with StrictLogging {
+class PlayJsonReaderUpickleCompat[T](implicit reads: Reads[T]) extends Reader[T] with StrictLogging {
   override def read0: PartialFunction[Value, T] = {
     case value =>
       val render = FastRenderer.render(value)
@@ -20,6 +20,6 @@ class PlayJsonReaderUpickleCompat[T](reads: Reads[T]) extends Reader[T] with Str
   }
 }
 
-class PlayJsonWriterUpickleCompat[T](writes: Writes[T]) extends Writer[T] {
+class PlayJsonWriterUpickleCompat[T](implicit writes: Writes[T]) extends Writer[T] {
   override def write0: (T) => Value = value => upicklejson.read(Json.stringify(Json.toJson[T](value)(writes)))
 }
