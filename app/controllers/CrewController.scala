@@ -1,12 +1,12 @@
 package controllers
 
-import java.util.UUID
 import javax.inject.Inject
 
 import be.thomastoye.speelsysteem.legacy.data.CrewRepository
-import be.thomastoye.speelsysteem.legacy.data.comparing.ComparingCrewRepository
-import be.thomastoye.speelsysteem.legacy.data.couchdb.{CouchCrewRepository$, CouchDatabase}
 import be.thomastoye.speelsysteem.legacy.models.{LegacyCrew, LegacyCrewConstants}
+import be.thomastoye.speelsysteem.legacy.data.slick.SlickCrewRepository.{crew2legacyModel, legacyModel2crewAndId}
+import be.thomastoye.speelsysteem.models.Crew
+import be.thomastoye.speelsysteem.models.Crew.Id
 import play.api.mvc._
 import play.api.data._
 import play.api.data.Forms._
@@ -16,7 +16,7 @@ import views._
 
 import scala.concurrent.Future
 
-class CrewController @Inject() (crewRepository: ComparingCrewRepository) extends Controller {
+class CrewController @Inject() (crewRepository: CrewRepository) extends Controller {
 
   val crewMemberForm = Form(
     mapping(
@@ -46,9 +46,9 @@ class CrewController @Inject() (crewRepository: ComparingCrewRepository) extends
     }
   }
 
-  def details(id: String): Action[AnyContent] = Action.async { implicit req =>
+  def details(id: Id): Action[AnyContent] = Action.async { implicit req =>
     crewRepository.findById(id) map {
-      case Some(crewMember) => Ok(html.crew.details(crewMember))
+      case Some( (crewId, crewMember) ) => Ok(html.crew.details(crewId, crewMember))
       case None => BadRequest("Geen animator met die ID")
     }
   }
@@ -58,24 +58,27 @@ class CrewController @Inject() (crewRepository: ComparingCrewRepository) extends
   def saveCrewMember: Action[AnyContent] = Action.async { implicit req =>
     crewMemberForm.bindFromRequest.fold(
       formWithErrors => Future.successful(BadRequest(html.crew.form.render(formWithErrors, req.flash))),
-      crewMember => {
-        crewMember.id match {
+      legacyCrew => {
+        val (_, crew) = legacyModel2crewAndId(legacyCrew)
+        val maybeId = legacyCrew.id
+
+        maybeId match {
           case Some(id) =>
             crewRepository
-              .update(crewMember)
+              .update(id, crew)
               .map(_ => Redirect(routes.CrewController.details(id)).flashing("success" -> "Animator upgedated"))
           case _ =>
             crewRepository
-              .insert(crewMember.copy(id = Some(UUID.randomUUID().toString)))
+              .insert(crew)
               .map(_ => Redirect(routes.CrewController.list()).flashing("success" -> "Animator toegevoegd"))
         }
       }
     )
   }
 
-  def editCrewMember(id: String): Action[AnyContent] = Action.async { implicit req =>
+  def editCrewMember(id: Crew.Id): Action[AnyContent] = Action.async { implicit req =>
     crewRepository.findById(id) map {
-      case Some(ch) => Ok(html.crew.form.render(crewMemberForm.fill(ch), req.flash))
+      case Some(ch) => Ok(html.crew.form.render(crewMemberForm.fill(crew2legacyModel(ch._2, Some(ch._1))), req.flash))
       case _ => BadRequest("Geen geldige id")
     }
   }

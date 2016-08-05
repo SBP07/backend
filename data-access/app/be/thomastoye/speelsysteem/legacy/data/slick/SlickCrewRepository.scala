@@ -11,6 +11,7 @@ import slick.driver.PostgresDriver.api._
 import slick.lifted.ProvenShape
 import Helpers.jodaDatetimeToSqldateMapper
 import be.thomastoye.speelsysteem.legacy.data.CrewRepository
+import be.thomastoye.speelsysteem.models._
 import com.typesafe.scalalogging.StrictLogging
 
 import scala.concurrent.Future
@@ -40,22 +41,66 @@ class LegacyCrewTable(tag: Tag) extends Table[LegacyCrew](tag, "animator") {
 }
 
 class SlickCrewRepository @Inject()(dbConfigProvider: DatabaseConfigProvider) extends CrewRepository with StrictLogging {
+  import SlickCrewRepository.{crew2legacyModel, legacyModel2crewAndId}
   val dbConfig = dbConfigProvider.get[JdbcProfile]
   val db = dbConfig.db
   val crew = TableQuery[LegacyCrewTable]
 
-  override def findById(id: String): Future[Option[LegacyCrew]] = db.run(crew.filter(_.id === id).result.headOption)
-  override def findAll: Future[Seq[LegacyCrew]] = db.run(crew.result).map(_.sortBy(s => (s.lastName, s.firstName)))
-  override def insert(crewMember: LegacyCrew): Future[Unit] = db.run(crew += crewMember).map(_ => ())
+  override def findById(id: String): Future[Option[(Crew.Id, Crew)]] = {
+    db
+      .run(crew.filter(_.id === id).result.headOption)
+      .map(x => x.map(legacyModel2crewAndId).map(y => (y._1.get, y._2)))
+  }
+
+  override def findAll: Future[Seq[(Crew.Id, Crew)]] = {
+    db.run(crew.result).map(_.map(legacyModel2crewAndId).map(x => (x._1.get, x._2))).map(x => x.sortBy(s => (s._2.lastName, s._2.firstName)))
+  }
+
+  override def insert(crewMember: Crew): Future[Unit] = db.run(crew += crew2legacyModel(crewMember)).map(_ => ())
   override def count: Future[Int] = db.run(crew.length.result)
-  override def update(crewMember: LegacyCrew): Future[Unit] = {
-    crewMember.id match {
-      case Some(id) =>
-        logger.debug("Updating crew member")
-        db.run(crew.filter(_.id === id).update(crewMember)).map(_ => ())
-      case _ =>
-        logger.warn("No id, not updating")
-        Future.successful(())
-    }
+  override def update(id: Crew.Id, crewMember: Crew): Future[Unit] = {
+    db.run(crew.filter(_.id === id).update(crew2legacyModel(crewMember, Some(id)))).map(_ => ())
+  }
+}
+
+object SlickCrewRepository {
+  def crew2legacyModel(crew: Crew, id: Option[Crew.Id] = None): LegacyCrew = {
+    LegacyCrew(
+      id,
+      crew.firstName,
+      crew.lastName,
+      crew.contact.phone.find(_.kind.contains("mobile")).map(_.phoneNumber),
+      crew.contact.phone.find(_.kind.contains("landline")).map(_.phoneNumber),
+      crew.contact.email.headOption,
+      crew.address.street,
+      crew.address.number,
+      crew.address.zipCode,
+      crew.address.city,
+      crew.bankAccount,
+      crew.yearStarted,
+      crew.birthDate.map(day => new LocalDate(day.year, day.month, day.day))
+    )
+  }
+
+  def legacyModel2crewAndId(legacyModel: LegacyCrew): (Option[Crew.Id], Crew) = {
+    val address = Address(legacyModel.street, legacyModel.streetNumber, legacyModel.zipCode, legacyModel.city)
+
+    val contact = CrewContact(
+      legacyModel.mobilePhone.map(PhoneContact(Some("mobile"), None, _)).toSeq ++ legacyModel.landline.map(PhoneContact(Some("landline"), None, _)).toSeq,
+      legacyModel.email.toSeq
+    )
+    val birthDate = legacyModel.birthDate.map(day => Day(day.getDayOfMonth, day.getMonthOfYear, day.getYear))
+
+    val crew = Crew(
+      legacyModel.firstName,
+      legacyModel.lastName,
+      address,
+      legacyModel.bankAccount,
+      contact,
+      legacyModel.yearStartedVolunteering,
+      birthDate
+    )
+
+    (legacyModel.id, crew)
   }
 }

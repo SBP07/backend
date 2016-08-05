@@ -1,5 +1,5 @@
-@import be.thomastoye.speelsysteem.legacy.models.LegacyCrew
-@(crew: LegacyCrew)(implicit flash: Flash)
+@import be.thomastoye.speelsysteem.models.Crew
+@(id: Crew.Id, crew: Crew)(implicit flash: Flash)
 @import helper._
 @import java.text.SimpleDateFormat
 @import _root_.helpers.DateTime._
@@ -12,7 +12,7 @@
 
     <h2>Gegevens</h2>
     <p>
-        <a href="@routes.CrewController.editCrewMember(crew.id.get)">
+        <a href="@routes.CrewController.editCrewMember(id)">
             <button type="button" class="btn btn-default">
                 <span class="glyphicon glyphicon-pencil"></span> Details bewerken
             </button>
@@ -37,13 +37,13 @@
                 <tr>
                     <td>Geboortedatum</td>
                     <td>
-                        @crew.birthDate.map(_.toString(fmt))
+                        @crew.birthDate
                     </td>
                 </tr>
                 <tr>
                     <td>Gestart in</td>
                     <td>
-                        @crew.yearStartedVolunteering
+                        @crew.yearStarted
                     </td>
                 </tr>
                 <tr>
@@ -56,30 +56,36 @@
             <table class="table table-striped">
                 <tr>
                     <td>Straat</td>
-                    <td>@crew.street @crew.streetNumber</td>
+                    <td>@crew.address.street @crew.address.number</td>
                 </tr>
                 <tr>
                     <td>Gemeente</td>
-                    <td>@crew.city</td>
+                    <td>@crew.address.city</td>
                 </tr>
                 <tr>
-                    <td>GSM-nummer</td>
-                    <td>@crew.mobilePhone</td>
-                </tr>
-                <tr>
-                    <td>Thuistelefoon</td>
-                    <td>@crew.landline</td>
-                </tr>
-                <tr>
-                    <td>Email-adres</td>
+                    <td>Telefoon</td>
                     <td>
-                        <a href="mailto:@crew.email">@crew.email</a>
+                        <ul>
+                            @for(phoneContact <- crew.contact.phone) {
+                                <li>@phoneContact.phoneNumber (@phoneContact.kind.getOrElse("")@phoneContact.comment.map(x =>", $x"))</li>
+                            }
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Emailadres</td>
+                    <td>
+                        <ul>
+                            @for(email <- crew.contact.email) {
+                                <li><a href="mailto:@email">@email</a></li>
+                            }
+                        </ul>
                     </td>
                 </tr>
                 <tr>
                     <td>Rekeningnummer</td>
                     <td>
-                        @crew.bankAccount
+                        @crew.bankAccount.getOrElse("Geen opgegeven")
                     </td>
                 </tr>
             </table>

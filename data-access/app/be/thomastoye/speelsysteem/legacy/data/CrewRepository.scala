@@ -1,17 +1,17 @@
 package be.thomastoye.speelsysteem.legacy.data
-import be.thomastoye.speelsysteem.legacy.models.LegacyCrew
+import be.thomastoye.speelsysteem.models.Crew
 
 import scala.concurrent.Future
 
 trait CrewRepository {
 
-  def findById(id: String): Future[Option[LegacyCrew]]
+  def findById(id: Crew.Id): Future[Option[(Crew.Id, Crew)]]
 
-  def findAll: Future[Seq[LegacyCrew]]
+  def findAll: Future[Seq[(Crew.Id, Crew)]]
 
-  def insert(animator: LegacyCrew): Future[Unit]
+  def insert(crewMember: Crew): Future[Unit]
 
   def count: Future[Int]
 
-  def update(animator: LegacyCrew): Future[Unit]
+  def update(id: Crew.Id, crewMember: Crew): Future[Unit]
 }

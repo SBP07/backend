@@ -26,7 +26,7 @@ object CouchConfiguration {
 case class CouchConfiguration(host: String, port: Int, https: Boolean, user: Option[String], pass: Option[String], db: String)
 
 object CouchDatabase {
-  case class CouchPersistenceException(msg: String) extends Exception(msg)
+  case class CouchPersistenceException(msg: String) extends Exception(msg) // TODO is this used?
 }
 
 class CouchDatabase @Inject()(config: Configuration) {
