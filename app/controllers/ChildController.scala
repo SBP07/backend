@@ -2,7 +2,8 @@ package controllers
 
 import javax.inject.Inject
 
-import be.thomastoye.speelsysteem.legacy.data.{ChildPresenceRepository, ChildRepository}
+import be.thomastoye.speelsysteem.data.ChildRepository
+import be.thomastoye.speelsysteem.legacy.data.ChildPresenceRepository
 import be.thomastoye.speelsysteem.legacy.models.Child
 import models._
 import play.api.libs.concurrent.Execution.Implicits._

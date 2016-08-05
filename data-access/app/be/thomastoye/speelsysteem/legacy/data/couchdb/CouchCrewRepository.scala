@@ -2,17 +2,14 @@ package be.thomastoye.speelsysteem.legacy.data.couchdb
 
 import javax.inject.Inject
 
-import be.thomastoye.speelsysteem.legacy.data.couchdb.CouchDatabase.CouchPersistenceException
+import be.thomastoye.speelsysteem.data.{CrewRepository, PlayJsonReaderUpickleCompat, PlayJsonWriterUpickleCompat}
 import be.thomastoye.speelsysteem.legacy.data.util.ScalazExtensions.PimpedScalazTask
 import upickle.default.{Reader, Writer}
-import be.thomastoye.speelsysteem.legacy.data.{CrewRepository, PlayJsonReaderUpickleCompat, PlayJsonWriterUpickleCompat}
-import be.thomastoye.speelsysteem.legacy.models.LegacyCrew
 import be.thomastoye.speelsysteem.models._
 import be.thomastoye.speelsysteem.models.Crew.Id
 import be.thomastoye.speelsysteem.models.JsonFormats._
-import com.ibm.couchdb.{CouchDoc, CouchException, CouchView, MappedDocType}
+import com.ibm.couchdb.{CouchDoc, MappedDocType}
 import com.typesafe.scalalogging.StrictLogging
-import org.joda.time.LocalDate
 import play.api.libs.concurrent.Execution.Implicits._
 
 import scala.concurrent.{Future, Promise}

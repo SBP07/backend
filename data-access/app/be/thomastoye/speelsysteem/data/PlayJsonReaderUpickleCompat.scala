@@ -1,11 +1,11 @@
-package be.thomastoye.speelsysteem.legacy.data
+package be.thomastoye.speelsysteem.data
 
 import com.typesafe.scalalogging.StrictLogging
 import play.api.libs.json._
-import upickle.default._
 import upickle.Js.Value
-import upickle.{json => upicklejson}
+import upickle.default._
 import upickle.json.FastRenderer
+import upickle.{json => upicklejson}
 
 class PlayJsonReaderUpickleCompat[T](implicit reads: Reads[T]) extends Reader[T] with StrictLogging {
   override def read0: PartialFunction[Value, T] = {

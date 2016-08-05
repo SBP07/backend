@@ -2,7 +2,8 @@ package controllers
 
 import javax.inject.Inject
 
-import be.thomastoye.speelsysteem.legacy.data.{ChildPresenceRepository, ChildRepository, ShiftRepository}
+import be.thomastoye.speelsysteem.data.ChildRepository
+import be.thomastoye.speelsysteem.legacy.data.{ChildPresenceRepository, ShiftRepository}
 import be.thomastoye.speelsysteem.legacy.models.{Child, ChildPresence, Shift}
 import org.joda.time.{DateTimeZone, LocalDate}
 import play.api.mvc._

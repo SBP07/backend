@@ -2,7 +2,7 @@ package controllers
 
 import javax.inject.Inject
 
-import be.thomastoye.speelsysteem.legacy.data.CrewRepository
+import be.thomastoye.speelsysteem.data.CrewRepository
 import be.thomastoye.speelsysteem.legacy.models.{LegacyCrew, LegacyCrewConstants}
 import be.thomastoye.speelsysteem.legacy.data.slick.SlickCrewRepository.{crew2legacyModel, legacyModel2crewAndId}
 import be.thomastoye.speelsysteem.models.Crew

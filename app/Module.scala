@@ -1,3 +1,4 @@
+import be.thomastoye.speelsysteem.data.{ChildRepository, CrewRepository}
 import be.thomastoye.speelsysteem.legacy.data._
 import be.thomastoye.speelsysteem.legacy.data.comparing.ComparingCrewRepository
 import be.thomastoye.speelsysteem.legacy.data.slick._

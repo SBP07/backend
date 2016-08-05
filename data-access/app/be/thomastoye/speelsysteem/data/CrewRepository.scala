@@ -1,4 +1,5 @@
-package be.thomastoye.speelsysteem.legacy.data
+package be.thomastoye.speelsysteem.data
+
 import be.thomastoye.speelsysteem.models.Crew
 
 import scala.concurrent.Future

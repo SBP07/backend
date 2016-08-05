@@ -10,7 +10,7 @@ import slick.driver.JdbcProfile
 import slick.driver.PostgresDriver.api._
 import slick.lifted.ProvenShape
 import Helpers.jodaDatetimeToSqldateMapper
-import be.thomastoye.speelsysteem.legacy.data.ChildRepository
+import be.thomastoye.speelsysteem.data.ChildRepository
 
 import scala.concurrent.Future
 
