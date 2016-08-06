@@ -1,9 +1,8 @@
-@import be.thomastoye.speelsysteem.legacy.models.Child
+@import be.thomastoye.speelsysteem.models.Child
 @import be.thomastoye.speelsysteem.legacy.models.Shift
 @import be.thomastoye.speelsysteem.legacy.models.ShiftType
-@(child: Child, presences: List[(Shift, ShiftType)])(implicit flash: Flash)
+@(child: Child, id: Child.Id, presences: List[(Shift, ShiftType)])(implicit flash: Flash)
 @import helper._
-@import java.text.SimpleDateFormat
 @import _root_.helpers.DateTime._
 
 @main("Details voor " + child.firstName + " " + child.lastName) {
@@ -15,19 +14,12 @@
 
 	<h2>Gegevens</h2>
 	<p>
-		<a href="@routes.ChildController.editChild(child.id.get)">
+		<a href="@routes.ChildController.editChild(id)">
 			<button type="button" class="btn btn-default">
 		  		<span class="glyphicon glyphicon-pencil"></span> Details bewerken
 			</button>
 		</a>
-		<a href="
-		    @{
-                child.id match {
-                    case Some(id) => routes.PresencesController.updateWithId(id)
-                    case _ => "#"
-                }
-		    }
-		">
+		<a href="@routes.PresencesController.updateWithId(id)">
 			<button type="button" class="btn btn-default">
 		  		<span class="glyphicon glyphicon-pencil"></span> Aanwezigheden aanpassen
 			</button>
@@ -40,7 +32,7 @@
 				<tr><td>Achternaam</td><td>@child.lastName</td></tr>
 				<tr><td>Geboortedatum</td>
 					<td>
-						@child.birthDate.map(_.toString(fmt))
+						@child.birthDate
 					</td>
 				</tr>
 			</table>

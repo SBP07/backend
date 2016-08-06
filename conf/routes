@@ -7,9 +7,9 @@ GET     /heartbeat              controllers.ApplicationController.heartbeat
 # Presences
 GET     /aanwezigheden              controllers.PresencesController.presentToday
 POST    /aanwezigheden/update       controllers.PresencesController.saveUpdate
-GET     /aanwezigheden/update/:id   controllers.PresencesController.updateWithId(id: Long)
+GET     /aanwezigheden/update/:id   controllers.PresencesController.updateWithId(id: String)
 GET     /aanwezigheden/nieuw        controllers.PresencesController.register
-GET     /aanwezigheden/nieuw/:id    controllers.PresencesController.registerWithId(id: Long)
+GET     /aanwezigheden/nieuw/:id    controllers.PresencesController.registerWithId(id: String)
 POST    /aanwezigheden/nieuw        controllers.PresencesController.savePresence
 
 
@@ -39,8 +39,8 @@ GET     /kind/              controllers.ChildController.showList
 GET     /kind/lijst         controllers.ChildController.showList
 GET     /kind/nieuw         controllers.ChildController.newChild
 POST    /kind/nieuw         controllers.ChildController.saveChild
-GET     /kind/edit/:id      controllers.ChildController.editChild(id: Long)
-GET     /kind/details/:id   controllers.ChildController.details(id: Long)
+GET     /kind/edit/:id      controllers.ChildController.editChild(id: String)
+GET     /kind/details/:id   controllers.ChildController.details(id: String)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

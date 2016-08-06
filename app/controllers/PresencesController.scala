@@ -4,14 +4,14 @@ import javax.inject.Inject
 
 import be.thomastoye.speelsysteem.data.ChildRepository
 import be.thomastoye.speelsysteem.legacy.data.{ChildPresenceRepository, ShiftRepository}
-import be.thomastoye.speelsysteem.legacy.models.{Child, ChildPresence, Shift}
+import be.thomastoye.speelsysteem.legacy.models.{ChildPresence, LegacyChild, Shift}
+import be.thomastoye.speelsysteem.models.Child
 import org.joda.time.{DateTimeZone, LocalDate}
 import play.api.mvc._
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.data._
 import play.api.data.Forms._
 import play.api.data.format.Formats._
-import models._
 import models.formBindings.PresencesPost
 import views.html.presences
 
@@ -23,38 +23,38 @@ class PresencesController @Inject() (childRepository: ChildRepository, shiftRepo
 {
   val registerForm: Form[PresencesPost] = Form(
     mapping(
-      "childId" -> of[Long],
-      "selectedShiftIds" -> list(longNumber),
-      "possibleShiftIds" -> list(longNumber)
+      "childId" -> of[Child.Id],
+      "selectedShiftIds" -> seq(longNumber),
+      "possibleShiftIds" -> seq(longNumber)
     ) {
       (childId, selectedShiftIds, possibleShiftIds) => {
         Await.result(for {
           child <- childRepository.findById(childId)
           selectedShifts <- shiftRepository.findByIds(selectedShiftIds)
           possibleShifts <- shiftRepository.findByIds(possibleShiftIds)
-        } yield PresencesPost(child, selectedShifts.toList, possibleShifts.toList), 3.seconds)
+        } yield PresencesPost(child, selectedShifts, possibleShifts), 3.seconds)
       }
     } {
       p: PresencesPost => {
-        val id = p.child.flatMap(_.id).getOrElse(-1L)
-        val shiftIds = p.selectedShifts.map(_.id).flatten
-        val possibleShiftIds = p.possibleShifts.map(_.id).flatten
+        val id = p.child.map(_._1).get
+        val shiftIds = p.selectedShifts.flatMap(_.id)
+        val possibleShiftIds = p.possibleShifts.flatMap(_.id)
         Some((id, shiftIds, possibleShiftIds))
       }
     }
   )
 
-  def updateWithId(childId: Long): Action[AnyContent] = Action.async { implicit req =>
+  def updateWithId(childId: Child.Id): Action[AnyContent] = Action.async { implicit req =>
     childRepository.findById(childId) flatMap { childOpt =>
-      childOpt map { child =>
-        child.id map { childId =>
-          childPresenceRepository.findAllForChild(childId) map (_.map(_._1).toList) flatMap { allPresences =>
-            shiftRepository.findAllWithType map (_.toList) map { allShifts =>
-              val filledForm = registerForm.fill(PresencesPost(Some(child), allPresences, allShifts.map(_._2)))
-              Ok(presences.updatePresencesForm.render(filledForm, child, LocalDate.now, allShifts, req.flash))
-            }
+      childOpt map { case (_, child) =>
+        childPresenceRepository.findAllForChild(childId) map (_.map(_._1).toList) flatMap { allPresences =>
+          shiftRepository.findAllWithType map (_.toList) map { allShifts =>
+            val filledForm = registerForm.fill(
+              PresencesPost(Some((childId, child)), allPresences, allShifts.map(_._2))
+            )
+            Ok(presences.updatePresencesForm.render(filledForm, childId, child, LocalDate.now, allShifts, req.flash))
           }
-        } getOrElse Future.successful(BadRequest("Kind niet gevonden"))
+        }
       } getOrElse Future.successful(BadRequest("Kind niet gevonden"))
     }
   }
@@ -62,37 +62,30 @@ class PresencesController @Inject() (childRepository: ChildRepository, shiftRepo
   def saveUpdate: Action[AnyContent] = Action.async { implicit req =>
     registerForm.bindFromRequest.fold(
       formWithErrors => {
-        formWithErrors.value.flatMap(_.child).flatMap(_.id) map { childId =>
-          childRepository.findById(childId) flatMap {
-            case Some(child) =>
-              shiftRepository.findAllWithType.map(_.toList) map { allShifts =>
-                BadRequest(
-                  presences.updatePresencesForm.render(formWithErrors, child, LocalDate.now, allShifts, req.flash)
-                )
-              }
-            case None => Future.successful(BadRequest("Kind niet gevonden"))
+        (for {
+          presencesPost <- formWithErrors.value
+          presencesPostChild <- presencesPost.child
+        } yield {
+          shiftRepository.findAllWithType.map { allShifts =>
+            BadRequest(presences.updatePresencesForm.render(formWithErrors, presencesPostChild._1, presencesPostChild._2, LocalDate.now, allShifts, req.flash) )
           }
-        } getOrElse Future.successful(BadRequest("Ongeldig kind (geen id gevonden)"))
+        }) getOrElse Future.successful(BadRequest("Ongeldig kind (geen id gevonden)"))
       }, {
         case PresencesPost(None, _, _) => Future.successful(BadRequest("Ongeldig kind"))
-        case PresencesPost(Some(child), selected, possible) => {
-          child.id match {
-            case Some(id) => /*req.dbSession.withTransaction*/
-              childPresenceRepository.findAllForChild(id).map(_.map(_._1).toList) flatMap { alreadyPersisted =>
-                val toPersist = PresencesPost.presencesToInsert(selected, possible, alreadyPersisted)
-                val toDelete = PresencesPost.presencesToDelete(selected, possible, alreadyPersisted)
+        case PresencesPost(Some(child), selected, possible) =>
+          val id = child._1
+          childPresenceRepository.findAllForChild(id).map(_.map(_._1).toList) flatMap { alreadyPersisted =>
+            val toPersist = PresencesPost.presencesToInsert(selected, possible, alreadyPersisted)
+            val toDelete = PresencesPost.presencesToDelete(selected, possible, alreadyPersisted)
 
-                Future.sequence(List(
-                  childPresenceRepository.register(toPersist.map(_.id).flatten.map(ChildPresence(id, _))),
-                  childPresenceRepository.unregister(toDelete.map(_.id).flatten.map(ChildPresence(id, _)))
-                )) map { _ =>
-                  Redirect(routes.ChildController.details(id)).flashing("success" -> "Aanwezigheden upgedated")
-                }
-              }
-            case _ => Future.successful(BadRequest("Ongeldig kind"))
+            Future.sequence(List(
+              childPresenceRepository.register(toPersist.flatMap(_.id).map(ChildPresence(id, _))),
+              childPresenceRepository.unregister(toDelete.flatMap(_.id).map(ChildPresence(id, _)))
+            )) map { _ =>
+              Redirect(routes.ChildController.details(id)).flashing("success" -> "Aanwezigheden upgedated")
+            }
           }
-
-        }
+        case _ => Future.successful(BadRequest("Ongeldig kind"))
       }
     )
   }
@@ -106,8 +99,8 @@ class PresencesController @Inject() (childRepository: ChildRepository, shiftRepo
     }
   }
 
-  def registerWithId(childId: Long): Action[AnyContent] = Action.async { implicit req =>
-    def finalStep(childOpt: Option[Child], selectedShifts: List[Shift]): Future[Result] = {
+  def registerWithId(childId: Child.Id): Action[AnyContent] = Action.async { implicit req =>
+    def finalStep(childOpt: Option[(Child.Id, Child)], selectedShifts: Seq[Shift]): Future[Result] = {
       shiftRepository.findAllWithType map(_.toList) flatMap { allShifts =>
         val filledForm = registerForm.fill(PresencesPost(childOpt, selectedShifts, allShifts.map(_._2)))
         childRepository.findAll map { allChildren =>
@@ -117,10 +110,10 @@ class PresencesController @Inject() (childRepository: ChildRepository, shiftRepo
     }
 
     childRepository.findById(childId) flatMap { child =>
-      child.flatMap(_.id) match {
+      child.map(_._1) match {
         case Some(test) =>
           childPresenceRepository.findAllForChild(test) flatMap { seq =>
-            val selectedShifts = seq.map(_._1).toList
+            val selectedShifts = seq.map(_._1)
             finalStep(child, selectedShifts)
 
           }
@@ -140,15 +133,12 @@ class PresencesController @Inject() (childRepository: ChildRepository, shiftRepo
     }, {
       case PresencesPost(None, _, _) => Future.successful(BadRequest("Ongeldig kind"))
       case PresencesPost(Some(child), selectedShifts, possibleShifts) =>
-        child.id match {
-          case Some(id) =>
-            childPresenceRepository.findAllForChild(id) map (_.map(_._1).toList) flatMap { alreadyPersisted =>
-              val toPersist = PresencesPost.presencesToInsert(selectedShifts, possibleShifts, alreadyPersisted)
-              childPresenceRepository.register(toPersist.flatMap(_.id).map(ChildPresence(id, _))) map { _ =>
-                Redirect(routes.ChildController.details(id)).flashing("success" -> s"${toPersist.size} aanwezigheden toegevoegd")
-              }
-            }
-          case _ => Future.successful(BadRequest("Ongeldig kind"))
+        val id = child._1
+        childPresenceRepository.findAllForChild(id) map (_.map(_._1).toList) flatMap { alreadyPersisted =>
+          val toPersist = PresencesPost.presencesToInsert(selectedShifts, possibleShifts, alreadyPersisted)
+          childPresenceRepository.register(toPersist.flatMap(_.id).map(ChildPresence(id, _))) map { _ =>
+            Redirect(routes.ChildController.details(id)).flashing("success" -> s"${toPersist.size} aanwezigheden toegevoegd")
+          }
         }
     })
   }

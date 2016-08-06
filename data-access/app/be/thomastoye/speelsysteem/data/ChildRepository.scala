@@ -1,20 +1,21 @@
 package be.thomastoye.speelsysteem.data
 
-import be.thomastoye.speelsysteem.legacy.models.Child
+import be.thomastoye.speelsysteem.models.Child
+import be.thomastoye.speelsysteem.models.Child.Id
 
 import scala.concurrent.Future
 
 trait ChildRepository {
 
-  def findById(id: Long): Future[Option[Child]]
+  def findById(id: Id): Future[Option[(Id, Child)]]
 
-  def findAll: Future[Seq[Child]]
+  def findAll: Future[Seq[(Id, Child)]]
 
-  def insert(child: Child): Future[Long]
+  def insert(child: Child): Future[Id]
 
   def count: Future[Int]
 
-  def update(child: Child): Future[Unit]
+  def update(id: Id, child: Child): Future[Unit]
 
-  def findByFirstAndLastname(firstName: String, lastName: String): Future[Option[Child]]
+  def findByFirstAndLastname(firstName: String, lastName: String): Future[Option[(Id, Child)]]
 }

@@ -24,7 +24,7 @@ trait ShiftRepository {
 
   def findAllWithTypeAndNumberOfPresences: Future[Seq[(ShiftType, Shift, Int)]]
 
-  def findByIds(ids: List[Long]): Future[Seq[Shift]]
+  def findByIds(ids: Seq[Long]): Future[Seq[Shift]]
 
   def findByDateAndType(date: LocalDate, shiftType: ShiftType): Future[Option[Shift]]
 

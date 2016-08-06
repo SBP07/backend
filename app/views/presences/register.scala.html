@@ -1,8 +1,8 @@
-@import be.thomastoye.speelsysteem.legacy.models.Child
+@import be.thomastoye.speelsysteem.models.Child
 @import be.thomastoye.speelsysteem.legacy.models.Shift
 @import be.thomastoye.speelsysteem.legacy.models.ShiftType
 @(childForm: Form[formBindings.PresencesPost],
-    children: List[Child],
+    children: Seq[(Child.Id, Child)],
     today: org.joda.time.LocalDate,
     shiftsToday: List[(ShiftType, Shift)]
     )(implicit flash: Flash)
@@ -22,7 +22,7 @@
     @helper.form(action = routes.PresencesController.savePresence, 'class -> "form-horizontal") {
         @select(field = childForm("childId"),
             options = (children.map(c => {
-                c.id.getOrElse(-1).toString -> {c.firstName + " " + c.lastName}
+                c._1 -> {c._2.firstName + " " + c._2.lastName}
             })), '_label -> "Kind", 'class -> "form-control selectpicker", Symbol("data-live-search") -> "true"
         )
 

@@ -10,7 +10,7 @@ trait CrewRepository {
 
   def findAll: Future[Seq[(Crew.Id, Crew)]]
 
-  def insert(crewMember: Crew): Future[Unit]
+  def insert(crewMember: Crew): Future[Unit] // TODO return Future[Crew.Id]
 
   def count: Future[Int]
 

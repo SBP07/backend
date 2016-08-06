@@ -1,3 +1,5 @@
 package be.thomastoye.speelsysteem.legacy.models
 
-case class ChildPresence(childId: Long, shiftId: Long)
+import be.thomastoye.speelsysteem.models.Child
+
+case class ChildPresence(childId: Child.Id, shiftId: Long)

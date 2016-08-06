@@ -2,7 +2,7 @@ package be.thomastoye.speelsysteem.legacy.data.slick
 
 import javax.inject.Inject
 
-import be.thomastoye.speelsysteem.legacy.models.{Child, Shift, ShiftType}
+import be.thomastoye.speelsysteem.legacy.models.{LegacyChild, Shift, ShiftType}
 import org.joda.time.LocalDate
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.libs.concurrent.Execution.Implicits._
@@ -63,7 +63,7 @@ class SlickShiftRepository @Inject()(dbConfigProvider: DatabaseConfigProvider) e
     }).result
   }
 
-  override def findByIds(ids: List[Long]): Future[Seq[Shift]] = db.run(shifts.filter(_.id inSet ids).result)
+  override def findByIds(ids: Seq[Long]): Future[Seq[Shift]] = db.run(shifts.filter(_.id inSet ids).result)
 
   override def findByDateAndType(date: LocalDate, shiftType: ShiftType): Future[Option[Shift]] = {
     shiftType.id.map { shiftType =>
@@ -93,7 +93,7 @@ class ShiftTable(tag: Tag) extends Table[Shift](tag, "shift") {
     TableQuery[ChildrenToShiftsTable].filter(_.shiftId === id).flatMap(_.childFK)
   }
 
-  def children: Query[ChildTable, Child, Seq] = {
+  def children: Query[ChildTable, LegacyChild, Seq] = {
     TableQuery[ChildrenToShiftsTable].filter(_.shiftId === id).flatMap(_.childFK)
   }
 }

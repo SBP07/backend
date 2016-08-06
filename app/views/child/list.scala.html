@@ -1,6 +1,5 @@
-@import be.thomastoye.speelsysteem.legacy.models.Child
-@(children: List[Child])(implicit flash: Flash)
-@import _root_.helpers.DateTime._
+@import be.thomastoye.speelsysteem.models.Child
+@(children: Seq[(Child.Id, Child)])(implicit flash: Flash)
 
 @main("Kinderen") {
 <h2 class="sub-header">Lijst van alle kinderen</h2>
@@ -22,20 +21,16 @@
         </thead>
         <tbody>
 
-            @for(child <- children) {
+            @for( (id, child) <- children) {
             <tr>
-                <td>@child.id.getOrElse("/")</td>
+                <td>@id</td>
                 <td>
-                    @child.id.map { id =>
-                        <a href="@routes.ChildController.details(id)">
-                    }
+                    <a href="@routes.ChildController.details(id)">
                             @child.firstName @child.lastName
-                    @child.id.map { id =>
-                        </a>
-                    }
+                    </a>
                 </td>
                 <td>
-                    @child.birthDate.map(_.toString(fmt))
+                    @child.birthDate
                 </td>
                 <td>@child.street @child.streetNumber</td>
                 <td>@child.zipCode @child.city</td>

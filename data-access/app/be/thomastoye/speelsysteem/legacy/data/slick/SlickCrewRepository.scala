@@ -85,7 +85,7 @@ object SlickCrewRepository {
   def legacyModel2crewAndId(legacyModel: LegacyCrew): (Option[Crew.Id], Crew) = {
     val address = Address(legacyModel.street, legacyModel.streetNumber, legacyModel.zipCode, legacyModel.city)
 
-    val contact = CrewContact(
+    val contact = ContactInfo(
       legacyModel.mobilePhone.map(PhoneContact(Some("mobile"), None, _)).toSeq ++ legacyModel.landline.map(PhoneContact(Some("landline"), None, _)).toSeq,
       legacyModel.email.toSeq
     )

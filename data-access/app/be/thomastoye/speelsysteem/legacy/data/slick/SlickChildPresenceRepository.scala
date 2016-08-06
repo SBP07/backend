@@ -3,7 +3,8 @@ package be.thomastoye.speelsysteem.legacy.data.slick
 import javax.inject.Inject
 
 import be.thomastoye.speelsysteem.legacy.data.ChildPresenceRepository
-import be.thomastoye.speelsysteem.legacy.models.{Child, ChildPresence, Shift, ShiftType}
+import be.thomastoye.speelsysteem.legacy.models.{ChildPresence, LegacyChild, Shift, ShiftType}
+import be.thomastoye.speelsysteem.models.Child
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.libs.concurrent.Execution.Implicits._
 import slick.driver.JdbcProfile
@@ -20,14 +21,14 @@ class SlickChildPresenceRepository @Inject()(dbConfigProvider: DatabaseConfigPro
   private val shifts = TableQuery[ShiftTable]
   private val presences = TableQuery[ChildrenToShiftsTable]
 
-  override def all: Future[Seq[(Child, Shift)]] = db.run {
+  override def all: Future[Seq[(LegacyChild, Shift)]] = db.run {
     (for {
       child <- children
       act <- child.shifts
     } yield (child, act)).result
   }
 
-  override def findAllForChild(id: Long): Future[Seq[(Shift, ShiftType)]] = db.run {
+  override def findAllForChild(id: Child.Id): Future[Seq[(Shift, ShiftType)]] = db.run {
     (for {
       child <- children if child.id === id
       act <- child.shifts
@@ -35,7 +36,7 @@ class SlickChildPresenceRepository @Inject()(dbConfigProvider: DatabaseConfigPro
     } yield (act, actType)).result
   }
 
-  override def findAllForShift(id: Long): Future[Seq[(Child, Shift)]] = db.run {
+  override def findAllForShift(id: Long): Future[Seq[(LegacyChild, Shift)]] = db.run {
     (for {
       child <- children
       act <- child.shifts if act.id === id
@@ -43,7 +44,7 @@ class SlickChildPresenceRepository @Inject()(dbConfigProvider: DatabaseConfigPro
   }
 
   override def register(presence: ChildPresence): Future[Unit] = db.run(presences += presence).map(_ => ())
-  override def register(presence: List[ChildPresence]): Future[Unit] = db.run(presences ++= presence).map(_ => ())
+  override def register(presence: Seq[ChildPresence]): Future[Unit] = db.run(presences ++= presence).map(_ => ())
 
   override def unregister(presence: ChildPresence): Future[Unit] = db.run {
     presences.filter(_.shiftId === presence.shiftId)
@@ -51,7 +52,7 @@ class SlickChildPresenceRepository @Inject()(dbConfigProvider: DatabaseConfigPro
       .delete
   } map(_ => ())
 
-  override def unregister(presence: List[ChildPresence]): Future[Unit] = db.run {
+  override def unregister(presence: Seq[ChildPresence]): Future[Unit] = db.run {
     presences.filter(_.shiftId inSet presence.map(_.shiftId))
       .filter(_.childId inSet presence.map(_.childId))
       .delete

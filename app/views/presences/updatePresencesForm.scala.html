@@ -1,10 +1,11 @@
-@import be.thomastoye.speelsysteem.legacy.models.Child
+@import be.thomastoye.speelsysteem.models.Child
 @import be.thomastoye.speelsysteem.legacy.models.Shift
 @import be.thomastoye.speelsysteem.legacy.models.ShiftType
 @(childForm: Form[formBindings.PresencesPost],
+    id: Child.Id,
     child: Child,
     today: org.joda.time.LocalDate,
-    shiftsToday: List[(ShiftType, Shift)])(implicit flash: Flash)
+    shiftsToday: Seq[(ShiftType, Shift)])(implicit flash: Flash)
 @import play.api.Play.current
 @import play.api.i18n.Messages.Implicits._
 @import org.joda.time.LocalDate
@@ -26,7 +27,7 @@
             <label for="childId" class="col-sm-3 control-label">Kind</label>
             <div class="col-sm-9">
                 <label class="control-label">@child.firstName @child.lastName</label>
-                <input type="hidden" name="childId" id="childId" value="@child.id.getOrElse(-1)">
+                <input type="hidden" name="childId" id="childId" value="@id">
             </div>
         </div>
 

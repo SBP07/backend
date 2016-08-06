@@ -1,7 +1,7 @@
-@import be.thomastoye.speelsysteem.legacy.models.Child
+@import be.thomastoye.speelsysteem.legacy.models.LegacyChild
 @import be.thomastoye.speelsysteem.legacy.models.Shift
 @import be.thomastoye.speelsysteem.legacy.models.ShiftType
-@(shift: Shift, shiftType: ShiftType, presentChildren: Seq[Child])(implicit flash: Flash)
+@(shift: Shift, shiftType: ShiftType, presentChildren: Seq[LegacyChild])(implicit flash: Flash)
 @import helper._
 @import _root_.helpers.DateTime.fmt
 

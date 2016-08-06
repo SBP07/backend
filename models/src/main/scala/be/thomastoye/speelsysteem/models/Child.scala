@@ -1,9 +1,6 @@
-package be.thomastoye.speelsysteem.legacy.models
-
-import org.joda.time.LocalDate
+package be.thomastoye.speelsysteem.models
 
 case class Child(
-  id: Option[Long] = None,
   firstName: String,
   lastName: String,
   mobilePhone: Option[String],
@@ -14,5 +11,9 @@ case class Child(
   zipCode: Option[Int],
   city: Option[String],
 
-  birthDate: Option[LocalDate]
+  birthDate: Option[Day]
 )
+
+object Child {
+  type Id = String
+}
