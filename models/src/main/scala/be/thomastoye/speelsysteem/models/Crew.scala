@@ -7,7 +7,7 @@ case class Crew(
   bankAccount: Option[String] = None,
   contact: ContactInfo,
   yearStarted: Option[Int] = None,
-  birthDate: Option[Day]
+  birthDate: Option[DayDate]
 )
 
 object Crew {

@@ -51,7 +51,7 @@ object LegacyChild {
         legacyChild.city
       ),
       contact,
-      legacyChild.birthDate.map(d => Day(d.getDayOfMonth, d.getMonthValue, d.getYear))
+      legacyChild.birthDate.map(d => DayDate(d.getDayOfMonth, d.getMonthValue, d.getYear))
     )
 
     (legacyChild.id, child)

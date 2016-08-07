@@ -89,7 +89,7 @@ object SlickCrewRepository {
       legacyModel.mobilePhone.map(PhoneContact(Some("mobile"), None, _)).toSeq ++ legacyModel.landline.map(PhoneContact(Some("landline"), None, _)).toSeq,
       legacyModel.email.toSeq
     )
-    val birthDate = legacyModel.birthDate.map(day => Day(day.getDayOfMonth, day.getMonthOfYear, day.getYear))
+    val birthDate = legacyModel.birthDate.map(day => DayDate(day.getDayOfMonth, day.getMonthOfYear, day.getYear))
 
     val crew = Crew(
       legacyModel.firstName,
