@@ -8,4 +8,5 @@ object JsonFormats {
   implicit val crewContactFormat = Json.format[ContactInfo]
   implicit val dayFormat = Json.format[Day]
   implicit val crewFormat = Json.format[Crew]
+  implicit val childFormat = Json.format[Child]
 }

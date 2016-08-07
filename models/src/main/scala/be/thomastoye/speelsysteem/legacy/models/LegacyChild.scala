@@ -2,7 +2,7 @@ package be.thomastoye.speelsysteem.legacy.models
 
 import java.time.LocalDate
 
-import be.thomastoye.speelsysteem.models.{Child, Day}
+import be.thomastoye.speelsysteem.models._
 
 case class LegacyChild(
   id: Option[String] = None,
@@ -25,26 +25,32 @@ object LegacyChild {
       id,
       child.firstName,
       child.lastName,
-      child.mobilePhone,
-      child.landline,
-      child.street,
-      child.streetNumber,
-      child.zipCode,
-      child.city,
+      child.contact.phone.find(_.kind.contains("mobile")).map(_.phoneNumber),
+      child.contact.phone.find(_.kind.contains("landline")).map(_.phoneNumber),
+      child.address.street,
+      child.address.number,
+      child.address.zipCode,
+      child.address.city,
       child.birthDate.map(_.toLocalDate)
     )
   }
 
   def legacyModel2childAndId(legacyChild: LegacyChild): (Option[Child.Id], Child) = {
+    val contact = ContactInfo(
+      legacyChild.mobilePhone.map(PhoneContact(Some("mobile"), None, _)).toSeq ++ legacyChild.landline.map(PhoneContact(Some("landline"), None, _)),
+      Seq.empty
+    )
+
     val child = Child(
       legacyChild.firstName,
       legacyChild.lastName,
-      legacyChild.mobilePhone,
-      legacyChild.landline,
-      legacyChild.street,
-      legacyChild.streetNumber,
-      legacyChild.zipCode,
-      legacyChild.city,
+      Address(
+        legacyChild.street,
+        legacyChild.streetNumber,
+        legacyChild.zipCode,
+        legacyChild.city
+      ),
+      contact,
       legacyChild.birthDate.map(d => Day(d.getDayOfMonth, d.getMonthValue, d.getYear))
     )
 

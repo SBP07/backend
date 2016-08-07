@@ -2,6 +2,7 @@ package controllers
 
 import javax.inject.Inject
 import java.time.{LocalDate => JavaLocalDate}
+import java.util.UUID
 
 import be.thomastoye.speelsysteem.data.ChildRepository
 import be.thomastoye.speelsysteem.legacy.data.ChildPresenceRepository
@@ -64,7 +65,7 @@ class ChildController @Inject() (childRepository: ChildRepository, childPresence
               .update(id, child)
               .map(_ => Redirect(routes.ChildController.details(id)).flashing("success" -> "Kind upgedated"))
           case _ =>
-            childRepository.insert(child).map(_ => Redirect(routes.ChildController.showList()).flashing("success" -> "Kind toegevoegd"))
+            childRepository.insert(UUID.randomUUID.toString, child).map(_ => Redirect(routes.ChildController.showList()).flashing("success" -> "Kind toegevoegd"))
         }
       }
     )

@@ -13,13 +13,13 @@ import scala.concurrent.Future
 class ComparingCrewRepository @Inject() (couchCrewRepository: CouchCrewRepository, slickCrewRepository: SlickCrewRepository)
 extends CrewRepository with ComparingRepository
 {
-  override def findById(id: Id): Future[Option[(Crew.Id, Crew)]] = doCompare("CrewRepository#findById", slickCrewRepository.findById(id), couchCrewRepository.findById(id))
+  override def findById(id: Id): Future[Option[(Crew.Id, Crew)]] = doCompare(slickCrewRepository.findById(id), couchCrewRepository.findById(id))
 
-  override def findAll: Future[Seq[(Crew.Id, Crew)]] = doCompare("CrewRepository#findAll", slickCrewRepository.findAll, couchCrewRepository.findAll, Some("Crew"))
+  override def findAll: Future[Seq[(Crew.Id, Crew)]] = doCompare(slickCrewRepository.findAll, couchCrewRepository.findAll, Some("Crew"))
 
-  override def insert(crewMember: Crew): Future[Unit] = doCompare("CrewRepository#insert", slickCrewRepository.insert(crewMember), couchCrewRepository.insert(crewMember))
+  override def insert(crewMember: Crew): Future[Unit] = doCompare(slickCrewRepository.insert(crewMember), couchCrewRepository.insert(crewMember))
 
-  override def count: Future[Int] = doCompare("CrewRepository#count", slickCrewRepository.count, couchCrewRepository.count)
+  override def count: Future[Int] = doCompare(slickCrewRepository.count, couchCrewRepository.count)
 
-  override def update(id: Id, crewMember: Crew): Future[Unit] = doCompare("CrewRepository#update", slickCrewRepository.update(id, crewMember), couchCrewRepository.update(id, crewMember))
+  override def update(id: Id, crewMember: Crew): Future[Unit] = doCompare(slickCrewRepository.update(id, crewMember), couchCrewRepository.update(id, crewMember))
 }

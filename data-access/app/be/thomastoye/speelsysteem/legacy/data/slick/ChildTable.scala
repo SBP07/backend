@@ -51,11 +51,11 @@ class SlickChildRepository @Inject()(dbConfigProvider: DatabaseConfigProvider) e
 
   override def findAll: Future[Seq[(Child.Id, Child)]] = {
     db.run(children.sortBy(s => (s.lastName, s.firstName)).result)
-      .map(_.map(legacyModel2childAndId).map(x => (x._1.get, x._2)))
+      .map(_.map(legacyModel2childAndId).map(x => (x._1.get, x._2)).sortBy(x => (x._2.lastName, x._2.firstName)))
   }
 
-  override def insert(child: Child): Future[Child.Id] = db.run {
-    (children returning children.map(_.id)) += child2legacyModel(None, child)
+  override def insert(id: Child.Id, child: Child): Future[Child.Id] = db.run {
+    (children returning children.map(_.id)) += child2legacyModel(Some(id), child)
   }
 
   override def count: Future[Int] = db.run(children.length.result)
@@ -64,8 +64,4 @@ class SlickChildRepository @Inject()(dbConfigProvider: DatabaseConfigProvider) e
     val legacyChild = child2legacyModel(Some(id), child)
     db.run(children.filter(_.id === id).update(legacyChild)).map(_ => ())
   }
-
-  override def findByFirstAndLastname(firstName: String, lastName: String): Future[Option[(Child.Id, Child)]] = db.run {
-    children.filter(_.firstName === firstName).filter(_.lastName === lastName).result.headOption
-  }.map(_.map(legacyModel2childAndId).map(x => (x._1.get, x._2)))
 }

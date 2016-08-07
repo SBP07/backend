@@ -3,7 +3,7 @@ package be.thomastoye.speelsysteem.legacy.data.couchdb
 import javax.inject.Inject
 
 import be.thomastoye.speelsysteem.legacy.exceptions.ConfigurationMissingFieldException
-import be.thomastoye.speelsysteem.models.Crew
+import be.thomastoye.speelsysteem.models.{Child, Crew}
 import com.ibm.couchdb._
 import play.Logger
 import play.api.Configuration
@@ -40,5 +40,8 @@ class CouchDatabase @Inject()(config: Configuration) {
       case \/-(res) => Logger.info(s"Successfully connected to CouchDB ${res.version} (vendor: ${res.vendor.name}): ${res.couchdb}")
   }
 
-  val db = couchdb.db(couchConfig.db, TypeMapping(classOf[Crew] -> "type/crew/v1"))
+  val db = couchdb.db(couchConfig.db, TypeMapping(
+    classOf[Crew] -> CouchCrewRepository.crewKind,
+    classOf[Child] -> CouchChildRepository.childKind
+  ))
 }

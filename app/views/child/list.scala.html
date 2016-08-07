@@ -12,7 +12,6 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>#</th>
                 <th>Naam</th>
                 <th>Geboortedatum</th>
                 <th>Straat, nummer</th>
@@ -23,7 +22,6 @@
 
             @for( (id, child) <- children) {
             <tr>
-                <td>@id</td>
                 <td>
                     <a href="@routes.ChildController.details(id)">
                             @child.firstName @child.lastName
@@ -32,8 +30,8 @@
                 <td>
                     @child.birthDate
                 </td>
-                <td>@child.street @child.streetNumber</td>
-                <td>@child.zipCode @child.city</td>
+                <td>@child.address.street @child.address.number</td>
+                <td>@child.address.zipCode @child.address.city</td>
             </tr>
             }
         </tbody>

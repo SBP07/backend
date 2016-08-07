@@ -3,13 +3,9 @@ package be.thomastoye.speelsysteem.models
 case class Child(
   firstName: String,
   lastName: String,
-  mobilePhone: Option[String],
-  landline: Option[String],
 
-  street: Option[String],
-  streetNumber: Option[String],
-  zipCode: Option[Int],
-  city: Option[String],
+  address: Address,
+  contact: ContactInfo,
 
   birthDate: Option[Day]
 )

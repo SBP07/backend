@@ -39,10 +39,18 @@
 		</div>
 		<div class="col-xs-6 col-md-6">
 			<table class="table table-striped">
-				<tr><td>Straat</td><td>@child.street @child.streetNumber</td></tr>
-				<tr><td>Gemeente</td><td>@child.zipCode @child.city</td></tr>
-				<tr><td>GSM-nummer</td><td>@child.mobilePhone</td></tr>
-				<tr><td>Thuistelefoon</td><td>@child.landline</td></tr>
+				<tr><td>Straat</td><td>@child.address.street @child.address.number</td></tr>
+				<tr><td>Gemeente</td><td>@child.address.zipCode @child.address.city</td></tr>
+				<tr>
+					<td>GSM-nummer</td>
+					<td>
+						<ul>
+							@for(mobile <- child.contact.phone) {
+								<li>@mobile.phoneNumber (@mobile.kind.getOrElse("")@mobile.comment.map(x =>", $x"))</li>
+							}
+						</ul>
+					</td>
+				</tr>
 			</table>
 		</div>
 	</div>

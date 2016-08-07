@@ -11,11 +11,9 @@ trait ChildRepository {
 
   def findAll: Future[Seq[(Id, Child)]]
 
-  def insert(child: Child): Future[Id]
+  def insert(id: Id, child: Child): Future[Id]
 
   def count: Future[Int]
 
   def update(id: Id, child: Child): Future[Unit]
-
-  def findByFirstAndLastname(firstName: String, lastName: String): Future[Option[(Id, Child)]]
 }

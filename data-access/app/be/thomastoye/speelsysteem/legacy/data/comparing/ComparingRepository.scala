@@ -9,13 +9,14 @@ trait ComparingRepository extends StrictLogging {
   /**
     * Compare the result from two different databases and log if the results aren't equal
     *
-    * @param methodName The method name that was called, used for logging (e.g. "ChildRepository.findAll")
     * @param slickFut The result from Slick/Postgres
     * @param couchFut The result from CouchDB
     * @tparam T The type, e.g. Seq[Child]
     * @return The result from Slick/Postgres
     */
-  def doCompare[T](methodName: String, slickFut: Future[T], couchFut: Future[T], splitOutputOn: Option[String] = None): Future[T] = {
+  def doCompare[T](slickFut: Future[T], couchFut: Future[T], splitOutputOn: Option[String] = None): Future[T] = {
+    val methodName = s"$getClassName#$getMethodName"
+
     for {
       slickRes <- slickFut
       couchRes <- couchFut
@@ -34,4 +35,6 @@ trait ComparingRepository extends StrictLogging {
     couchFut
   }
 
+  private def getMethodName : String = Thread.currentThread.getStackTrace()(4).getMethodName
+  private def getClassName : String = Thread.currentThread.getStackTrace()(4).getClassName
 }
