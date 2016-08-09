@@ -1,7 +1,5 @@
 @import be.thomastoye.speelsysteem.models.Child
-@import be.thomastoye.speelsysteem.legacy.models.LegacyShift
-@import be.thomastoye.speelsysteem.legacy.models.ShiftType
-@(child: Child, id: Child.Id, presences: List[(LegacyShift, ShiftType)])(implicit flash: Flash)
+@(child: Child, id: Child.Id)(implicit flash: Flash)
 @import helper._
 @import _root_.helpers.DateTime._
 
@@ -17,11 +15,6 @@
 		<a href="@routes.ChildController.editChild(id)">
 			<button type="button" class="btn btn-default">
 		  		<span class="glyphicon glyphicon-pencil"></span> Details bewerken
-			</button>
-		</a>
-		<a href="@routes.PresencesController.updateWithId(id)">
-			<button type="button" class="btn btn-default">
-		  		<span class="glyphicon glyphicon-pencil"></span> Aanwezigheden aanpassen
 			</button>
 		</a>
 	</p>
@@ -54,13 +47,4 @@
 			</table>
 		</div>
 	</div>
-	
-	<h2>Aanwezigheden</h2>
-	
-	<ul>
-        @for( (act, actType)  <- presences) {
-            <li>@act.date.toString(fmt), <abbr title="@actType.description">@actType.mnemonic</abbr> (locatie: @act.place)</li>
-        }
-	</ul>
-	
 }

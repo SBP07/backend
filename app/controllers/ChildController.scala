@@ -5,9 +5,7 @@ import java.time.{LocalDate => JavaLocalDate}
 import java.util.UUID
 
 import be.thomastoye.speelsysteem.data.ChildRepository
-import be.thomastoye.speelsysteem.legacy.data.ChildPresenceRepository
 import be.thomastoye.speelsysteem.legacy.models.LegacyChild
-import be.thomastoye.speelsysteem.legacy.models.LegacyChild._
 import be.thomastoye.speelsysteem.models.Child
 import models._
 import play.api.libs.concurrent.Execution.Implicits._
@@ -20,7 +18,7 @@ import org.joda.time.{LocalDate => JodaLocalDate}
 
 import scala.concurrent.Future
 
-class ChildController @Inject() (childRepository: ChildRepository, childPresenceRepository: ChildPresenceRepository) extends Controller {
+class ChildController @Inject() (childRepository: ChildRepository) extends Controller {
 
   val childForm = Form(
     mapping(
@@ -79,9 +77,9 @@ class ChildController @Inject() (childRepository: ChildRepository, childPresence
   }
 
   def details(id: Child.Id): Action[AnyContent] = Action.async { implicit req =>
-    childRepository.findById(id) flatMap  {
-      case Some(x) => childPresenceRepository.findAllForChild(id).map(all => Ok(html.child.details(x._2, x._1, all.toList)))
-      case None => Future.successful(BadRequest("Geen kind met die ID"))
+    childRepository.findById(id) map  {
+      case Some(x) => Ok(html.child.details(x._2, x._1))
+      case None => BadRequest("Geen kind met die ID")
     }
   }
 }

@@ -3,7 +3,7 @@ package be.thomastoye.speelsysteem.legacy.data.slick
 import java.time.LocalDate
 import javax.inject.Inject
 
-import be.thomastoye.speelsysteem.legacy.models.{LegacyChild, LegacyShift}
+import be.thomastoye.speelsysteem.legacy.models.LegacyChild
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.libs.concurrent.Execution.Implicits._
 import slick.driver.JdbcProfile
@@ -15,7 +15,7 @@ import be.thomastoye.speelsysteem.models.Child
 
 import scala.concurrent.Future
 
-class ChildTable(tag: Tag) extends Table[LegacyChild](tag, "child") {
+class LegacyChildTable(tag: Tag) extends Table[LegacyChild](tag, "child") {
 
   def id = column[String]("id")
   def firstName = column[String]("first_name")
@@ -33,9 +33,6 @@ class ChildTable(tag: Tag) extends Table[LegacyChild](tag, "child") {
   def * : ProvenShape[LegacyChild] = (id.?, firstName, lastName, mobilePhone.?, landline.?, street.?, streetNumber.?,
     zipCode.?, city.?, birthDate.?) <> ((LegacyChild.apply _).tupled, LegacyChild.unapply)
 
-  def shifts: Query[ShiftTable, LegacyShift, Seq] = {
-    TableQuery[ChildrenToShiftsTable].filter(_.childId === id).flatMap(_.shiftFK)
-  }
 }
 
 class SlickChildRepository @Inject()(dbConfigProvider: DatabaseConfigProvider) extends ChildRepository {
@@ -43,7 +40,7 @@ class SlickChildRepository @Inject()(dbConfigProvider: DatabaseConfigProvider) e
 
   val dbConfig = dbConfigProvider.get[JdbcProfile]
   val db = dbConfig.db
-  val children = TableQuery[ChildTable]
+  val children = TableQuery[LegacyChildTable]
 
   override def findById(id: Child.Id) = {
     db.run(children.filter(_.id === id).result.headOption).map(_.map(legacyModel2childAndId).map(x => (x._1.get, x._2)))

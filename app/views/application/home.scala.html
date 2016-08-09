@@ -9,12 +9,6 @@
 </div>
 <div class="row">
     <div class="col-xs-6">
-        <h2>Aanwezigheden van kinderen</h2>
-        @linklist(Map("Een kind inschrijven voor een dagdeel/activiteit" -> routes.PresencesController.register,
-        "Een lijst van alle momenteel aanwezige kinderen weergeven" -> routes.PresencesController.presentToday)
-        )
-    </div>
-    <div class="col-xs-6">
         <h2>Aanwezigheden van animatoren</h2>
     </div>
 </div>`
@@ -26,10 +20,6 @@
     <div class="col-xs-4">
         <h2>Animatoren</h2>
         @linklist(Map("Lijst van alle animatoren" -> routes.CrewController.list, "Nieuwe animator registreren" -> routes.CrewController.newCrewMember))
-    </div>
-    <div class="col-xs-4">
-        <h2>Dagdelen</h2>
-        @linklist(Map("Lijst van alle dagdelen" -> routes.LegacyShiftController.list, "Nieuw dagdeel toevoegen" -> routes.LegacyShiftController.newShift))
     </div>
 </div>
 }

@@ -4,26 +4,6 @@ GET     /                      controllers.ApplicationController.home
 # For continuous delivery
 GET     /heartbeat              controllers.ApplicationController.heartbeat
 
-# Presences
-GET     /aanwezigheden              controllers.PresencesController.presentToday
-POST    /aanwezigheden/update       controllers.PresencesController.saveUpdate
-GET     /aanwezigheden/update/:id   controllers.PresencesController.updateWithId(id: String)
-GET     /aanwezigheden/nieuw        controllers.PresencesController.register
-GET     /aanwezigheden/nieuw/:id    controllers.PresencesController.registerWithId(id: String)
-POST    /aanwezigheden/nieuw        controllers.PresencesController.savePresence
-
-
-# Shifts
-GET     /dagdelen                 controllers.LegacyShiftController.list
-GET     /dagdelen/                controllers.LegacyShiftController.list
-GET     /dagdelen/lijst           controllers.LegacyShiftController.list
-GET     /dagdelen/nieuw           controllers.LegacyShiftController.newShift
-POST    /dagdelen/nieuw           controllers.LegacyShiftController.saveShift
-GET     /dagdelen/update/:date    controllers.LegacyShiftController.updateShift(date: String)
-GET     /dagdelen/details/:id     controllers.LegacyShiftController.detailsShifts(id: Long)
-GET     /dagdelen/delete/:id      controllers.LegacyShiftController.deleteShift(id: Long)
-POST    /dagdelen/delete          controllers.LegacyShiftController.reallyDeleteShift
-
 # Animators
 GET     /animator              controllers.CrewController.list
 GET     /animator/             controllers.CrewController.list
