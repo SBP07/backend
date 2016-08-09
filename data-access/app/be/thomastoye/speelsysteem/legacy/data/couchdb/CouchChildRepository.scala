@@ -4,7 +4,6 @@ import javax.inject.Inject
 
 import be.thomastoye.speelsysteem.data.{ChildRepository, PlayJsonReaderUpickleCompat, PlayJsonWriterUpickleCompat}
 import be.thomastoye.speelsysteem.legacy.data.util.ScalazExtensions.PimpedScalazTask
-import be.thomastoye.speelsysteem.models.Child.Id
 import upickle.default.{Reader, Writer}
 import be.thomastoye.speelsysteem.models._
 import be.thomastoye.speelsysteem.models.Child.Id
