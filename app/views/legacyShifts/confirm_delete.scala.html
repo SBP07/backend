@@ -4,7 +4,7 @@
 @import _root_.helpers.DateTime.fmt
 
 @main("Dagdeel verwijderen") {
-	@helper.form(action = routes.ShiftController.reallyDeleteShift, 'class -> "form-horizontal") {
+	@helper.form(action = routes.LegacyShiftController.reallyDeleteShift, 'class -> "form-horizontal") {
 
         <div class="alert alert-warning" role="alert">
             <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>

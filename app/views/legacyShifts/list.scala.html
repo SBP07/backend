@@ -6,7 +6,7 @@
 
 @main("Dagdelen") {
     <h2 class="sub-header">Lijst van alle dagdelen</h2>
-    <a href="@routes.ShiftController.newShift">
+    <a href="@routes.LegacyShiftController.newShift">
             <button type="button" class="btn btn-default">
                     <span class="glyphicon glyphicon-pencil"></span> Nieuw dagdeel
             </button>
@@ -31,7 +31,7 @@
                     </td>
                     <td>
                         @shift._2.id.map { id =>
-                            <a href="@routes.ShiftController.detailsShifts(id)">
+                            <a href="@routes.LegacyShiftController.detailsShifts(id)">
                         }
                                 @shift._2.date.toString(fmt)
                         @shift._2.id.map { id =>
@@ -44,7 +44,7 @@
                     </td>
                     <td>
                         @shift._2.id.map { id =>
-                            <a href="@routes.ShiftController.deleteShift(id)">Verwijderen</a>
+                            <a href="@routes.LegacyShiftController.deleteShift(id)">Verwijderen</a>
                         }
                     </td>
                 </tr>

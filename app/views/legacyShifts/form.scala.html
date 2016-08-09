@@ -1,5 +1,5 @@
 @import be.thomastoye.speelsysteem.legacy.models.ShiftType
-@(shiftForm: Form[controllers.ShiftController.ShiftsPost],
+@(shiftForm: Form[controllers.LegacyShiftController.ShiftsPost],
 	shiftTypes: Seq[ShiftType])(implicit flash: Flash)
 @import play.api.Play.current
 @import play.api.i18n.Messages.Implicits._
@@ -8,7 +8,7 @@
 @implicitField = @{ FieldConstructor(bootstrap3FieldConstructorTemplate.f) }
 
 @main("Nieuw dagedeel") {
-	@helper.form(action = routes.ShiftController.saveShift, 'class -> "form-horizontal") {
+	@helper.form(action = routes.LegacyShiftController.saveShift, 'class -> "form-horizontal") {
 		<fieldset>
 			<legend>Dagdeel</legend>
             @shiftForm("id").value.map { id =>

@@ -14,15 +14,15 @@ POST    /aanwezigheden/nieuw        controllers.PresencesController.savePresence
 
 
 # Shifts
-GET     /dagdelen                 controllers.ShiftController.list
-GET     /dagdelen/                controllers.ShiftController.list
-GET     /dagdelen/lijst           controllers.ShiftController.list
-GET     /dagdelen/nieuw           controllers.ShiftController.newShift
-POST    /dagdelen/nieuw           controllers.ShiftController.saveShift
-GET     /dagdelen/update/:date    controllers.ShiftController.updateShift(date: String)
-GET     /dagdelen/details/:id     controllers.ShiftController.detailsShifts(id: Long)
-GET     /dagdelen/delete/:id      controllers.ShiftController.deleteShift(id: Long)
-POST    /dagdelen/delete          controllers.ShiftController.reallyDeleteShift
+GET     /dagdelen                 controllers.LegacyShiftController.list
+GET     /dagdelen/                controllers.LegacyShiftController.list
+GET     /dagdelen/lijst           controllers.LegacyShiftController.list
+GET     /dagdelen/nieuw           controllers.LegacyShiftController.newShift
+POST    /dagdelen/nieuw           controllers.LegacyShiftController.saveShift
+GET     /dagdelen/update/:date    controllers.LegacyShiftController.updateShift(date: String)
+GET     /dagdelen/details/:id     controllers.LegacyShiftController.detailsShifts(id: Long)
+GET     /dagdelen/delete/:id      controllers.LegacyShiftController.deleteShift(id: Long)
+POST    /dagdelen/delete          controllers.LegacyShiftController.reallyDeleteShift
 
 # Animators
 GET     /animator              controllers.CrewController.list
