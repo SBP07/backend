@@ -3,7 +3,7 @@ package be.thomastoye.speelsysteem.legacy.data.slick
 import java.time.LocalDate
 import javax.inject.Inject
 
-import be.thomastoye.speelsysteem.legacy.models.{LegacyChild, Shift}
+import be.thomastoye.speelsysteem.legacy.models.{LegacyChild, LegacyShift}
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.libs.concurrent.Execution.Implicits._
 import slick.driver.JdbcProfile
@@ -33,7 +33,7 @@ class ChildTable(tag: Tag) extends Table[LegacyChild](tag, "child") {
   def * : ProvenShape[LegacyChild] = (id.?, firstName, lastName, mobilePhone.?, landline.?, street.?, streetNumber.?,
     zipCode.?, city.?, birthDate.?) <> ((LegacyChild.apply _).tupled, LegacyChild.unapply)
 
-  def shifts: Query[ShiftTable, Shift, Seq] = {
+  def shifts: Query[ShiftTable, LegacyShift, Seq] = {
     TableQuery[ChildrenToShiftsTable].filter(_.childId === id).flatMap(_.shiftFK)
   }
 }

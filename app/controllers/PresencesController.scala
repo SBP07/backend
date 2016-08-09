@@ -4,7 +4,7 @@ import javax.inject.Inject
 
 import be.thomastoye.speelsysteem.data.ChildRepository
 import be.thomastoye.speelsysteem.legacy.data.{ChildPresenceRepository, ShiftRepository}
-import be.thomastoye.speelsysteem.legacy.models.{ChildPresence, LegacyChild, Shift}
+import be.thomastoye.speelsysteem.legacy.models.{ChildPresence, LegacyChild, LegacyShift}
 import be.thomastoye.speelsysteem.models.Child
 import org.joda.time.{DateTimeZone, LocalDate}
 import play.api.mvc._
@@ -100,7 +100,7 @@ class PresencesController @Inject() (childRepository: ChildRepository, shiftRepo
   }
 
   def registerWithId(childId: Child.Id): Action[AnyContent] = Action.async { implicit req =>
-    def finalStep(childOpt: Option[(Child.Id, Child)], selectedShifts: Seq[Shift]): Future[Result] = {
+    def finalStep(childOpt: Option[(Child.Id, Child)], selectedShifts: Seq[LegacyShift]): Future[Result] = {
       shiftRepository.findAllWithType map(_.toList) flatMap { allShifts =>
         val filledForm = registerForm.fill(PresencesPost(childOpt, selectedShifts, allShifts.map(_._2)))
         childRepository.findAll map { allChildren =>

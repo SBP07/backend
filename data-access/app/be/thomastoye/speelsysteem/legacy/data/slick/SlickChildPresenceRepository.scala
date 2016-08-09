@@ -3,7 +3,7 @@ package be.thomastoye.speelsysteem.legacy.data.slick
 import javax.inject.Inject
 
 import be.thomastoye.speelsysteem.legacy.data.ChildPresenceRepository
-import be.thomastoye.speelsysteem.legacy.models.{ChildPresence, LegacyChild, Shift, ShiftType}
+import be.thomastoye.speelsysteem.legacy.models.{ChildPresence, LegacyChild, LegacyShift, ShiftType}
 import be.thomastoye.speelsysteem.models.Child
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.libs.concurrent.Execution.Implicits._
@@ -21,14 +21,14 @@ class SlickChildPresenceRepository @Inject()(dbConfigProvider: DatabaseConfigPro
   private val shifts = TableQuery[ShiftTable]
   private val presences = TableQuery[ChildrenToShiftsTable]
 
-  override def all: Future[Seq[(LegacyChild, Shift)]] = db.run {
+  override def all: Future[Seq[(LegacyChild, LegacyShift)]] = db.run {
     (for {
       child <- children
       act <- child.shifts
     } yield (child, act)).result
   }
 
-  override def findAllForChild(id: Child.Id): Future[Seq[(Shift, ShiftType)]] = db.run {
+  override def findAllForChild(id: Child.Id): Future[Seq[(LegacyShift, ShiftType)]] = db.run {
     (for {
       child <- children if child.id === id
       act <- child.shifts
@@ -36,7 +36,7 @@ class SlickChildPresenceRepository @Inject()(dbConfigProvider: DatabaseConfigPro
     } yield (act, actType)).result
   }
 
-  override def findAllForShift(id: Long): Future[Seq[(LegacyChild, Shift)]] = db.run {
+  override def findAllForShift(id: Long): Future[Seq[(LegacyChild, LegacyShift)]] = db.run {
     (for {
       child <- children
       act <- child.shifts if act.id === id

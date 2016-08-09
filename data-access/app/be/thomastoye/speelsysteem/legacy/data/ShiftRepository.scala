@@ -1,32 +1,32 @@
 package be.thomastoye.speelsysteem.legacy.data
-import be.thomastoye.speelsysteem.legacy.models.{Shift, ShiftType}
+import be.thomastoye.speelsysteem.legacy.models.{LegacyShift, ShiftType}
 import org.joda.time.LocalDate
 
 import scala.concurrent.Future
 
 trait ShiftRepository {
 
-  def findAll: Future[Seq[Shift]]
+  def findAll: Future[Seq[LegacyShift]]
 
-  def findById(id: Long): Future[Option[Shift]]
+  def findById(id: Long): Future[Option[LegacyShift]]
 
-  def insert(shift: Shift): Future[Unit]
+  def insert(shift: LegacyShift): Future[Unit]
 
   def count: Future[Int]
 
-  def findByIdWithTypeAndNumberOfPresences(id: Long): Future[Option[(Shift, ShiftType, Int)]]
+  def findByIdWithTypeAndNumberOfPresences(id: Long): Future[Option[(LegacyShift, ShiftType, Int)]]
 
-  def findByDate(date: LocalDate): Future[Seq[Shift]]
+  def findByDate(date: LocalDate): Future[Seq[LegacyShift]]
 
-  def findAllWithType: Future[Seq[(ShiftType, Shift)]]
+  def findAllWithType: Future[Seq[(ShiftType, LegacyShift)]]
 
-  def findAllWithTypeToday(today: LocalDate): Future[Seq[(ShiftType, Shift)]]
+  def findAllWithTypeToday(today: LocalDate): Future[Seq[(ShiftType, LegacyShift)]]
 
-  def findAllWithTypeAndNumberOfPresences: Future[Seq[(ShiftType, Shift, Int)]]
+  def findAllWithTypeAndNumberOfPresences: Future[Seq[(ShiftType, LegacyShift, Int)]]
 
-  def findByIds(ids: Seq[Long]): Future[Seq[Shift]]
+  def findByIds(ids: Seq[Long]): Future[Seq[LegacyShift]]
 
-  def findByDateAndType(date: LocalDate, shiftType: ShiftType): Future[Option[Shift]]
+  def findByDateAndType(date: LocalDate, shiftType: ShiftType): Future[Option[LegacyShift]]
 
-  def delete(shift: Shift): Future[Int]
+  def delete(shift: LegacyShift): Future[Int]
 }

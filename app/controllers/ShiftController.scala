@@ -3,7 +3,7 @@ package controllers
 import javax.inject.Inject
 
 import be.thomastoye.speelsysteem.legacy.data.{ChildPresenceRepository, ShiftRepository, ShiftTypeRepository}
-import be.thomastoye.speelsysteem.legacy.models.Shift
+import be.thomastoye.speelsysteem.legacy.models.LegacyShift
 import org.joda.time.LocalDate
 import play.api.mvc._
 import play.api.data.Forms._
@@ -69,7 +69,7 @@ class ShiftController @Inject() (shiftRepository: ShiftRepository, shiftTypeRepo
             shiftTypeRepository.findByMnemonic("EXT") map(_.flatMap(_.id).getOrElse(-1)) flatMap { externalActivityId =>
               Future.sequence(notPersistedYet.map(_.id).flatten map { id =>
                 val place = if (id == externalActivityId) post.externalLocation else "Speelplein"
-                shiftRepository insert Shift(None, post.date, place, id)
+                shiftRepository insert LegacyShift(None, post.date, place, id)
               }) map { _ =>
                 Redirect(routes.ShiftController.list).flashing("success" -> s"${notPersistedYet.size} dagdelen toegevoegd")
               }
