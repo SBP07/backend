@@ -1,4 +1,4 @@
-package be.thomastoye.speelsysteem.legacy.data.util
+package be.thomastoye.speelsysteem.data.util
 
 import scala.language.implicitConversions
 import scala.concurrent.{Future, Promise}

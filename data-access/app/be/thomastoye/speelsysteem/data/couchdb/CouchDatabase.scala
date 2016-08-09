@@ -1,4 +1,4 @@
-package be.thomastoye.speelsysteem.legacy.data.couchdb
+package be.thomastoye.speelsysteem.data.couchdb
 
 import javax.inject.Inject
 

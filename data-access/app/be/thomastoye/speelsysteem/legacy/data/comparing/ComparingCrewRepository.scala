@@ -3,7 +3,7 @@ package be.thomastoye.speelsysteem.legacy.data.comparing
 import javax.inject.Inject
 
 import be.thomastoye.speelsysteem.data.CrewRepository
-import be.thomastoye.speelsysteem.legacy.data.couchdb.CouchCrewRepository
+import be.thomastoye.speelsysteem.data.couchdb.CouchCrewRepository
 import be.thomastoye.speelsysteem.legacy.data.slick.SlickCrewRepository
 import be.thomastoye.speelsysteem.models.Crew
 import be.thomastoye.speelsysteem.models.Crew.Id

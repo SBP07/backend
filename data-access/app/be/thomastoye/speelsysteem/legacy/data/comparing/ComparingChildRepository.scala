@@ -3,7 +3,7 @@ package be.thomastoye.speelsysteem.legacy.data.comparing
 import javax.inject.Inject
 
 import be.thomastoye.speelsysteem.data.ChildRepository
-import be.thomastoye.speelsysteem.legacy.data.couchdb.CouchChildRepository
+import be.thomastoye.speelsysteem.data.couchdb.CouchChildRepository
 import be.thomastoye.speelsysteem.legacy.data.slick.SlickChildRepository
 import be.thomastoye.speelsysteem.models.Child
 import be.thomastoye.speelsysteem.models.Child.Id
