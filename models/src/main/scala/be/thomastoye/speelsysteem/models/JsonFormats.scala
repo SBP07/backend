@@ -47,4 +47,8 @@ object JsonFormats {
   implicit val shiftFormat: Format[Shift] = Format(shiftReads, shiftWrites)
 
   implicit val dayFormat = Json.format[Day]
+
+  implicit val dayWithIdWrites = new Writes[(Day.Id, Day)] {
+    override def writes(o: (Day.Id, Day)): JsValue = Json.obj("id" -> o._1) ++ Json.toJson(o._2).as[JsObject]
+  }
 }

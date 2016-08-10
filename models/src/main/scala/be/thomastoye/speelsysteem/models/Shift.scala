@@ -4,14 +4,16 @@ import java.time.Instant
 
 import be.thomastoye.speelsysteem.models.Shift.ShiftKind
 
+object Day {
+  type Id = String
+}
+
 case class Day(
-  day: DayDate,
+  date: DayDate,
   shifts: Seq[Shift]
 )
 
 object Shift {
-  type Id = String
-
   sealed trait ShiftKind { val mnemonic: String }
 
   /** Common shift kinds */
