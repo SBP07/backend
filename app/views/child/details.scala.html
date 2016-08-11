@@ -1,23 +1,12 @@
 @import be.thomastoye.speelsysteem.models.Child
 @(child: Child, id: Child.Id)(implicit flash: Flash)
-@import helper._
-@import _root_.helpers.DateTime._
 
 @main("Details voor " + child.firstName + " " + child.lastName) {
-
-        
         <a href="@routes.ChildController.showList">
             <span class="glyphicon glyphicon-chevron-left"></span> Terug naar lijst
         </a>
 
 	<h2>Gegevens</h2>
-	<p>
-		<a href="@routes.ChildController.editChild(id)">
-			<button type="button" class="btn btn-default">
-		  		<span class="glyphicon glyphicon-pencil"></span> Details bewerken
-			</button>
-		</a>
-	</p>
 	<div class="row">
 		<div class="col-xs-6 col-md-6">
 			<table class="table table-striped">

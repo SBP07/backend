@@ -1,14 +1,8 @@
 @import be.thomastoye.speelsysteem.models.Crew
 @(crewMembers: Seq[(Crew.Id, Crew)])(implicit flash: Flash)
-@import _root_.helpers.DateTime._
 
 @main("Animatoren") {
     <h2 class="sub-header">Lijst van alle animatoren</h2>
-    <a href="@routes.CrewController.newCrewMember">
-            <button type="button" class="btn btn-default">
-                    <span class="glyphicon glyphicon-pencil"></span> Nieuwe animator
-            </button>
-    </a>
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>

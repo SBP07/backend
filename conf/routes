@@ -1,7 +1,6 @@
 # Home page
 GET     /                      controllers.ApplicationController.home
 
-# For continuous delivery
 GET     /heartbeat              controllers.ApplicationController.heartbeat
 
 # Animators
@@ -9,17 +8,11 @@ GET     /animator              controllers.CrewController.list
 GET     /animator/             controllers.CrewController.list
 GET     /animator/lijst        controllers.CrewController.list
 GET     /animator/details/:id  controllers.CrewController.details(id: String)
-GET     /animator/nieuw        controllers.CrewController.newCrewMember
-POST    /animator/nieuw        controllers.CrewController.saveCrewMember
-GET     /animator/edit/:id     controllers.CrewController.editCrewMember(id: String)
 
 # Children
 GET     /kind               controllers.ChildController.showList
 GET     /kind/              controllers.ChildController.showList
 GET     /kind/lijst         controllers.ChildController.showList
-GET     /kind/nieuw         controllers.ChildController.newChild
-POST    /kind/nieuw         controllers.ChildController.saveChild
-GET     /kind/edit/:id      controllers.ChildController.editChild(id: String)
 GET     /kind/details/:id   controllers.ChildController.details(id: String)
 
 ### API

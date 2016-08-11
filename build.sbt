@@ -30,8 +30,6 @@ lazy val models = project
   .settings(commonSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "joda-time" % "joda-time" % "2.7",
-      "org.joda" % "joda-convert" % "1.2",
       "com.typesafe.play" %% "play-json" % "2.4.8"
     )
   )
@@ -41,9 +39,6 @@ lazy val dataAccess = Project("data-access", file("data-access"))
   .enablePlugins(PlayScala)
   .settings(
     libraryDependencies ++= Seq(
-      "org.postgresql" % "postgresql" % "9.4-1206-jdbc41",
-      "com.typesafe.slick" %% "slick" % "3.0.3",
-      "com.typesafe.play" %% "play-slick" % "1.0.1",
       "com.ibm" %% "couchdb-scala" % "0.7.2",
       "com.typesafe.scala-logging" %% "scala-logging" % "3.4.0"
     )

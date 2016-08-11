@@ -2,7 +2,7 @@ package be.thomastoye.speelsysteem.data.couchdb
 
 import javax.inject.Inject
 
-import be.thomastoye.speelsysteem.legacy.exceptions.ConfigurationMissingFieldException
+import be.thomastoye.speelsysteem.exceptions.ConfigurationMissingFieldException
 import be.thomastoye.speelsysteem.models.{Child, Crew}
 import com.ibm.couchdb._
 import play.Logger

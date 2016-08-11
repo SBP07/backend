@@ -1,7 +1,5 @@
 @()(implicit flash: Flash)
 
-@import _root_.helpers.DateTime._
-
 @main("Homepage") {
 <div class="jumbotron">
     <h1>Speelsysteem</h1>
@@ -15,11 +13,11 @@
 <div class="row">
     <div class="col-xs-4">
         <h2>Kinderen</h2>
-        @linklist(Map("Lijst van alle kinderen" -> routes.ChildController.showList, "Nieuw kind registreren" -> routes.ChildController.newChild))
+        @linklist(Map("Lijst van alle kinderen" -> routes.ChildController.showList))
     </div>
     <div class="col-xs-4">
         <h2>Animatoren</h2>
-        @linklist(Map("Lijst van alle animatoren" -> routes.CrewController.list, "Nieuwe animator registreren" -> routes.CrewController.newCrewMember))
+        @linklist(Map("Lijst van alle animatoren" -> routes.CrewController.list))
     </div>
 </div>
 }

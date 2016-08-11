@@ -1,8 +1,5 @@
 @import be.thomastoye.speelsysteem.models.Crew
 @(id: Crew.Id, crew: Crew)(implicit flash: Flash)
-@import helper._
-@import java.text.SimpleDateFormat
-@import _root_.helpers.DateTime._
 
 @main("Details voor " + crew.firstName + " " + crew.lastName) {
 
@@ -11,18 +8,6 @@
     </a>
 
     <h2>Gegevens</h2>
-    <p>
-        <a href="@routes.CrewController.editCrewMember(id)">
-            <button type="button" class="btn btn-default">
-                <span class="glyphicon glyphicon-pencil"></span> Details bewerken
-            </button>
-        </a>
-        <a href="???">
-            <button type="button" class="btn btn-default">
-                <span class="glyphicon glyphicon-pencil"></span> Aanwezigheden aanpassen
-            </button>
-        </a>
-    </p>
     <div class="row">
         <div class="col-xs-6 col-md-6">
             <table class="table table-striped">
