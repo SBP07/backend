@@ -14,6 +14,8 @@ case class Day(
 )
 
 object Shift {
+  type Id = String
+
   sealed trait ShiftKind { val mnemonic: String }
 
   /** Common shift kinds */
@@ -39,6 +41,7 @@ object Shift {
 }
 
 case class Shift(
+  id: Shift.Id,
   price: Price,
   childrenCanBePresent: Boolean,
   crewCanBePresent: Boolean,

@@ -8,6 +8,7 @@ import play.api.libs.json.Reads._
 object JsonFormats {
   val emptyJsonObject = Json.obj()
 
+  implicit val attendanceFormat = Json.format[Attendance]
   implicit val addressFormat = Json.format[Address]
   implicit val phoneContactFormat = Json.format[PhoneContact]
   implicit val crewContactFormat = Json.format[ContactInfo]
@@ -24,7 +25,8 @@ object JsonFormats {
   }
 
   private val shiftWrites: Writes[Shift] = (
-    (JsPath \ "price").write[Price] and
+      (JsPath \ "id").write[String] and
+      (JsPath \ "price").write[Price] and
       (JsPath \ "childrenCanBePresent").write[Boolean] and
       (JsPath \ "crewCanBePresent").write[Boolean] and
       (JsPath \ "kind").write[ShiftKind] and
@@ -34,11 +36,12 @@ object JsonFormats {
     )(unlift(Shift.unapply))
 
   private val shiftReads: Reads[Shift] = (
-    (JsPath \ "price").read[Price] and
-    (JsPath \ "childrenCanBePresent").read[Boolean] and
-    (JsPath \ "crewCanBePresent").read[Boolean] and
-    (JsPath \ "kind").read[ShiftKind] and
-    (JsPath \ "location").readNullable[String] and
+      (JsPath \ "id").read[String] and
+      (JsPath \ "price").read[Price] and
+      (JsPath \ "childrenCanBePresent").read[Boolean] and
+      (JsPath \ "crewCanBePresent").read[Boolean] and
+      (JsPath \ "kind").read[ShiftKind] and
+      (JsPath \ "location").readNullable[String] and
       (JsPath \ "description").readNullable[String] and
       (JsPath \ "startAndEnd").readNullable[StartAndEndTime]
     )(Shift.apply _)

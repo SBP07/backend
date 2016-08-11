@@ -17,15 +17,15 @@ import scalaz.{-\/, \/-}
 
 object CouchChildRepository {
   val childKind = "type/child/v1"
-}
-
-class CouchChildRepository @Inject() (couchDatabase: CouchDatabase) extends ChildRepository with StrictLogging {
-  import CouchChildRepository.childKind
-
-  val db = couchDatabase.db
 
   implicit val childReader: Reader[Child] = new PlayJsonReaderUpickleCompat[Child]
   implicit val childWriter: Writer[Child] = new PlayJsonWriterUpickleCompat[Child]
+}
+
+class CouchChildRepository @Inject() (couchDatabase: CouchDatabase) extends ChildRepository with StrictLogging {
+  import CouchChildRepository._
+
+  val db = couchDatabase.db
 
   override def findById(id: Id): Future[Option[(Id, Child)]] = findAll.map(_.find(_._1 == id))
 
